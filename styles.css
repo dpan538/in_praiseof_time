@@ -807,8 +807,16 @@ body.is-interrupt #system-chrome {
   pointer-events: auto;
 }
 
+.desktop-icon.is-hidden {
+  display: none;
+}
+
 .desktop-icon span:first-child {
   color: var(--chapter-primary);
+}
+
+.desktop-icon-eyu span:first-child {
+  color: rgba(240, 240, 240, 0.66);
 }
 
 .desktop-icon-lost span:first-child {
@@ -825,6 +833,11 @@ body.is-interrupt #system-chrome {
   font-size: 10px;
   line-height: 1.35;
   pointer-events: auto;
+}
+
+.desktop-window-wide {
+  width: 420px;
+  height: 520px;
 }
 
 .desktop-window pre {
@@ -854,6 +867,14 @@ body.is-interrupt #system-chrome {
 
 .desktop-body {
   padding: 8px;
+}
+
+.desktop-window-wide .desktop-body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 0;
+  height: calc(100% - 2.3rem);
+  padding: 0;
 }
 
 .desktop-crt {
@@ -929,6 +950,104 @@ body.is-interrupt #system-chrome {
   color: var(--chapter-primary);
   padding-top: 7px;
   letter-spacing: 0.06em;
+}
+
+.eyu-shell {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: rgba(8, 8, 8, 0.96);
+}
+
+.eyu-list {
+  flex: 0 0 120px;
+  width: 120px;
+  box-sizing: border-box;
+  padding: 0.8rem 0.55rem;
+  background: rgba(240, 240, 240, 0.04);
+  overflow-y: auto;
+}
+
+.eyu-list button {
+  display: block;
+  width: 100%;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  appearance: none;
+  border: 0;
+  background: none;
+  color: rgba(240, 240, 240, 0.58);
+  text-align: left;
+  font: inherit;
+  font-size: 0.66rem;
+  line-height: 1.45;
+  cursor: pointer;
+}
+
+.eyu-list button.is-active {
+  color: var(--chapter-primary);
+}
+
+.eyu-content {
+  flex: 0 0 300px;
+  width: 300px;
+  box-sizing: border-box;
+  padding: 1rem 1rem 1.4rem;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.eyu-header {
+  margin-bottom: 1.25rem;
+}
+
+.eyu-title {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: rgba(240, 240, 240, 0.92);
+}
+
+.eyu-meta {
+  margin-top: 0.4rem;
+  font-size: 0.72rem;
+  opacity: 0.5;
+}
+
+.eyu-section {
+  padding-bottom: 1.5rem;
+  font-size: 0.78rem;
+  line-height: 1.75;
+  color: rgba(240, 240, 240, 0.82);
+}
+
+.eyu-redact {
+  margin: 0.8rem 0;
+  color: rgba(240, 240, 240, 0.4);
+  letter-spacing: 0.04em;
+  white-space: pre-wrap;
+  overflow: hidden;
+}
+
+.eyu-strike {
+  opacity: 0.6;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.eyu-footer {
+  margin-top: 2rem;
+  font-size: 0.8em;
+  opacity: 0.5;
+}
+
+.eyu-comment {
+  margin-top: 1rem;
+  font-size: 0.8em;
+  line-height: 1.6;
+  opacity: 0.6;
+  white-space: pre-wrap;
 }
 
 .trash-list button {

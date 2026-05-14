@@ -1,0 +1,714 @@
+{
+  "generated_at": "2026-05-14",
+  "source_manifest": "signal_data/MANIFEST.json",
+  "method": "Web search enrichment plus cross-check against MANIFEST GPS/altitude values. Altitude is marked official only when an external source gave a published value; otherwise the MANIFEST iPhone altitude is retained as project metadata.",
+  "GROUP_A_NORTHEAST_CHINA_TRAVERSE_JULY_2024": {
+    "IMG_7948_DONGAN": {
+      "clips": ["IMG_7948"],
+      "date_context": "2024-07-02 19:35 local",
+      "full_name": "Dong'an, Daqing area, Heilongjiang Province, People's Republic of China",
+      "coordinates_verified": {
+        "status": "partial_match_with_user_coordinate_mismatch",
+        "manifest": {"lat": 46.7443, "lon": 125.1233},
+        "requested": {"lat": 47.7443, "lon": 125.1233},
+        "note": "Longitude matches the request, but MANIFEST latitude is 46.7443, one degree south of the requested 47.7443. External gazetteer hits for Dong'an near Daqing are also around 46.6-46.8 N, so the request appears likely mistyped."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 156.614,
+        "note": "No official altitude located for this exact Dong'an point."
+      },
+      "terrain": "urban / plain",
+      "climate_note": "Early July on the Songnen Plain is warm and humid compared with the later Inner Mongolia grassland segment.",
+      "light_note": "Evening light is low and long, with flat summer haze over a petroleum-city plain.",
+      "population_density": "medium",
+      "signal_coverage": "good",
+      "one_fact": "The surrounding Daqing area is historically defined by the Daqing Oil Field, one of China's major petroleum bases, so this is not empty countryside even when the frame reads as transit.",
+      "sources": [
+        "https://where-is.org/cn/dongan4"
+      ]
+    },
+    "IMG_8033_DAMIN": {
+      "clips": ["IMG_8033"],
+      "date_context": "2024-07-03 12:23 local",
+      "full_name": "Damin Town / Damin Subdistrict, Longsha District, Qiqihar, Heilongjiang Province, People's Republic of China",
+      "coordinates_verified": {
+        "status": "matched_to_qiqihar_damin_area",
+        "manifest": {"lat": 47.3103, "lon": 123.8932},
+        "requested": {"lat": 47.3103, "lon": 123.8932},
+        "note": "The coordinate sits just south-west of central Qiqihar, consistent with Damin and the airport-side urban edge."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 146.229,
+        "note": "No official altitude located for Damin; MANIFEST altitude is retained."
+      },
+      "terrain": "urban / plain",
+      "climate_note": "Midday in July is warm, relatively humid, and within Qiqihar's monsoon-influenced summer period.",
+      "light_note": "High summer noon light; broad sky and hard top-light softened by northeastern haze.",
+      "population_density": "medium",
+      "signal_coverage": "good",
+      "one_fact": "Qiqihar Sanjiazi Airport is listed as being located in Damin Town, about 13 km from the city center.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Qiqihar_Sanjiazi_Airport",
+        "https://www.latlong.net/place/qiqihar-heilongjiang-china-23898.html"
+      ]
+    },
+    "IMG_8084_QIQIHAR_ARXAN_ROAD_NO_GPS": {
+      "clips": ["IMG_8084"],
+      "date_context": "2024-07-04 09:46 UTC-derived / no GPS",
+      "full_name": "Qiqihar to Arxan National Forest Park road corridor, Heilongjiang to Xing'an League, Inner Mongolia, People's Republic of China",
+      "coordinates_verified": {
+        "status": "no_manifest_gps",
+        "manifest": null,
+        "requested": "route / no single coordinate",
+        "note": "This entry intentionally preserves the project's no-GPS state."
+      },
+      "altitude_verified": {
+        "status": "not_available_for_clip",
+        "meters": null,
+        "note": "The clip has no GPS altitude; Arxan scenic sources list high volcanic/lake terrain, including Tianchi at 1332.3 m, but that does not verify this road segment."
+      },
+      "terrain": "forest / mountain / grassland road",
+      "climate_note": "July is the green, wet, cool-season travel window in Arxan, with forest humidity and sudden mountain weather.",
+      "light_note": "Forest-edge light alternates between bright open grass and heavily absorbed conifer shade.",
+      "population_density": "sparse",
+      "signal_coverage": "none",
+      "one_fact": "Arxan National Forest Park is known for volcanic landforms, primeval forest ecosystems, hot/mineral springs, wetlands, rivers, lakes, gorges, and peaks.",
+      "sources": [
+        "https://www.aesly.com/en/",
+        "https://www.travelchinaguide.com/cityguides/inner_mongolia/xingan/arxan-forest-park.htm"
+      ]
+    },
+    "IMG_8191_8220_8224_DALAI_LAKE_HULUN_LAKE": {
+      "clips": ["IMG_8191", "IMG_8220", "IMG_8224"],
+      "date_context": "2024-07-05 evening/night local",
+      "full_name": "Dalai Lake National Nature Reserve / Hulun Lake, Hulunbuir, Inner Mongolia Autonomous Region, People's Republic of China",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": 48.9213, "lon": 117.113},
+        "requested": {"lat": 48.92, "lon": 117.11},
+        "note": "MANIFEST points cluster within roughly 0.2 km of the requested Dalai/Hulun Lake coordinate."
+      },
+      "altitude_verified": {
+        "status": "externally_supported_nearby_lake_level",
+        "meters": 543,
+        "manifest_range_meters": [550.797, 561.653],
+        "note": "IUCN/Ramsar material lists Hulun/Dalai Lake around 543 m; MANIFEST clip altitudes are slightly higher, plausible for shore/road level."
+      },
+      "terrain": "grassland / wetland / lake",
+      "climate_note": "July is short, warm summer on a semi-arid continental lake plain; 2024 also carried regional wildfire-smoke risk from fires north-east of the border.",
+      "light_note": "Open steppe-lake light is wide and wind-cleared, but smoke can flatten contrast and turn distance into a veil.",
+      "population_density": "sparse",
+      "signal_coverage": "weak",
+      "one_fact": "UNESCO describes Dalai Lake as a biosphere reserve and a prime site for wetland and bird-migration research; Hulun Lake is the largest freshwater lake in northern China.",
+      "wildfire_context": "NASA Earth Observatory reported intense smoky fires across eastern Russia in summer 2024, including Amur Oblast bordering Heilongjiang, with new fire groups flaring in June and July; this supports the project's Russian wildfire smoke context for the Hulunbuir/Dalai Lake segment, though it does not prove smoke at the exact clip coordinates and hour.",
+      "sources": [
+        "https://www.unesco.org/en/mab/dalai-lake",
+        "https://rsis.ramsar.org/ris/1146",
+        "https://portals.iucn.org/library/sites/library/files/documents/1989-Scott-001.pdf",
+        "https://science.nasa.gov/earth/earth-observatory/a-smoky-summer-in-amur-153051/"
+      ]
+    },
+    "IMG_8284_YIRSHI": {
+      "clips": ["IMG_8284"],
+      "date_context": "2024-07-06 23:37 local",
+      "full_name": "Yirshi / Yiershi Town, Arxan City, Xing'an League, Inner Mongolia Autonomous Region, People's Republic of China",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": 47.2545, "lon": 119.856},
+        "requested": {"lat": 47.2545, "lon": 119.856},
+        "note": "MANIFEST exactly matches requested coordinate."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 910.957,
+        "note": "No official point altitude found for Yirshi; MANIFEST altitude is retained."
+      },
+      "terrain": "forest / mountain town",
+      "climate_note": "July nights in the Greater Khingan foothills are cool relative to the plains, with forest moisture and rapid temperature drop after sunset.",
+      "light_note": "Night light is town-scale and sparse; beyond settlement edges the image falls quickly into black.",
+      "population_density": "low",
+      "signal_coverage": "good",
+      "one_fact": "Yirshi is used as a route node for Arxan forest travel itineraries, connecting Arxan city, forest park roads, and surrounding wetland/mountain sites.",
+      "sources": [
+        "https://www.trip.com/travel-guide/attraction/arxan/yiershi-town-56808664",
+        "https://www.aesly.com/en/"
+      ]
+    },
+    "IMG_8300_MOSITAI": {
+      "clips": ["IMG_8300"],
+      "date_context": "2024-07-07 13:47 local",
+      "full_name": "Mositai area, Inner Mongolia Autonomous Region, People's Republic of China",
+      "coordinates_verified": {
+        "status": "matched_to_manifest_but_sparse_external_data",
+        "manifest": {"lat": 46.0986, "lon": 119.6295},
+        "requested": {"lat": 46.0986, "lon": 119.6295},
+        "note": "Coordinate matches request; external English-language information for 'Mositai' itself was sparse."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 953.542,
+        "note": "No official altitude located for this named point."
+      },
+      "terrain": "grassland",
+      "climate_note": "July afternoon is short-season grassland summer: warm sun, wind exposure, and a high chance of fast-changing cloud.",
+      "light_note": "Open grassland produces high, unobstructed luminance with few built structures to interrupt horizon light.",
+      "population_density": "sparse",
+      "signal_coverage": "weak",
+      "one_fact": "The point falls in the same broader Inner Mongolia grassland-forest transition belt as the Arxan/Hulunbuir traverse rather than a dense urban district.",
+      "sources": [
+        "https://www.aesly.com/en/",
+        "https://www.unesco.org/en/mab/dalai-lake"
+      ],
+      "data_quality": "sparse"
+    },
+    "IMG_8722_JILIN_CITY": {
+      "clips": ["IMG_8722"],
+      "date_context": "2024-07-13 19:11 local",
+      "full_name": "Jilin City, Jilin Province, People's Republic of China",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": 43.767, "lon": 126.6668},
+        "requested": {"lat": 43.767, "lon": 126.6668},
+        "note": "MANIFEST exactly matches requested coordinate."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 189.415,
+        "note": "No official altitude for this exact point was found."
+      },
+      "terrain": "urban / river valley / hills",
+      "climate_note": "July in Jilin City is warm, humid, and rainy under a monsoon-influenced continental climate.",
+      "light_note": "Evening river-valley light is humid and reflective, with hills and the Songhua River softening the urban edge.",
+      "population_density": "high",
+      "signal_coverage": "good",
+      "one_fact": "Jilin City is built around the Songhua River and is surrounded by named mountains, a geography that gives the city its 'river city' identity.",
+      "sources": [
+        "https://www.china.org.cn/english/TCC/41590.htm",
+        "https://en.wikipedia.org/wiki/Jilin_City"
+      ]
+    }
+  },
+  "GROUP_B_GANSU_QINGHAI_TRAVERSE_JULY_2025": {
+    "IMG_3484_BAIYIN_RENMINLU": {
+      "clips": ["IMG_3484"],
+      "date_context": "2025-07-04 17:57 local",
+      "full_name": "Renminlu area, Baiyin City, Gansu Province, People's Republic of China",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": 36.5483, "lon": 104.1408},
+        "requested": {"lat": 36.5483, "lon": 104.1408},
+        "note": "MANIFEST exactly matches requested coordinate."
+      },
+      "altitude_verified": {
+        "status": "externally_supported",
+        "meters": 1724,
+        "manifest_meters": 1723.81,
+        "note": "External weather/geographic sources list Baiyin around 1724 m, matching the MANIFEST altitude."
+      },
+      "terrain": "urban / loess plateau / semi-arid",
+      "climate_note": "July in Baiyin is warm and semi-arid, with late-afternoon heat easing toward a dry plateau evening.",
+      "light_note": "Dust and high-elevation sun make the light hard, pale, and slightly chalked by the plateau air.",
+      "population_density": "medium",
+      "signal_coverage": "good",
+      "one_fact": "Baiyin's name literally means 'silver', and the city is strongly associated with mineral extraction and nonferrous metals.",
+      "sources": [
+        "https://meteoatlas.it/cina/baiyin-12431/meteo-a-luglio",
+        "https://weatherspark.com/m/115444/7/Average-Weather-in-July-in-Baiyin-China"
+      ]
+    },
+    "IMG_3549_3551_GULANG": {
+      "clips": ["IMG_3549", "IMG_3551"],
+      "date_context": "2025-07-05 evening local",
+      "full_name": "Gulang County, Wuwei City, Gansu Province, People's Republic of China",
+      "coordinates_verified": {
+        "status": "matched_to_county_area",
+        "manifest": {"lat": 37.5732, "lon": 102.8718},
+        "requested": {"lat": 37.5732, "lon": 102.8718},
+        "note": "MANIFEST point lies within the Gulang county area, north of the county seat coordinate listed by gazetteers."
+      },
+      "altitude_verified": {
+        "status": "manifest_with_county_range_support",
+        "meters": 1908.817,
+        "manifest_range_meters": [1860.0, 1908.817],
+        "note": "Published county elevation ranges run from about 1550 m to 3469 m; MANIFEST altitudes fit inside this range."
+      },
+      "terrain": "desert / mountain corridor / rural town",
+      "climate_note": "July is Gulang's warmest month but remains dry by eastern-China standards, with high evaporation and strong sun.",
+      "light_note": "Evening light is dry and granular, flattening into yellow-grey at the eastern edge of the Hexi Corridor.",
+      "population_density": "low",
+      "signal_coverage": "good",
+      "one_fact": "Gulang County lies at the eastern end of the Hexi Corridor and south of the Tengger Desert.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Gulang_County"
+      ]
+    },
+    "IMG_3567_3612_3618_YANGXIANG_AREA": {
+      "clips": ["IMG_3567", "IMG_3612", "IMG_3618"],
+      "date_context": "2025-07-06 morning/afternoon local",
+      "full_name": "Yangxiang area, Gansu-Qinghai border highland road corridor, People's Republic of China",
+      "coordinates_verified": {
+        "status": "matched_to_requested_area",
+        "manifest": {"lat": 37.9304, "lon": 102.2659},
+        "requested": {"lat": 37.93, "lon": 102.26},
+        "note": "Representative MANIFEST point is within roughly 0.5 km of requested Yangxiang-area coordinate; later clips climb to 3119 m and descend to 2269 m."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 1952.84,
+        "manifest_range_meters": [1952.84, 3119.302],
+        "note": "No official point altitude found; MANIFEST shows the road segment rising sharply into mountain terrain."
+      },
+      "terrain": "mountain / grassland road",
+      "climate_note": "July is the brief green season on the Gansu-Qinghai highlands, with cool air at altitude and rapid cloud build-up.",
+      "light_note": "Light is high-UV and exposed; cloud shadows can move quickly across road, slope, and grass.",
+      "population_density": "sparse",
+      "signal_coverage": "weak",
+      "one_fact": "The clip sequence records a sharp altitude change from about 1953 m to above 3100 m in less than two hours of local time.",
+      "sources": [
+        "https://www.britannica.com/place/Qilian-Mountains",
+        "https://www.mdpi.com/1999-4907/14/10/1951"
+      ],
+      "data_quality": "sparse"
+    },
+    "IMG_3773_3798_3810_QILIAN_MOUNTAIN_PASS": {
+      "clips": ["IMG_3773", "IMG_3798", "IMG_3810"],
+      "date_context": "2025-07-07 evening local",
+      "full_name": "Qilian Mountains pass area near Qingshizui / Menyuan, Qinghai Province, People's Republic of China",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": 37.3784, "lon": 101.4117},
+        "requested": {"lat": 37.37, "lon": 101.41},
+        "note": "Representative MANIFEST point is within roughly 1 km of the requested pass coordinate; IMG_3810 reaches the project maximum altitude."
+      },
+      "altitude_verified": {
+        "status": "manifest_with_regional_range_support",
+        "meters": 3752.9,
+        "manifest_range_meters": [3408.378, 3752.9],
+        "note": "Published Qilian Mountains regional sources place much of the range around 3500-5000 m; MANIFEST values are plausible for a road/pass rather than a summit."
+      },
+      "terrain": "mountain / alpine grassland",
+      "climate_note": "July is the accessible alpine-meadow season, but the pass remains cool, wind-exposed, and sensitive to sudden weather.",
+      "light_note": "Thin high-altitude air gives bright, hard edges; evening drops fast behind ridges and turns the route line into a pressure system.",
+      "population_density": "sparse",
+      "signal_coverage": "weak",
+      "one_fact": "Britannica describes the Qilian Mountains' ice reservoir as a crucial water source for the Hexi Corridor and Qaidam Basin.",
+      "sources": [
+        "https://www.britannica.com/place/Qilian-Mountains",
+        "https://www.mdpi.com/1999-4907/14/10/1951"
+      ]
+    },
+    "IMG_3840_DONGXIA": {
+      "clips": ["IMG_3840"],
+      "date_context": "2025-07-08 13:56 local",
+      "full_name": "Dongxia area, Qinghai Province, People's Republic of China",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": 36.753, "lon": 101.3072},
+        "requested": {"lat": 36.753, "lon": 101.307},
+        "note": "MANIFEST matches requested coordinate within rounding."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 3167.801,
+        "note": "No official altitude located for this exact point."
+      },
+      "terrain": "mountain / plateau valley",
+      "climate_note": "July at 3167 m is cool by season, with strong sun and colder air when cloud covers the plateau.",
+      "light_note": "Midday light is intense and high-contrast, but plateau haze reduces distant saturation.",
+      "population_density": "sparse",
+      "signal_coverage": "weak",
+      "one_fact": "This point remains over 3000 m after the Qilian peak sequence, so the chapter's descent is relative rather than a return to lowland altitude.",
+      "sources": [
+        "https://www.mdpi.com/1999-4907/14/10/1951"
+      ],
+      "data_quality": "sparse"
+    },
+    "IMG_3940_GANDI_XINING_OUTSKIRTS": {
+      "clips": ["IMG_3940"],
+      "date_context": "2025-07-09 05:47 local",
+      "full_name": "Gandi / Xining outskirts, Qinghai Province, People's Republic of China",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": 36.5703, "lon": 100.5159},
+        "requested": {"lat": 36.5703, "lon": 100.5159},
+        "note": "MANIFEST exactly matches requested coordinate."
+      },
+      "altitude_verified": {
+        "status": "manifest_only_with_xining_regional_context",
+        "meters": 3227.04,
+        "note": "Xining proper averages about 2200 m; this clip point is substantially higher than the city valley and is kept as MANIFEST altitude."
+      },
+      "terrain": "mountain / plateau outskirts",
+      "climate_note": "Early July dawn near Xining's plateau edge is cool, dry, and marked by large day-night temperature swings.",
+      "light_note": "Pre-sunrise plateau light is blue-grey and low, then brightens abruptly once the sun clears terrain.",
+      "population_density": "low",
+      "signal_coverage": "weak",
+      "one_fact": "Xining lies in the Huangshui River Valley on the eastern edge of the Qinghai-Tibet Plateau and has been a northern Silk Road commercial hub for over 2000 years.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Xining"
+      ]
+    }
+  },
+  "GROUP_C_NEW_YORK_CITY_AREA_2024_2025": {
+    "IMG_1401_LES_CLUSTER": {
+      "clips": ["IMG_0945", "IMG_3212", "IMG_1401", "IMG_1410", "IMG_2140", "IMG_2361", "IMG_4700", "IMG_5811", "IMG_1448", "IMG_1565", "IMG_1627"],
+      "date_context": "2024-02 to 2025-05, especially night clips September-May",
+      "full_name": "Lower East Side, Manhattan, New York City, specifically Ludlow Street between Stanton Street and Rivington Street",
+      "coordinates_verified": {
+        "status": "cluster_match",
+        "manifest_representative": {"lat": 40.7141, "lon": -73.9735},
+        "requested": {"lat": 40.7194, "lon": -73.9896},
+        "note": "MANIFEST representative printed here is from IMG_1401 and sits east of the stated Ludlow coordinate; other project context fixes CH01 at 40.7194,-73.9896. Treat as a chapter location cluster, not one precise GPS point."
+      },
+      "altitude_verified": {
+        "status": "manifest_cluster",
+        "meters": 8.063,
+        "note": "LES is low-elevation urban terrain; no official altitude for the apartment point was searched beyond MANIFEST."
+      },
+      "terrain": "urban",
+      "climate_note": "September evenings are humid and warm; late-night spring clips are cooler but still enclosed by building heat and street-level nightlife.",
+      "light_note": "The dominant light is artificial: bar spill, traffic, apartment windows, and the black reflective surface of high-rise glass.",
+      "population_density": "dense",
+      "signal_coverage": "good",
+      "one_fact": "NYC311 states that between 10 PM and 7 AM, music from bars/restaurants may not exceed 42 dB measured inside nearby residences and may not exceed 7 dB over ambient street level when measured from the public street.",
+      "noise_context": "Ludlow/Orchard/Rivington/Essex sit inside a documented nightlife and noise conflict zone. NYC311 has a specific complaint category for bar/club/restaurant noise, and local reporting describes Lower East Side late-night crowd/noise tensions around Ludlow and nearby streets.",
+      "sources": [
+        "https://portal.311.nyc.gov/article/?kanumber=KA-01085",
+        "https://www.dnainfo.com/new-york/20131004/lower-east-side/embattled-les-lounge-agrees-close-windows-roof-after-complaints",
+        "https://www.furmancenter.org/neighborhoods/lower-east-side-chinatown/"
+      ]
+    },
+    "IMG_0902_BENSONHURST": {
+      "clips": ["IMG_0902"],
+      "date_context": "2024-02-10 00:14 local",
+      "full_name": "Bensonhurst, Brooklyn, New York City, New York, United States",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": 40.6274, "lon": -74.0014},
+        "requested": {"lat": 40.6274, "lon": -74.0014},
+        "note": "MANIFEST exactly matches requested coordinate."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 22.927,
+        "note": "No official altitude located for this exact point."
+      },
+      "terrain": "urban / residential",
+      "climate_note": "February midnight in Brooklyn is winter-cold, often damp, and street sound carries through hard residential surfaces.",
+      "light_note": "Light is residential sodium/LED streetlight with low winter reflectance and little sky color.",
+      "population_density": "dense",
+      "signal_coverage": "good",
+      "one_fact": "Bensonhurst is noted for major ethnic enclaves and is described as home to Brooklyn's second Chinatown.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Bensonhurst,_Brooklyn"
+      ]
+    },
+    "IMG_1113_JERSEY_CITY": {
+      "clips": ["IMG_1113"],
+      "date_context": "2024-02-13 10:12 local",
+      "full_name": "Jersey City, Hudson County, New Jersey, United States",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": 40.7324, "lon": -74.0607},
+        "requested": {"lat": 40.7324, "lon": -74.0607},
+        "note": "MANIFEST exactly matches requested coordinate."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 66.909,
+        "note": "No official altitude located for this exact point."
+      },
+      "terrain": "urban / waterfront metropolitan",
+      "climate_note": "February morning is cold and often windy across the Hudson-side urban plain.",
+      "light_note": "Winter morning light is hard and low, reflecting off glass towers, asphalt, and river haze.",
+      "population_density": "dense",
+      "signal_coverage": "good",
+      "one_fact": "Jersey City functions as part of the New York metropolitan waterfront rather than as a visual break from it; the river is a boundary but not a separation.",
+      "sources": [
+        "https://www.jerseycitynj.gov/"
+      ],
+      "data_quality": "moderate"
+    },
+    "IMG_2719_COLD_SPRING": {
+      "clips": ["IMG_2719"],
+      "date_context": "2024-03-17 10:23 local",
+      "full_name": "Village of Cold Spring, Putnam County, New York, United States",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": 41.446, "lon": -73.9643},
+        "requested": {"lat": 41.446, "lon": -73.9643},
+        "note": "MANIFEST exactly matches requested coordinate."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 171.755,
+        "note": "No official altitude located for this exact point."
+      },
+      "terrain": "river valley / mountain village",
+      "climate_note": "Mid-March in the Hudson Highlands is late winter/early spring, often cold with bare trees and bright river air.",
+      "light_note": "Hudson Valley light is open over the water but broken by steep hills and leafless branches.",
+      "population_density": "low",
+      "signal_coverage": "good",
+      "one_fact": "Cold Spring's official village page ties its 19th-century growth to the West Point Foundry and its location on the Hudson River.",
+      "sources": [
+        "https://www.coldspringny.gov/211/About"
+      ]
+    },
+    "IMG_2685_FORT_MONTGOMERY": {
+      "clips": ["IMG_2685"],
+      "date_context": "2024-03-17 11:07 local",
+      "full_name": "Fort Montgomery, Town of Highlands, Orange County, New York, United States",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": 41.3301, "lon": -73.9731},
+        "requested": {"lat": 41.3301, "lon": -73.9731},
+        "note": "MANIFEST exactly matches requested coordinate."
+      },
+      "altitude_verified": {
+        "status": "manifest_anomaly",
+        "meters": -0.58,
+        "note": "MANIFEST altitude is slightly below sea level, likely GPS noise near the Hudson; do not use this as literal elevation."
+      },
+      "terrain": "river valley / wooded highlands",
+      "climate_note": "March morning is cold and exposed near the Hudson, with winter vegetation still dominant.",
+      "light_note": "Light opens sharply over the river and is interrupted by highland slopes and historic stonework.",
+      "population_density": "low",
+      "signal_coverage": "good",
+      "one_fact": "New York State Parks identifies Fort Montgomery as the site of a fierce Revolutionary War battle for control of the Hudson River on October 6, 1777.",
+      "sources": [
+        "https://parks.ny.gov/visit/historic-sites/fort-montgomery-state-historic-site"
+      ]
+    },
+    "IMG_8669_PITTSBURGH": {
+      "clips": ["IMG_8669"],
+      "date_context": "2025-03-03 16:42 local",
+      "full_name": "Pittsburgh, Allegheny County, Pennsylvania, United States",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": 40.4317, "lon": -80.0065},
+        "requested": {"lat": 40.4317, "lon": -80.0065},
+        "note": "MANIFEST exactly matches requested coordinate."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 337.972,
+        "note": "No official altitude located for this exact point."
+      },
+      "terrain": "urban / river valley / hills",
+      "climate_note": "Early March in Pittsburgh is late winter, with low sun, cold air, and frequent damp overcast conditions.",
+      "light_note": "River-valley light is oblique and steel-grey, often softened by cloud and industrial haze.",
+      "population_density": "high",
+      "signal_coverage": "good",
+      "one_fact": "Pittsburgh sits at the confluence where the Allegheny and Monongahela rivers form the Ohio River.",
+      "sources": [
+        "https://geographyworlds.com/blog/pittsburgh-geography-guide"
+      ]
+    }
+  },
+  "GROUP_D_BRISBANE_AUSTRALIA_2025_2026": {
+    "IMG_5523_ASCOT": {
+      "clips": ["IMG_5523", "IMG_5521", "IMG_5671"],
+      "date_context": "2025-08-22 evening, 2025-08-23 morning, 2026-05-14 night",
+      "full_name": "Ascot, City of Brisbane, Queensland, Australia",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": -27.4431, "lon": 153.0639},
+        "requested": {"lat": -27.443, "lon": 153.064},
+        "note": "MANIFEST representative point matches requested coordinate within rounding."
+      },
+      "altitude_verified": {
+        "status": "manifest_with_suburb_context",
+        "meters": 5.422,
+        "note": "Suburb sources list Ascot elevation around 14 m and Bartleys Hill at 78 m; MANIFEST points are low-lying local positions."
+      },
+      "terrain": "urban / river-adjacent suburb",
+      "climate_note": "August is Brisbane's dry, mild late-winter period; May is autumn, still mild with humid residue at night.",
+      "light_note": "Low winter/autumn sun sits cleanly on roofs, river air, and pale road surfaces; night light is suburban and thin.",
+      "population_density": "medium",
+      "signal_coverage": "good",
+      "one_fact": "Ascot is strongly associated with Eagle Farm and Doomben racecourses; the suburb's name references Ascot, England.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Ascot,_Queensland",
+        "https://www.weather-atlas.com/en/australia/brisbane-weather-august"
+      ]
+    },
+    "IMG_6010_BALMORAL": {
+      "clips": ["IMG_6010"],
+      "date_context": "2026-05-14 00:23 local",
+      "full_name": "Balmoral, City of Brisbane, Queensland, Australia",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": -27.4622, "lon": 153.0513},
+        "requested": {"lat": -27.462, "lon": 153.051},
+        "note": "MANIFEST matches requested coordinate within rounding."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 3.118,
+        "note": "No official exact altitude located; MANIFEST indicates a low river-adjacent point."
+      },
+      "terrain": "urban / river-adjacent / coastal-subtropical",
+      "climate_note": "May nights in Brisbane are mild autumn nights, often humid enough for air and water surfaces to hold glare.",
+      "light_note": "Water reflections dominate: bright motion survives after the surrounding suburb goes dark.",
+      "population_density": "medium",
+      "signal_coverage": "good",
+      "one_fact": "Balmoral is a compact inner-eastern Brisbane suburb bordering the Brisbane River and adjacent to Bulimba/Hawthorne.",
+      "sources": [
+        "https://www.inthesuburbs.com.au/suburb/balmoral-qld-4171.html",
+        "https://www.timeanddate.com/weather/australia/brisbane/climate"
+      ]
+    },
+    "IMG_3483_MORNINGSIDE": {
+      "clips": ["IMG_3483"],
+      "date_context": "2026-05-14 08:57 local",
+      "full_name": "Morningside, City of Brisbane, Queensland, Australia",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": -27.4434, "lon": 153.0853},
+        "requested": {"lat": -27.443, "lon": 153.085},
+        "note": "MANIFEST matches requested coordinate within rounding."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 6.194,
+        "note": "No official exact altitude located for the clip point."
+      },
+      "terrain": "urban / inner-eastern suburb",
+      "climate_note": "May morning is mild, with Brisbane autumn light after a short night and before midday heat builds.",
+      "light_note": "Morning light is already high enough to feel exposed; shadows are shorter than the emotional register expects.",
+      "population_density": "medium",
+      "signal_coverage": "good",
+      "one_fact": "Morningside developed with rail and light-industrial corridors, leaving visible layers of residential and industrial use.",
+      "sources": [
+        "https://www.somners.com/suburbs/morningside",
+        "https://en.wikipedia.org/wiki/Morningside,_Queensland"
+      ]
+    },
+    "BRISBANE_CITYCAT_ROUTE_ASCOT_HAMILTON_TO_UQ_ST_LUCIA": {
+      "clips": [],
+      "date_context": "2025-2026 recurring commute context",
+      "full_name": "Brisbane CityCat F1 ferry route, Northshore Hamilton to The University of Queensland St Lucia",
+      "coordinates_verified": {
+        "status": "route_context_not_clip_point",
+        "manifest": null,
+        "requested": "Ascot/Hamilton to UQ St Lucia ferry commute",
+        "note": "This is a route environment rather than a single clip GPS point."
+      },
+      "altitude_verified": {
+        "status": "not_applicable",
+        "meters": null,
+        "note": "River route."
+      },
+      "terrain": "river / urban / coastal-subtropical",
+      "climate_note": "The commute occurs in Brisbane's subtropical climate: dry mild winter/August conditions and warm, humid shoulder-season conditions by May.",
+      "light_note": "River light is persistent and reflective, especially in low sun; it can feel brighter than the air temperature suggests.",
+      "population_density": "high",
+      "signal_coverage": "good",
+      "one_fact": "Brisbane City Council describes CityCat/ferry services as stretching from UQ St Lucia to Northshore Hamilton, and the 2024 timetable shows Northshore Hamilton to UQ St Lucia all-stops trips of about 82-83 minutes.",
+      "ferry_data": {
+        "route": "F1 CityCat Northshore Hamilton - UQ St Lucia",
+        "official_operator_context": "Brisbane City Council ferry services / TransLink timetable",
+        "terminal_span": "Northshore Hamilton to UQ St Lucia",
+        "published_trip_duration_examples_minutes": [
+          {"from": "Northshore Hamilton", "to": "UQ St Lucia", "example": "17:45 -> 19:08", "duration": 83},
+          {"from": "UQ St Lucia", "to": "Northshore Hamilton", "example": "17:45 -> 19:07", "duration": 82},
+          {"from": "Apollo Road", "to": "UQ St Lucia", "example": "17:50 -> 19:08", "duration": 78}
+        ],
+        "project_note": "User-reported 1.5 hour journey is consistent when walking, waiting, transfer, and terminal access time are included."
+      },
+      "sources": [
+        "https://www.brisbane.qld.gov.au/about-council/your-brisbane/things-to-do-and-see/lifestyle/brisbane-citycat-and-ferry-services-getting-around-brisbane",
+        "https://assets-global.website-files.com/5f7e5c84a8e6b464ca3bfeca/6606c139bf6c18c8e9989f94_24050_RCF_citycat_timetable_web_v3_Accessibility.pdf",
+        "https://www.rivercityferries.com.au/customer-information"
+      ]
+    }
+  },
+  "GROUP_E_ISOLATED_LOCATIONS": {
+    "IMG_0196_NANXIANG_SHANGHAI": {
+      "clips": ["IMG_0196"],
+      "date_context": "2024-01-12 20:55 local",
+      "full_name": "Nanxiang Ancient Town, Jiading District, Shanghai Municipality, People's Republic of China",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": 31.2869, "lon": 121.3215},
+        "requested": {"lat": 31.2869, "lon": 121.3215},
+        "note": "MANIFEST exactly matches requested coordinate."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 11.671,
+        "note": "No official point altitude located."
+      },
+      "terrain": "urban / historic water-town suburb",
+      "climate_note": "January in Shanghai is cool, damp, and low-sun, with evening air holding winter moisture.",
+      "light_note": "Winter evening light is subdued and mixed with commercial/residential artificial light rather than bright skyline glare.",
+      "population_density": "high",
+      "signal_coverage": "good",
+      "one_fact": "Shanghai's official English site describes Nanxiang Ancient Town as over 1500 years old and named after Baihe Nanxiang Temple, built in 505 AD.",
+      "sources": [
+        "https://english.shanghai.gov.cn/en-ScenicSpots/20240318/d27e0a0fd8a647f38e8da351b13cfeec.html",
+        "https://english.shanghai.gov.cn/en-Parks/20231220/0e7be85fb98442c38275d3515155c39d.html"
+      ]
+    },
+    "IMG_8863_TAIAN_MT_TAI_BASE": {
+      "clips": ["IMG_8863"],
+      "date_context": "2025-12-23 22:02 local",
+      "full_name": "Tai'an / Mount Tai base area, Shandong Province, People's Republic of China",
+      "coordinates_verified": {
+        "status": "matched",
+        "manifest": {"lat": 36.2043, "lon": 117.0843},
+        "requested": {"lat": 36.2043, "lon": 117.0843},
+        "note": "MANIFEST exactly matches requested coordinate."
+      },
+      "altitude_verified": {
+        "status": "manifest_for_base_official_peak_context",
+        "meters": 196.576,
+        "official_peak_meters": 1532.7,
+        "note": "MANIFEST altitude fits a base/approach area; Mount Tai's Jade Emperor Peak is listed around 1532.7 m."
+      },
+      "terrain": "mountain / urban base",
+      "climate_note": "Late December night at the base is cold; summit conditions are substantially colder because of the mountain's vertical climate gradient.",
+      "light_note": "Night-climb light is artificial and directional: stair lamps, headlamps, vendor light, and black mountain mass.",
+      "population_density": "medium",
+      "signal_coverage": "good",
+      "one_fact": "Mount Tai is a UNESCO World Heritage Site associated with imperial worship for thousands of years and is regarded as foremost among China's Five Great Mountains.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Mount_Tai",
+        "https://whc.unesco.org/en/list/437/"
+      ],
+      "data_quality": "moderate"
+    }
+  },
+  "sparse_or_unverifiable": [
+    {
+      "key": "IMG_7948_DONGAN",
+      "reason": "User-provided latitude differs from MANIFEST by exactly one degree; external search supports the MANIFEST/Daqing-side latitude more than the requested coordinate."
+    },
+    {
+      "key": "IMG_8300_MOSITAI",
+      "reason": "English-language searchable sources for Mositai as a named place were sparse; terrain and signal notes are inferred from coordinate context and nearby regional sources."
+    },
+    {
+      "key": "IMG_3567_3612_3618_YANGXIANG_AREA",
+      "reason": "Exact administrative identity and official altitude were not confidently verifiable; MANIFEST altitudes and Qilian/Gansu-Qinghai regional sources were used."
+    },
+    {
+      "key": "IMG_3840_DONGXIA",
+      "reason": "Exact local source for Dongxia at the clip coordinate was sparse; altitude is MANIFEST-only."
+    },
+    {
+      "key": "IMG_1113_JERSEY_CITY",
+      "reason": "Only broad city context was gathered; no official altitude or neighborhood-specific environmental source was found."
+    },
+    {
+      "key": "IMG_8669_PITTSBURGH",
+      "reason": "Pittsburgh is not in the chapter structure; enrichment is enough for context but less deep than core project locations."
+    },
+    {
+      "key": "IMG_8863_TAIAN_MT_TAI_BASE",
+      "reason": "Summit/night-climb climate was contextualized from Mount Tai's altitude and mountain-climate sources; no December 2025 event-specific weather record was retrieved."
+    }
+  ]
+}

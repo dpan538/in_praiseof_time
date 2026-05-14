@@ -162,6 +162,7 @@ function bindEvents() {
 
 function setupDesktopObjects() {
   const zones = [
+    { x: [0.14, 0.28], y: [0.66, 0.82] },
     { x: [0.12, 0.24], y: [0.16, 0.32] },
     { x: [0.72, 0.84], y: [0.16, 0.34] },
     { x: [0.12, 0.25], y: [0.62, 0.78] },
@@ -183,6 +184,7 @@ function randomBetween(min, max) {
 
 function openDesktopObject(type) {
   const builders = {
+    eyu: buildEyuWindow,
     nye: buildNyeWindow,
     nanxiang: buildNanxiangWindow,
     brisbane: buildBrisbaneWindow,
@@ -194,6 +196,7 @@ function openDesktopObject(type) {
 
   closeOldestWindowsForNewOne();
   const win = builder();
+  if (!win) return;
   win.style.left = `${Math.round(randomBetween(0.34, 0.58) * window.innerWidth)}px`;
   win.style.top = `${Math.round(randomBetween(0.18, 0.42) * window.innerHeight)}px`;
   bringWindowForward(win);
@@ -218,6 +221,16 @@ function createDesktopWindow(title, body) {
   ].join("");
   win.querySelector(".desktop-close").addEventListener("click", () => closeDesktopWindow(win));
   win.addEventListener("pointerdown", () => bringWindowForward(win));
+  return win;
+}
+
+function createSizedDesktopWindow(title, body, className) {
+  const win = typeof body === "string" ? createDesktopWindow(title, body) : createDesktopWindow(title, "");
+  if (className) win.classList.add(className);
+  if (body && typeof body !== "string") {
+    const bodyEl = win.querySelector(".desktop-body");
+    bodyEl.insertBefore(body, bodyEl.lastElementChild);
+  }
   return win;
 }
 
@@ -324,6 +337,129 @@ function buildTrashWindow() {
   return win;
 }
 
+function buildEyuWindow() {
+  const articles = Array.isArray(window.EYU_ARTICLES) ? window.EYU_ARTICLES : [];
+  if (!articles.length) return null;
+
+  const shell = document.createElement("div");
+  shell.className = "eyu-shell";
+
+  const list = document.createElement("div");
+  list.className = "eyu-list";
+
+  const content = document.createElement("div");
+  content.className = "eyu-content";
+
+  shell.append(list, content);
+
+  const win = createSizedDesktopWindow("鳄鱼的美食屋.eyu", shell, "desktop-window-wide");
+
+  articles.forEach((article, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = article.title;
+    button.dataset.articleId = article.id;
+    button.classList.toggle("is-active", index === 0);
+    button.addEventListener("click", () => renderEyuArticle(win, article.id));
+    list.appendChild(button);
+  });
+
+  renderEyuArticle(win, articles[0].id);
+  return win;
+}
+
+function renderEyuArticle(win, articleId) {
+  const articles = Array.isArray(window.EYU_ARTICLES) ? window.EYU_ARTICLES : [];
+  const article = articles.find((entry) => entry.id === articleId) || articles[0];
+  if (!article || !win) return;
+
+  const list = win.querySelector(".eyu-list");
+  const content = win.querySelector(".eyu-content");
+  if (!list || !content) return;
+
+  [...list.querySelectorAll("button")].forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.articleId === article.id);
+  });
+
+  content.innerHTML = "";
+
+  const header = document.createElement("div");
+  header.className = "eyu-header";
+
+  const title = document.createElement("div");
+  title.className = "eyu-title";
+  title.textContent = article.title;
+
+  const meta = document.createElement("div");
+  meta.className = "eyu-meta";
+  meta.textContent = article.date;
+
+  header.append(title, meta);
+  content.appendChild(header);
+
+  article.sections.forEach((section) => {
+    const unit = document.createElement("div");
+    unit.className = "eyu-section";
+    renderEyuSection(unit, section);
+    content.appendChild(unit);
+  });
+
+  const footer = document.createElement("div");
+  footer.className = "eyu-footer";
+  footer.textContent = `阅读 ${article.reads ?? "—"}  留言 ↓`;
+  content.appendChild(footer);
+
+  if (article.comment) {
+    const comment = document.createElement("div");
+    comment.className = "eyu-comment";
+    comment.textContent = `── ${article.comment.author} / ${article.comment.location} / ${article.comment.date}\n${article.comment.content}`;
+    content.appendChild(comment);
+  }
+
+  content.scrollTop = 0;
+}
+
+function renderEyuSection(container, section) {
+  if (section.type === "text") {
+    container.textContent = section.content;
+    return;
+  }
+
+  if (section.type === "redact") {
+    const block = document.createElement("div");
+    block.className = "eyu-redact";
+    block.textContent = Array.from({ length: section.rows || 1 }, () => "░".repeat(36)).join("\n");
+    container.appendChild(block);
+    return;
+  }
+
+  if (section.type === "strike") {
+    if (section.before) {
+      const before = document.createElement("span");
+      before.textContent = section.before;
+      container.appendChild(before);
+    }
+
+    const struck = document.createElement("span");
+    struck.className = "eyu-strike";
+    struck.textContent = section.content;
+    container.appendChild(struck);
+
+    if (section.after) {
+      const after = document.createElement("span");
+      after.textContent = section.after;
+      container.appendChild(after);
+    }
+
+    if (section.strike2) {
+      const struck2 = document.createElement("span");
+      struck2.className = "eyu-strike";
+      struck2.textContent = section.strike2;
+      container.appendChild(struck2);
+    }
+  }
+}
+
 function openTrashTextWindow() {
   closeOldestWindowsForNewOne();
   const win = createDesktopWindow("untitled.txt", `<textarea class="trash-empty-file" readonly></textarea><div class="trash-status"></div>`);
@@ -419,6 +555,7 @@ function activateChapter(chapter) {
   setPalette(spec);
   updateChrome(spec);
   updateNav(chapter);
+  updateDesktopObjectVisibility(chapter);
   dom.chapter00.classList.toggle("is-active", chapter === "ch00");
   dom.stage.classList.toggle("is-active", chapter !== "ch00");
   dom.stage.dataset.mode = chapter;
@@ -436,6 +573,12 @@ function activateChapter(chapter) {
   renderAltitudeRoute();
   maybeStartP5(chapter);
   maybeStartCh04InterruptTimer(chapter);
+}
+
+function updateDesktopObjectVisibility(chapter) {
+  const eyuIcon = dom.objectLayer?.querySelector('[data-object="eyu"]');
+  if (!eyuIcon) return;
+  eyuIcon.classList.toggle("is-hidden", !(chapter === "ch01" || chapter === "ch04"));
 }
 
 function setPalette(spec) {
