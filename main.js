@@ -53,20 +53,13 @@ const CHAPTERS = {
   },
 };
 
-const BOOT_SEQUENCE = [
+const BOOT_SEQUENCE_BASE = [
   { text: "in_praise_of_time", delay: 0 },
   { text: "v1.0.0", delay: 600 },
   { text: "", delay: 400 },
-  { text: "loading signal data...", delay: 200 },
+  { text: "loading archive...", delay: 200 },
   { text: "MANIFEST.json        OK", delay: 500 },
   { text: "environment.json     OK", delay: 200 },
-  { text: "beishang.txt         OK", delay: 200 },
-  { text: "eyu_articles.js      OK", delay: 200 },
-  { text: "", delay: 300 },
-  { text: "46 clips registered", delay: 400 },
-  { text: "47 locations indexed", delay: 200 },
-  { text: "", delay: 300 },
-  { text: "locating...", delay: 600 },
 ];
 
 const SHUTDOWN_TEXT = "in_praise_of_time  —  session ended";
@@ -165,6 +158,8 @@ const state = {
   textObserver: null,
   shutdownBuffer: "",
   shuttingDown: false,
+  environmentEntries: null,
+  minimizedWindows: new Map(),
   map: {
     instance: null,
     marker: null,
@@ -236,6 +231,8 @@ const dom = {
   interruptStage: document.getElementById("interrupt-stage"),
   interruptVideo: document.getElementById("interrupt-video"),
   interruptBeishangText: document.getElementById("interrupt-beishang-text"),
+  hiddenIntButton: document.getElementById("hidden-int-button"),
+  dockBar: document.getElementById("dock-bar"),
 };
 
 const textureCtx = dom.texture.getContext("2d");
@@ -255,10 +252,9 @@ async function init() {
   setupDesktopObjects();
   setupOperatingSystem();
   resizeTexture();
-  requestAnimationFrame(drawTexture);
   if (sessionStorage.getItem("booted") === "1") {
     const chapter = sessionStorage.getItem("last_chapter") || "ch00";
-    if (chapter === "int") enterInterrupt();
+    if (chapter === "int") activateChapter("ch04");
     else {
       activateChapter(CHAPTERS[chapter] ? chapter : "ch00");
       if ((CHAPTERS[chapter] ? chapter : "ch00") === "ch00") runLocating();
@@ -281,7 +277,10 @@ async function loadSubdermalText() {
 }
 
 function bindEvents() {
-  window.addEventListener("resize", resizeTexture);
+  window.addEventListener("resize", () => {
+    resizeTexture();
+    positionDesktopIcons();
+  });
   document.addEventListener("keydown", onKeyDown);
   window.addEventListener("wheel", onWheel, { passive: false });
 
@@ -299,6 +298,7 @@ function bindEvents() {
   dom.video.addEventListener("ended", () => advanceClip());
   dom.video.addEventListener("timeupdate", trackClipReadProgress);
   dom.interruptVideo.addEventListener("ended", () => exitInterrupt());
+  dom.hiddenIntButton?.addEventListener("click", () => enterInterrupt());
 }
 
 async function playBootSequence() {
@@ -307,12 +307,52 @@ async function playBootSequence() {
   dom.bootScreen.setAttribute("aria-hidden", "false");
   dom.bootLines.textContent = "";
   const lines = [];
-  for (const entry of BOOT_SEQUENCE) {
+  for (const entry of buildBootSequence()) {
     await wait(entry.delay);
     lines.push(entry.text);
     dom.bootLines.textContent = lines.join("\n");
+    dom.bootLines.scrollTop = dom.bootLines.scrollHeight;
   }
   await wait(800);
+}
+
+function buildBootSequence() {
+  const clips = Object.keys(state.signal || {})
+    .filter((key) => key.startsWith("IMG_"))
+    .map((key) => state.signal[key]);
+  return [
+    ...BOOT_SEQUENCE_BASE,
+    { text: "", delay: 200 },
+    { text: "indexing clips...", delay: 300 },
+    ...clips.map((clip) => ({ text: formatBootClipLine(clip), delay: 60 })),
+    { text: "", delay: 80 },
+    { text: `all ${clips.length} clips indexed   ✓`, delay: 300 },
+    { text: "", delay: 120 },
+    { text: "loading signal data...", delay: 300 },
+    { text: "glitch weights         ✓", delay: 70 },
+    { text: "altitude index         ✓", delay: 70 },
+    { text: "ios timeline           ✓", delay: 70 },
+    { text: "audio waveforms        ✓", delay: 70 },
+    { text: "", delay: 120 },
+    { text: "mounting environment...", delay: 300 },
+    { text: "47 locations           ✓", delay: 70 },
+    { text: "6 unverified           !", delay: 70 },
+    { text: "", delay: 120 },
+    { text: "loading text layers...", delay: 300 },
+    { text: "beishang.txt           ✓  (3847 chars)", delay: 70 },
+    { text: "eyu_articles.js        ✓  (7 articles)", delay: 70 },
+    { text: "news_content.js        ✓  (6 chapters)", delay: 70 },
+    { text: "", delay: 120 },
+    { text: "system ready.", delay: 600 },
+    { text: "locating...", delay: 600 },
+  ];
+}
+
+function formatBootClipLine(clip) {
+  const name = String(clip.filename || clip.clip || "").padEnd(20, " ");
+  const time = String(clip.local_time || "").slice(11, 16) || "--:--";
+  const location = String(clip.location || "unknown").replace(",", "");
+  return `${name}${time}  ${location.padEnd(16, " ")}✓`;
 }
 
 function hideBootScreen() {
@@ -326,26 +366,34 @@ function wait(ms) {
 }
 
 function setupDesktopObjects() {
-  const zones = [
-    { x: [0.14, 0.28], y: [0.66, 0.82] },
-    { x: [0.12, 0.24], y: [0.16, 0.32] },
-    { x: [0.72, 0.84], y: [0.16, 0.34] },
-    { x: [0.12, 0.25], y: [0.62, 0.78] },
-    { x: [0.72, 0.84], y: [0.58, 0.76] },
-    { x: [0.46, 0.56], y: [0.76, 0.86] },
-    { x: [0.82, 0.92], y: [0.08, 0.2] },
-  ];
-
-  dom.desktopIcons.forEach((icon, index) => {
-    const zone = zones[index];
-    icon.style.left = `${randomBetween(zone.x[0], zone.x[1]) * window.innerWidth}px`;
-    icon.style.top = `${randomBetween(zone.y[0], zone.y[1]) * window.innerHeight}px`;
-    icon.addEventListener("click", () => openDesktopObject(icon.dataset.object));
+  positionDesktopIcons();
+  dom.desktopIcons.forEach((icon) => {
+    icon.addEventListener("click", () => selectDesktopIcon(icon));
+    icon.addEventListener("dblclick", () => openDesktopObject(icon.dataset.object));
   });
 }
 
-function randomBetween(min, max) {
-  return min + Math.random() * (max - min);
+function positionDesktopIcons() {
+  const positions = {
+    nye: { right: 236, top: 70 },
+    nanxiang: { right: 126, top: 70 },
+    brisbane: { right: 16, top: 70 },
+    nogps: { right: 170, top: 190 },
+    readme: { right: 56, top: 202 },
+    eyu: { right: 128, bottom: 84 },
+    trash: { right: 18, bottom: 40 },
+  };
+  dom.desktopIcons.forEach((icon) => {
+    const pos = positions[icon.dataset.object] || { right: 18, top: 70 };
+    const width = 92;
+    icon.style.left = `${Math.max(8, window.innerWidth - pos.right - width)}px`;
+    icon.style.top = Number.isFinite(pos.bottom) ? "" : `${pos.top}px`;
+    icon.style.bottom = Number.isFinite(pos.bottom) ? `${pos.bottom}px` : "";
+  });
+}
+
+function selectDesktopIcon(icon) {
+  dom.desktopIcons.forEach((item) => item.classList.toggle("is-selected", item === icon));
 }
 
 function openDesktopObject(type) {
@@ -364,12 +412,25 @@ function openDesktopObject(type) {
   closeOldestWindowsForNewOne();
   const win = builder();
   if (!win) return;
-  return mountDesktopWindow(win, {
+  const mounted = mountDesktopWindow(win, {
     id: type,
     kind: "object",
-    left: Math.round(randomBetween(0.34, 0.58) * window.innerWidth),
-    top: Math.round(randomBetween(0.18, 0.42) * window.innerHeight),
+    ...desktopObjectWindowPosition(type),
   });
+  if (type === "trash") maybeShowTrashDialog();
+  return mounted;
+}
+
+function desktopObjectWindowPosition(type) {
+  return {
+    eyu: { left: 220, top: 110 },
+    nye: { left: 460, top: 110 },
+    nanxiang: { left: 500, top: 150 },
+    brisbane: { left: 540, top: 190 },
+    nogps: { left: 460, top: 230 },
+    trash: { left: 340, top: 260 },
+    readme: { left: 300, top: 90 },
+  }[type] || { left: 80, top: 80 };
 }
 
 function closeOldestWindowsForNewOne() {
@@ -384,10 +445,19 @@ function createDesktopWindow(title, body) {
   win.className = "desktop-window";
   win.dataset.windowTitle = title;
   win.innerHTML = [
-    `<div class="desktop-titlebar"><span>| ${title} |</span><button class="desktop-close" aria-label="Close">[─][×]</button></div>`,
+    `<div class="desktop-titlebar"><span>${title}</span><button class="desktop-minimize" type="button" aria-label="Minimize">[─]</button><button class="desktop-close" type="button" aria-label="Close">[×]</button></div>`,
     `<div class="desktop-body"><pre>+------------------------------+</pre>${body}<pre>+------------------------------+</pre></div>`,
   ].join("");
-  win.querySelector(".desktop-close").addEventListener("click", () => closeDesktopWindow(win));
+  win.querySelector(".desktop-close").addEventListener("pointerdown", (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    closeDesktopWindow(win);
+  });
+  win.querySelector(".desktop-minimize").addEventListener("pointerdown", (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    minimizeDesktopWindow(win);
+  });
   win.addEventListener("pointerdown", () => bringWindowForward(win));
   return win;
 }
@@ -400,8 +470,7 @@ function mountDesktopWindow(win, options = {}) {
   if (!win.dataset.windowTitle) {
     win.dataset.windowTitle = win.querySelector(".desktop-titlebar span")?.textContent?.replace(/[|]/g, "").trim() || id;
   }
-  win.style.left = `${options.left ?? Math.round(randomBetween(0.3, 0.62) * window.innerWidth)}px`;
-  win.style.top = `${options.top ?? Math.round(randomBetween(0.16, 0.5) * window.innerHeight)}px`;
+  setWindowPosition(win, options);
   bringWindowForward(win);
   makeDraggable(win);
   dom.objectLayer.appendChild(win);
@@ -409,6 +478,20 @@ function mountDesktopWindow(win, options = {}) {
   updateFinderWindow();
   updateControlPanelWindow();
   return win;
+}
+
+function setWindowPosition(win, options = {}) {
+  ["left", "right", "top", "bottom"].forEach((side) => {
+    win.style[side] = "";
+  });
+  if (Number.isFinite(options.width)) win.style.width = `${options.width}px`;
+  if (Number.isFinite(options.height)) win.style.height = `${options.height}px`;
+  const left = options.left ?? 80;
+  const top = options.top ?? 80;
+  if (Number.isFinite(options.right)) win.style.right = `${options.right}px`;
+  else win.style.left = `${left}px`;
+  if (Number.isFinite(options.bottom)) win.style.bottom = `${options.bottom}px`;
+  else win.style.top = `${top}px`;
 }
 
 function createSizedDesktopWindow(title, body, className) {
@@ -423,6 +506,7 @@ function createSizedDesktopWindow(title, body, className) {
 
 function closeDesktopWindow(win) {
   if (!win) return;
+  removeDockIcon(win);
   if (win.trashTimers) {
     win.trashTimers.forEach((timer) => clearTimeout(timer));
   }
@@ -437,17 +521,64 @@ function closeDesktopWindow(win) {
 }
 
 function bringWindowForward(win) {
+  if (win.classList.contains("is-minimized")) return;
   state.windowZ += 1;
+  state.desktopWindows.forEach((item) => item.classList.remove("is-focused"));
   win.style.zIndex = state.windowZ;
   win.classList.add("is-focused");
-  setTimeout(() => win.classList.remove("is-focused"), 280);
   updateFinderWindow();
+}
+
+function minimizeDesktopWindow(win) {
+  if (!win || win.classList.contains("is-minimized")) return;
+  const rect = win.getBoundingClientRect();
+  win.dataset.restoreLeft = String(rect.left);
+  win.dataset.restoreTop = String(rect.top);
+  win.dataset.restoreWidth = String(rect.width);
+  win.dataset.restoreHeight = String(rect.height);
+  win.classList.add("is-minimized");
+  win.style.display = "none";
+  addDockIcon(win);
+  updateFinderWindow();
+  updateControlPanelWindow();
+}
+
+function restoreDesktopWindow(win) {
+  if (!win) return;
+  win.classList.remove("is-minimized");
+  win.style.display = "";
+  win.style.left = `${Math.round(Number(win.dataset.restoreLeft || 80))}px`;
+  win.style.top = `${Math.round(Number(win.dataset.restoreTop || 80))}px`;
+  win.style.right = "";
+  win.style.bottom = "";
+  if (win.dataset.restoreWidth) win.style.width = `${Math.round(Number(win.dataset.restoreWidth))}px`;
+  if (win.dataset.restoreHeight) win.style.height = `${Math.round(Number(win.dataset.restoreHeight))}px`;
+  removeDockIcon(win);
+  bringWindowForward(win);
+}
+
+function addDockIcon(win) {
+  if (!dom.dockBar || state.minimizedWindows.has(win.dataset.windowId)) return;
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "dock-icon";
+  button.textContent = String(win.dataset.windowTitle || win.dataset.windowId || "window").slice(0, 12);
+  button.addEventListener("click", () => restoreDesktopWindow(win));
+  state.minimizedWindows.set(win.dataset.windowId, button);
+  dom.dockBar.appendChild(button);
+}
+
+function removeDockIcon(win) {
+  const icon = state.minimizedWindows.get(win.dataset.windowId);
+  if (icon) icon.remove();
+  state.minimizedWindows.delete(win.dataset.windowId);
 }
 
 function makeDraggable(win) {
   const handle = win.querySelector(".desktop-titlebar");
   let drag = null;
   handle.addEventListener("pointerdown", (event) => {
+    if (event.target.closest("button")) return;
     drag = {
       x: event.clientX,
       y: event.clientY,
@@ -476,6 +607,11 @@ function setupOperatingSystem() {
     updateFinderWindow();
     updateProfilerWindow();
   }, 2000));
+  openInitialSystemWindows();
+}
+
+function openInitialSystemWindows() {
+  ["finder", "control", "news", "note", "calendar"].forEach((id) => openSystemWindow(id));
 }
 
 function insertSystemLaunchers() {
@@ -559,27 +695,149 @@ function findWindowById(id) {
 
 function systemWindowPosition(id) {
   const positions = {
-    finder: { left: 86, top: 82 },
-    control: { left: 132, top: 116 },
-    note: { left: 210, top: 128 },
-    calendar: { left: 250, top: 150 },
-    puzzle: { left: 310, top: 92 },
-    profiler: { left: 380, top: 128 },
-    maze: { left: 430, top: 100 },
-    news: { left: 340, top: 72 },
-    map: { left: 520, top: 120 },
+    finder: { left: 10, top: 60 },
+    control: { right: 10, top: 60 },
+    news: { left: 220, top: 60 },
+    note: { left: 10, bottom: 80 },
+    calendar: { right: 10, bottom: 80 },
+    puzzle: { left: 460, top: 120 },
+    profiler: { left: 480, top: 150 },
+    maze: { left: 520, top: 180 },
+    map: { left: 540, top: 80 },
   };
   return positions[id] || {};
 }
 
 function openSearchWindow(open) {
-  const root = document.getElementById("gazetteer-window");
-  if (root && root.classList.contains("is-open") === open) return;
-  document.getElementById("gazetteer-db-button")?.click();
+  const existing = findWindowById("search");
+  if (open) {
+    if (existing) {
+      restoreDesktopWindow(existing);
+      bringWindowForward(existing);
+      return;
+    }
+    const win = buildSearchWindow();
+    mountDesktopWindow(win, { id: "search", kind: "system", left: 90, top: 90, width: 360, height: 440 });
+    return;
+  }
+  if (existing) closeDesktopWindow(existing);
 }
 
 function isSearchWindowOpen() {
-  return !!document.getElementById("gazetteer-window")?.classList.contains("is-open");
+  return !!findWindowById("search");
+}
+
+function buildSearchWindow() {
+  const shell = document.createElement("div");
+  shell.className = "search-panel os-window-body";
+  const input = document.createElement("input");
+  input.className = "search-input";
+  input.type = "search";
+  input.autocomplete = "off";
+  input.spellcheck = false;
+  input.placeholder = "";
+  const results = document.createElement("div");
+  results.className = "search-results";
+  const detail = document.createElement("div");
+  detail.className = "search-detail";
+  shell.append(input, results, detail);
+  const win = createSizedDesktopWindow("search", shell, "desktop-window-search");
+  const render = () => renderSearchWindow(input.value, results, detail);
+  input.addEventListener("input", render);
+  loadEnvironmentEntries().then(render).catch((error) => {
+    detail.textContent = `environment.json unavailable\n${error.message || error}`;
+  });
+  return win;
+}
+
+async function loadEnvironmentEntries() {
+  if (state.environmentEntries) return state.environmentEntries;
+  const env = await fetch("signal_data/environment.json").then((response) => response.json());
+  state.environmentEntries = Object.keys(env)
+    .filter((group) => group.startsWith("GROUP_"))
+    .flatMap((group) => Object.entries(env[group] || {}).map(([key, raw]) => ({
+      key,
+      group,
+      raw,
+      label: raw.full_name || key.replaceAll("_", " "),
+      search: [key, raw.full_name, raw.terrain, raw.one_fact, raw.narrative_note, raw.chapter_relevance].filter(Boolean).join(" ").toLowerCase(),
+    })));
+  return state.environmentEntries;
+}
+
+function renderSearchWindow(query, results, detail) {
+  const entries = state.environmentEntries || [];
+  const needle = query.trim().toLowerCase();
+  const matches = entries.filter((entry) => !needle || entry.search.includes(needle)).slice(0, 24);
+  results.innerHTML = "";
+  matches.forEach((entry, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "search-result";
+    button.textContent = entry.label;
+    button.addEventListener("click", () => {
+      results.querySelectorAll(".search-result").forEach((item) => item.classList.remove("is-selected"));
+      button.classList.add("is-selected");
+      renderSearchDetail(entry, detail);
+    });
+    results.appendChild(button);
+    if (index === 0) {
+      button.classList.add("is-selected");
+      renderSearchDetail(entry, detail);
+    }
+  });
+  if (!matches.length) detail.textContent = "NO MATCH";
+}
+
+function renderSearchDetail(entry, detail) {
+  const raw = entry.raw || {};
+  detail.innerHTML = "";
+  const title = document.createElement("div");
+  title.className = "search-detail-title";
+  title.textContent = entry.label;
+  detail.appendChild(title);
+  [
+    ["coordinates", extractEnvironmentCoordinates(raw)],
+    ["altitude", extractEnvironmentAltitude(raw)],
+    ["terrain", raw.terrain || raw.terrain_detail],
+    ["climate", raw.climate_note || raw.climate || raw.seasonal_light],
+    ["light", raw.light_note || raw.sensory_atmospheric],
+    ["population", raw.population_density],
+    ["signal coverage", raw.signal_coverage],
+    ["one_fact", raw.one_fact],
+    ["narrative_note", raw.narrative_note],
+  ].forEach(([label, value]) => {
+    const row = document.createElement("div");
+    row.className = "search-detail-row";
+    row.textContent = `${label}: ${formatSearchValue(value)}`;
+    detail.appendChild(row);
+  });
+}
+
+function extractEnvironmentCoordinates(raw) {
+  const source = raw.coordinates_verified?.manifest || raw.coordinates_verified?.requested || raw.coordinates || raw;
+  const lat = Number(source.lat ?? source.latitude);
+  const lon = Number(source.lon ?? source.lng ?? source.longitude);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return "—";
+  return `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+}
+
+function extractEnvironmentAltitude(raw) {
+  const altitude = raw.altitude_verified;
+  if (typeof altitude === "number") return `${Math.round(altitude)}m`;
+  if (altitude && typeof altitude === "object") {
+    const meters = altitude.meters ?? altitude.manifest_meters ?? altitude.altitude_m;
+    if (Number.isFinite(Number(meters))) return `${Math.round(Number(meters))}m`;
+    if (altitude.status) return altitude.status;
+  }
+  return "—";
+}
+
+function formatSearchValue(value) {
+  if (value === null || typeof value === "undefined" || value === "") return "—";
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") return String(value);
+  if (Array.isArray(value)) return value.map(formatSearchValue).join("; ");
+  return JSON.stringify(value);
 }
 
 function makeAsciiCheckbox(label, checked, onChange) {
@@ -613,24 +871,20 @@ function makeAsciiSlider(label, value, min, max, step, onChange) {
   const render = () => {
     const units = 10;
     const ratio = Math.max(0, Math.min(1, (current - min) / (max - min || 1)));
-    const position = Math.round(ratio * units);
-    track.textContent = `${"─".repeat(position)}●${"─".repeat(units - position)}`;
+    const position = Math.min(units, Math.floor(ratio * units));
+    track.textContent = `[${"─".repeat(position)}●${"─".repeat(units - position)}]`;
     valueNode.textContent = current.toFixed(max <= 1 ? 2 : 0);
   };
-  const setFromClientX = (clientX) => {
+  const stepFromClientX = (clientX) => {
     const rect = track.getBoundingClientRect();
-    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / Math.max(1, rect.width)));
-    const next = Math.round((min + ratio * (max - min)) / step) * step;
+    const direction = clientX < rect.left + rect.width / 2 ? -1 : 1;
+    const next = current + direction * step;
     current = Number(Math.max(min, Math.min(max, next)).toFixed(3));
     onChange(current);
     render();
   };
   track.addEventListener("pointerdown", (event) => {
-    setFromClientX(event.clientX);
-    track.setPointerCapture(event.pointerId);
-  });
-  track.addEventListener("pointermove", (event) => {
-    if (event.buttons) setFromClientX(event.clientX);
+    stepFromClientX(event.clientX);
   });
   render();
   row.append(name, track, valueNode);
@@ -836,6 +1090,7 @@ function buildNoteWindow() {
   shell.className = "note-panel os-window-body";
   const textarea = document.createElement("textarea");
   textarea.spellcheck = false;
+  textarea.setAttribute("autocorrect", "off");
   textarea.autocapitalize = "off";
   textarea.autocomplete = "off";
   textarea.value = sessionStorage.getItem("note_content") || "";
@@ -1082,8 +1337,8 @@ function trackClipReadProgress() {
 function buildMazeWindow() {
   const shell = document.createElement("div");
   shell.className = "maze-panel os-window-body";
-  const grid = document.createElement("pre");
-  grid.className = "maze-grid";
+  const grid = document.createElement("canvas");
+  grid.className = "maze-canvas";
   const message = document.createElement("div");
   message.className = "maze-message";
   const footer = document.createElement("div");
@@ -1094,6 +1349,7 @@ function buildMazeWindow() {
   win.mazeHandler = (event) => handleMazeKey(event, win);
   win.tabIndex = 0;
   win.addEventListener("keydown", win.mazeHandler);
+  win.addEventListener("pointerdown", () => win.focus());
   requestAnimationFrame(() => {
     win.focus();
     renderMaze(win);
@@ -1175,16 +1431,49 @@ function mazeRows(ms) {
 
 function renderMaze(win, rows = mazeRows(win.mazeState)) {
   const ms = win.mazeState;
-  const grid = win.querySelector(".maze-grid");
+  const grid = win.querySelector(".maze-canvas");
   const footer = win.querySelector(".maze-footer");
   const message = win.querySelector(".maze-message");
+  const cell = 24;
   if (ms.complete) {
-    grid.textContent = "出口在这里。或者说，这里有一个出口。";
+    const text = "出口在这里。或者说，这里有一个出口。";
+    grid.width = 480;
+    grid.height = 96;
+    const ctx = grid.getContext("2d");
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, grid.width, grid.height);
+    ctx.fillStyle = "#000000";
+    ctx.font = "12px IBM Plex Mono, monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, grid.width / 2, grid.height / 2);
     footer.textContent = "press any key";
     message.textContent = "";
     return;
   }
-  grid.textContent = rows.join("\n");
+  const width = Math.max(...rows.map((row) => row.length));
+  grid.width = width * cell;
+  grid.height = rows.length * cell;
+  const ctx = grid.getContext("2d");
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fillRect(0, 0, grid.width, grid.height);
+  ctx.font = "16px IBM Plex Mono, monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  rows.forEach((row, y) => {
+    for (let x = 0; x < width; x += 1) {
+      const char = row[x] || " ";
+      if (char === "█") {
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(x * cell, y * cell, cell, cell);
+      } else if (char === "@" || char === "E") {
+        ctx.fillStyle = "#000000";
+        ctx.fillText(char, x * cell + cell / 2, y * cell + cell / 2);
+      }
+    }
+  });
+  win.style.width = `${grid.width + 18}px`;
+  win.style.height = `${grid.height + 96}px`;
   message.textContent = ms.message;
   footer.textContent = `${ms.levels[ms.level].name} / steps ${ms.steps}`;
 }
@@ -1275,7 +1564,11 @@ function renderNewsWindow(win = findWindowById("news")) {
   bodyWrap.className = "news-body";
   const figure = document.createElement("div");
   figure.className = "news-figure";
-  figure.innerHTML = `<div>${"░░░░░░░░░░░░\n".repeat(6)}</div><span>[${content.fig}]</span>`;
+  const image = document.createElement("div");
+  image.className = "news-figure-image";
+  const caption = document.createElement("span");
+  caption.textContent = `[${content.fig}]`;
+  figure.append(image, caption);
   const article = document.createElement("article");
   article.className = "news-copy";
   article.innerHTML = `<h2>${content.headline}</h2><p>${body}</p>`;
@@ -1339,12 +1632,18 @@ function initializeMapWindow(win) {
     maxZoom: 19,
     attribution: "&copy; OpenStreetMap",
   }).addTo(map);
-  const color = currentChapterColor();
+  const applyTileFilter = () => {
+    win.querySelectorAll(".leaflet-tile").forEach((tile) => {
+      tile.style.filter = "grayscale(100%) brightness(0.75) contrast(0.9)";
+    });
+  };
+  map.on("load", applyTileFilter);
+  map.on("tileload", applyTileFilter);
   const marker = L.circleMarker([center.lat, center.lon], {
-    radius: 6,
+    radius: 4,
     weight: 1,
-    color,
-    fillColor: color,
+    color: "#000000",
+    fillColor: "#000000",
     fillOpacity: 1,
   }).addTo(map);
   win.leafletMap = map;
@@ -1361,10 +1660,9 @@ function updateMapWindow(win = findWindowById("map"), fly = true) {
   const center = currentMapCenter();
   if (win.mapCoords) win.mapCoords.textContent = formatMapCoords(center);
   if (!win.leafletMap || !win.mapMarker) return;
-  const color = currentChapterColor();
   const latLng = [center.lat, center.lon];
   win.mapMarker.setLatLng(latLng);
-  win.mapMarker.setStyle({ color, fillColor: color });
+  win.mapMarker.setStyle({ color: "#000000", fillColor: "#000000" });
   if (fly) win.leafletMap.flyTo(latLng, center.zoom, { duration: 1.5 });
   else win.leafletMap.setView(latLng, center.zoom);
 }
@@ -1504,9 +1802,17 @@ function openTrashItem(id) {
   mountDesktopWindow(win, {
     id: `trash-${item.id}`,
     kind: "object",
-    left: Math.round(randomBetween(0.36, 0.62) * window.innerWidth),
-    top: Math.round(randomBetween(0.18, 0.46) * window.innerHeight),
+    ...trashItemWindowPosition(item.id),
   });
+}
+
+function trashItemWindowPosition(id) {
+  return {
+    "freedom-wanted": { left: 360, top: 300 },
+    "freedom-forbidden": { left: 390, top: 330 },
+    "cambridge-as": { left: 420, top: 160 },
+    "cambridge-al-forecast": { left: 450, top: 190 },
+  }[id] || { left: 360, top: 300 };
 }
 
 function buildReadmeWindow() {
@@ -1526,7 +1832,7 @@ function buildReadmeWindow() {
 }
 
 function buildEyuWindow() {
-  const articles = Array.isArray(window.EYU_ARTICLES) ? window.EYU_ARTICLES : [];
+  const articles = sortedEyuArticles();
   if (!articles.length) return null;
 
   const shell = document.createElement("div");
@@ -1540,20 +1846,60 @@ function buildEyuWindow() {
 
   shell.append(list, content);
 
-  const win = createSizedDesktopWindow("鳄鱼的美食屋.eyu", shell, "desktop-window-wide");
+  const win = createSizedDesktopWindow("鳄鱼的美食屋.eyu", shell, "desktop-window-eyu");
 
   articles.forEach((article, index) => {
     const button = document.createElement("button");
     button.type = "button";
-    button.textContent = article.title;
     button.dataset.articleId = article.id;
     button.classList.toggle("is-active", index === 0);
+    const date = document.createElement("span");
+    date.className = "eyu-list-date";
+    date.textContent = eyuListDate(article);
+    const title = document.createElement("span");
+    title.className = "eyu-list-title";
+    title.textContent = eyuListTitle(article);
+    button.append(date, title);
     button.addEventListener("click", () => renderEyuArticle(win, article.id));
     list.appendChild(button);
   });
 
   renderEyuArticle(win, articles[0].id);
   return win;
+}
+
+function sortedEyuArticles() {
+  const articles = Array.isArray(window.EYU_ARTICLES) ? window.EYU_ARTICLES : [];
+  const order = [
+    "kaishi_sheying",
+    "shicha_diyi_juan",
+    "lekai_5112",
+    "langshan",
+    "dongjing_guangxue",
+    "jiyi_bianma",
+    "xue_qian_xue_hou",
+  ];
+  return [...articles].sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+}
+
+function eyuListDate(article) {
+  return {
+    kaishi_sheying: "Sep 2024",
+    shicha_diyi_juan: "Jan 2025",
+    lekai_5112: "Oct 2024",
+    langshan: "2024",
+    dongjing_guangxue: "Jan 2025",
+    jiyi_bianma: "Jan 2025",
+    xue_qian_xue_hou: "2025",
+  }[article.id] || article.date || "";
+}
+
+function eyuListTitle(article) {
+  return {
+    shicha_diyi_juan: "时差里的第一卷",
+    dongjing_guangxue: "东京光学 50mm F2，和公园",
+    jiyi_bianma: "漆黑的记忆编码",
+  }[article.id] || article.title;
 }
 
 function renderEyuArticle(win, articleId) {
@@ -1580,7 +1926,7 @@ function renderEyuArticle(win, articleId) {
 
   const meta = document.createElement("div");
   meta.className = "eyu-meta";
-  meta.textContent = article.date;
+  meta.textContent = `${article.date} / reads ${article.reads ?? "—"}`;
 
   header.append(title, meta);
   content.appendChild(header);
@@ -1616,7 +1962,7 @@ function renderEyuSection(container, section) {
   if (section.type === "redact") {
     const block = document.createElement("div");
     block.className = "eyu-redact";
-    block.textContent = Array.from({ length: section.rows || 1 }, () => "░".repeat(36)).join("\n");
+    block.style.height = `${Math.max(1, section.rows || 1) * 18}px`;
     container.appendChild(block);
     return;
   }
@@ -1654,8 +2000,8 @@ function openTrashTextWindow(filename = "还是应该有.txt") {
   mountDesktopWindow(win, {
     id: "trash-still",
     kind: "object",
-    left: Math.round(randomBetween(0.4, 0.6) * window.innerWidth),
-    top: Math.round(randomBetween(0.26, 0.46) * window.innerHeight),
+    left: 390,
+    top: 300,
   });
   startTrashSequence(win);
 }
@@ -1817,6 +2163,47 @@ function activateChapter(chapter) {
   renderAltitudeRoute();
   maybeStartP5(chapter);
   maybeStartCh04InterruptTimer(chapter);
+  maybeShowOnboardingDialog(chapter);
+}
+
+function maybeShowOnboardingDialog(chapter) {
+  if (chapter !== "ch01" || sessionStorage.getItem("onboarding_ch01") === "1") return;
+  sessionStorage.setItem("onboarding_ch01", "1");
+  showSystemDialog("■ in_praise_of_time", [
+    "This is an archive.",
+    "46 clips. 47 locations.",
+    "2024 – 2026.",
+    "",
+    "Double-click desktop objects to open.",
+    "Windows can be moved and resized.",
+    "Type \"shutdown\" to end the session.",
+  ]);
+}
+
+function maybeShowTrashDialog() {
+  if (sessionStorage.getItem("trash_onboarding") === "1") return;
+  sessionStorage.setItem("trash_onboarding", "1");
+  showSystemDialog("■ trash", [
+    "5 items.",
+    "Some were kept on purpose.",
+  ]);
+}
+
+function showSystemDialog(title, lines) {
+  const existing = document.querySelector(".system-dialog");
+  if (existing) existing.remove();
+  const dialog = document.createElement("section");
+  dialog.className = "system-dialog";
+  dialog.setAttribute("role", "dialog");
+  dialog.setAttribute("aria-modal", "true");
+  dialog.innerHTML = [
+    `<div class="system-dialog-title">${title}</div>`,
+    `<div class="system-dialog-body"><pre></pre><button type="button">[ OK ]</button></div>`,
+  ].join("");
+  dialog.querySelector("pre").textContent = `\n${lines.join("\n")}\n`;
+  dialog.querySelector("button").addEventListener("click", () => dialog.remove());
+  document.body.appendChild(dialog);
+  dialog.querySelector("button").focus();
 }
 
 function updateDesktopObjectVisibility(chapter) {
@@ -1856,7 +2243,6 @@ function setClip(clipKey) {
 
   const glitch = clip.glitch_weight || 0;
   dom.crtFrame.style.setProperty("--glitch-shift", `${1 + glitch * 5}px`);
-  dom.crtFrame.style.setProperty("--glitch-opacity", `${0.18 + glitch * 0.42}`);
   dom.crtFrame.style.setProperty("--glitch-cycle", `${Math.max(1.8, 8 - glitch * 5.8)}s`);
 
   updateMonitor(clip);
@@ -1894,9 +2280,18 @@ function triggerNyeInterrupt() {
 }
 
 function enterInterrupt() {
-  state.previousChapter = state.chapter === "int" ? "ch01" : state.chapter;
+  if (state.chapter === "int") return;
+  const ch04Spec = CHAPTERS.ch04;
+  const fromCh04 = state.chapter === "ch04" && ch04Spec.clips.includes(state.currentClip);
+  state.interruptReturn = {
+    chapter: "ch04",
+    clip: fromCh04 ? state.currentClip : ch04Spec.clips[0],
+    clipIndex: fromCh04 ? state.clipIndex : 0,
+    time: fromCh04 ? dom.video.currentTime || 0 : 0,
+  };
+  state.previousChapter = state.interruptReturn.chapter;
   state.chapter = "int";
-  sessionStorage.setItem("last_chapter", "int");
+  sessionStorage.setItem("last_chapter", "ch04");
   const clip = state.signal.IMG_8863;
   setPalette(CHAPTERS.int);
   updateMapWindow();
@@ -1905,6 +2300,7 @@ function enterInterrupt() {
   updateFinderWindow();
   dom.body.classList.add("is-interrupt");
   dom.interruptStage.classList.add("is-active");
+  dom.video.pause();
   dom.interruptVideo.volume = state.settings.audio.video;
   dom.interruptVideo.src = clip.filename;
   dom.interruptVideo.load();
@@ -1920,7 +2316,23 @@ function exitInterrupt() {
   dom.interruptVideo.load();
   dom.body.classList.remove("is-interrupt");
   dom.interruptStage.classList.remove("is-active");
-  hardCut(() => activateChapter(state.previousChapter || "ch04"));
+  const restore = state.interruptReturn || { chapter: "ch04" };
+  hardCut(() => {
+    activateChapter(restore.chapter || "ch04");
+    if (restore.clip && state.signal[restore.clip]) {
+      const spec = CHAPTERS[restore.chapter || "ch04"];
+      state.clipIndex = Math.max(0, spec.clips.indexOf(restore.clip));
+      if (restore.time) {
+        const seek = () => {
+          dom.video.currentTime = Math.min(restore.time, Math.max(0, (dom.video.duration || restore.time) - 0.2));
+          dom.video.play().catch(() => {});
+          dom.video.removeEventListener("loadedmetadata", seek);
+        };
+        dom.video.addEventListener("loadedmetadata", seek);
+      }
+      setClip(restore.clip);
+    }
+  });
 }
 
 function startInterruptText() {
@@ -2070,12 +2482,8 @@ function drawTexture(now = 0) {
   requestAnimationFrame(drawTexture);
 }
 
-function hexToRgba(hex, alpha) {
-  const clean = hex.replace("#", "");
-  const r = parseInt(clean.slice(0, 2), 16);
-  const g = parseInt(clean.slice(2, 4), 16);
-  const b = parseInt(clean.slice(4, 6), 16);
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+function hexToRgba() {
+  return "#000000";
 }
 
 function maybeStartP5(chapter) {
@@ -2330,11 +2738,7 @@ function updateAmbientGain(clip) {
   };
 
   function bootGazetteer() {
-    insertDbButton();
-    createGazetteerWindow();
-    createGazetteerTooltip();
-    loadGazetteerData();
-    wrapChapterActivationForGazetteer();
+    // Replaced by the simpler environment search window.
   }
 
   function insertDbButton() {

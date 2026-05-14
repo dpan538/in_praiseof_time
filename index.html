@@ -32,7 +32,6 @@
       <button data-chapter="ch02">CH.02</button>
       <button data-chapter="ch03">CH.03</button>
       <button data-chapter="ch04">CH.04</button>
-      <button data-chapter="int">INT</button>
     </nav>
     <div class="chrome-line chrome-bottom-left" id="clock">| 00:00:00 |</div>
     <div class="chrome-line chrome-bottom-right" id="coordinates">| --.----, ---.---- |</div>
@@ -123,32 +122,32 @@
 
     <section id="desktop-object-layer" aria-label="Desktop object layer">
       <button class="desktop-icon desktop-icon-eyu" data-object="eyu" aria-label="Open eyu articles">
-        <span>[.eyu]</span>
-        <span>鳄鱼的美食屋</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 2h11l3 3v17H5z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M16 2v5h5" fill="none" stroke="#000" stroke-width="2"/><path d="M8 10h8M8 14h8M8 18h5" stroke="#000" stroke-width="2"/></svg>
+        <span class="desktop-icon-label">鳄鱼的美食屋.eyu</span>
       </button>
       <button class="desktop-icon" data-object="nye" aria-label="Open NYE 3 second clip">
-        <span>[▶ MOV]</span>
-        <span>IMG_5811 / 00:03</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M6 5v14M18 5v14M9 9l5 3-5 3z" fill="#000"/><path d="M4 8h2M4 12h2M4 16h2M18 8h2M18 12h2M18 16h2" stroke="#000" stroke-width="1"/></svg>
+        <span class="desktop-icon-label">NYE_3SEC.MOV</span>
       </button>
       <button class="desktop-icon" data-object="nanxiang" aria-label="Open Nanxiang clip">
-        <span>[▶ MOV]</span>
-        <span>IMG_0196 / 00:10</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M6 5v14M18 5v14M9 9l5 3-5 3z" fill="#000"/><path d="M4 8h2M4 12h2M4 16h2M18 8h2M18 12h2M18 16h2" stroke="#000" stroke-width="1"/></svg>
+        <span class="desktop-icon-label">NANXIANG.MOV</span>
       </button>
       <button class="desktop-icon" data-object="brisbane" aria-label="Open Brisbane water clip">
-        <span>[▶ MOV]</span>
-        <span>IMG_6010 / 00:10</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M6 5v14M18 5v14M9 9l5 3-5 3z" fill="#000"/><path d="M4 8h2M4 12h2M4 16h2M18 8h2M18 12h2M18 16h2" stroke="#000" stroke-width="1"/></svg>
+        <span class="desktop-icon-label">BRISBANE_WATER.MOV</span>
       </button>
       <button class="desktop-icon desktop-icon-lost" data-object="nogps" aria-label="Open no GPS object">
-        <span>[? ---]</span>
-        <span>IMG_8084 / SIGNAL LOST</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M9 9c0-2 2-3 4-3s4 1 4 3c0 3-4 2-4 6M13 18h1" fill="none" stroke="#000" stroke-width="2"/></svg>
+        <span class="desktop-icon-label">NO_GPS</span>
       </button>
       <button class="desktop-icon" data-object="trash" aria-label="Open trash">
-        <span>[///]</span>
-        <span>Trash</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v14H7z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M5 6h14M9 4h6M10 10v8M14 10v8" stroke="#000" stroke-width="2"/></svg>
+        <span class="desktop-icon-label">trash</span>
       </button>
       <button class="desktop-icon desktop-icon-readme" data-object="readme" aria-label="Open README">
-        <span>[txt]</span>
-        <span>README.txt</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 2h11l3 3v17H5z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M16 2v5h5" fill="none" stroke="#000" stroke-width="2"/><path d="M8 11h8M8 15h8M8 19h6" stroke="#000" stroke-width="2"/></svg>
+        <span class="desktop-icon-label">README.txt</span>
       </button>
     </section>
 
@@ -164,6 +163,8 @@
 +-------------------+</pre>
     </section>
   </main>
+  <button id="hidden-int-button" type="button" aria-label="Trigger interrupt">[INT]</button>
+  <div id="dock-bar" aria-label="Dock bar"></div>
 
   <!-- AUDIO_CH01: nyc_ambient.mp3 -->
   <!-- AUDIO_CH02: steppe_wind.mp3 -->
