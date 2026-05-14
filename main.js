@@ -53,6 +53,94 @@ const CHAPTERS = {
   },
 };
 
+const BOOT_SEQUENCE = [
+  { text: "in_praise_of_time", delay: 0 },
+  { text: "v1.0.0", delay: 600 },
+  { text: "", delay: 400 },
+  { text: "loading signal data...", delay: 200 },
+  { text: "MANIFEST.json        OK", delay: 500 },
+  { text: "environment.json     OK", delay: 200 },
+  { text: "beishang.txt         OK", delay: 200 },
+  { text: "eyu_articles.js      OK", delay: 200 },
+  { text: "", delay: 300 },
+  { text: "46 clips registered", delay: 400 },
+  { text: "47 locations indexed", delay: 200 },
+  { text: "", delay: 300 },
+  { text: "locating...", delay: 600 },
+];
+
+const SHUTDOWN_TEXT = "in_praise_of_time  —  session ended";
+const SHUTDOWN_SUBTEXT = "2024 – 2026";
+const SHUTDOWN_FINAL = "daipan.art  /  daipan.ink";
+
+const MAP_CENTERS = {
+  CH00: { lat: 40.7194, lon: -73.9896, zoom: 15 },
+  CH01: { lat: 40.7194, lon: -73.9896, zoom: 15 },
+  CH02: { lat: 48.9213, lon: 117.1130, zoom: 9 },
+  CH03: { lat: 37.3784, lon: 101.4117, zoom: 10 },
+  CH04: { lat: -27.443, lon: 153.064, zoom: 13 },
+  INT: { lat: 36.2043, lon: 117.0843, zoom: 12 },
+};
+
+const TRASH_ITEMS = [
+  { id: "freedom-wanted", filename: "想要自由.txt", type: "text", content: [] },
+  { id: "freedom-forbidden", filename: "不该有自由.txt", type: "text", content: [] },
+  { id: "freedom-still", filename: "还是应该有.txt", type: "text", statusSequence: true, content: [] },
+  {
+    id: "cambridge-as",
+    filename: "Cambridge_AS_2020.pdf",
+    type: "pdf",
+    content: [
+      "STATEMENT OF RESULTS",
+      "GCE AS & A LEVEL",
+      "",
+      "Candidate Name    DAI PAN",
+      "Centre Name       SISU BILINGUAL SCHOOL",
+      "Date of Birth     17/07/2003",
+      "Series            November 2020",
+      "Centre / Cand.    CN378/0012",
+      "",
+      "──────────────────────────────────────",
+      "Syllabus  Title        Qual    Result",
+      "9702      Physics      AS      b(b) 74%",
+      "9708      Economics    AS      d(d) 53%",
+      "9709      Mathematics  A Level B(b) 77%",
+      "──────────────────────────────────────",
+      "",
+      "Cambridge Assessment International",
+      "Education",
+    ],
+  },
+  {
+    id: "cambridge-al-forecast",
+    filename: "Cambridge_AL_forecast.pdf",
+    type: "pdf",
+    content: [
+      "CAMBRIDGE INTERNATIONAL A LEVEL",
+      "FORECAST GRADES",
+      "",
+      "Shanghai International Studies",
+      "University Bilingual School",
+      "International Division",
+      "",
+      "Student Name  潘岱 PAN Dai",
+      "Gender        Male",
+      "D.O.B.        17/07/2003",
+      "Enrollment    01/09/2018",
+      "Graduation    01/06/2021",
+      "",
+      "──────────────────────────────────────",
+      "Subject             Forecast Grade",
+      "A Level Physics     B",
+      "A Level Economics   B",
+      "──────────────────────────────────────",
+      "",
+      "SISU Bilingual School",
+      "15/03/2021",
+    ],
+  },
+];
+
 const state = {
   signal: {},
   chapter: "ch00",
@@ -72,6 +160,37 @@ const state = {
   gpsLostTimers: [],
   interruptTextTimer: null,
   trashSequenceStarted: false,
+  startedAt: performance.now(),
+  systemIntervals: [],
+  textObserver: null,
+  shutdownBuffer: "",
+  shuttingDown: false,
+  map: {
+    instance: null,
+    marker: null,
+    ready: false,
+  },
+  settings: {
+    signalTexture: true,
+    subdermalText: true,
+    scanLines: false,
+    dataPanel: true,
+    systemChrome: true,
+    coordinates: true,
+    clock: true,
+    signalOpacity: 1,
+    subdermalOpacity: 0.03,
+    audio: {
+      video: 0.2,
+      ambient: 0.15,
+      extract: 0,
+    },
+  },
+  metrics: {
+    clipWatch: {},
+    clipsRead: new Set(JSON.parse(sessionStorage.getItem("clips_read") || "[]")),
+    textSeen: new Set(JSON.parse(sessionStorage.getItem("text_seen") || "[]")),
+  },
   audio: {
     context: null,
     gainVideo: null,
@@ -88,6 +207,12 @@ const dom = {
   subdermalText: document.getElementById("subdermal-text"),
   noise: document.getElementById("noise-frame"),
   flash: document.getElementById("white-flash"),
+  bootScreen: document.getElementById("boot-screen"),
+  bootLines: document.getElementById("boot-lines"),
+  shutdownScreen: document.getElementById("shutdown-screen"),
+  shutdownText: document.getElementById("shutdown-text"),
+  shutdownSubtext: document.getElementById("shutdown-subtext"),
+  shutdownFinal: document.getElementById("shutdown-final"),
   chapter00: document.getElementById("chapter-00"),
   stage: document.getElementById("chapter-stage"),
   chapterLabel: document.getElementById("chapter-label"),
@@ -128,10 +253,25 @@ async function init() {
   setupVideoObserver();
   setupAudioUnlock();
   setupDesktopObjects();
+  setupOperatingSystem();
   resizeTexture();
-  activateChapter("ch00");
-  runLocating();
   requestAnimationFrame(drawTexture);
+  if (sessionStorage.getItem("booted") === "1") {
+    const chapter = sessionStorage.getItem("last_chapter") || "ch00";
+    if (chapter === "int") enterInterrupt();
+    else {
+      activateChapter(CHAPTERS[chapter] ? chapter : "ch00");
+      if ((CHAPTERS[chapter] ? chapter : "ch00") === "ch00") runLocating();
+    }
+  } else {
+    await playBootSequence();
+    sessionStorage.setItem("booted", "1");
+    hardCut(() => {
+      hideBootScreen();
+      activateChapter("ch00");
+      runLocating();
+    });
+  }
 }
 
 async function loadSubdermalText() {
@@ -157,7 +297,32 @@ function bindEvents() {
   });
 
   dom.video.addEventListener("ended", () => advanceClip());
+  dom.video.addEventListener("timeupdate", trackClipReadProgress);
   dom.interruptVideo.addEventListener("ended", () => exitInterrupt());
+}
+
+async function playBootSequence() {
+  if (!dom.bootScreen || !dom.bootLines) return;
+  dom.bootScreen.classList.add("is-active");
+  dom.bootScreen.setAttribute("aria-hidden", "false");
+  dom.bootLines.textContent = "";
+  const lines = [];
+  for (const entry of BOOT_SEQUENCE) {
+    await wait(entry.delay);
+    lines.push(entry.text);
+    dom.bootLines.textContent = lines.join("\n");
+  }
+  await wait(800);
+}
+
+function hideBootScreen() {
+  if (!dom.bootScreen) return;
+  dom.bootScreen.classList.remove("is-active");
+  dom.bootScreen.setAttribute("aria-hidden", "true");
+}
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function setupDesktopObjects() {
@@ -168,6 +333,7 @@ function setupDesktopObjects() {
     { x: [0.12, 0.25], y: [0.62, 0.78] },
     { x: [0.72, 0.84], y: [0.58, 0.76] },
     { x: [0.46, 0.56], y: [0.76, 0.86] },
+    { x: [0.82, 0.92], y: [0.08, 0.2] },
   ];
 
   dom.desktopIcons.forEach((icon, index) => {
@@ -190,6 +356,7 @@ function openDesktopObject(type) {
     brisbane: buildBrisbaneWindow,
     nogps: buildNoGpsWindow,
     trash: buildTrashWindow,
+    readme: buildReadmeWindow,
   };
   const builder = builders[type];
   if (!builder) return;
@@ -197,30 +364,50 @@ function openDesktopObject(type) {
   closeOldestWindowsForNewOne();
   const win = builder();
   if (!win) return;
-  win.style.left = `${Math.round(randomBetween(0.34, 0.58) * window.innerWidth)}px`;
-  win.style.top = `${Math.round(randomBetween(0.18, 0.42) * window.innerHeight)}px`;
-  bringWindowForward(win);
-  makeDraggable(win);
-  dom.objectLayer.appendChild(win);
-  state.desktopWindows.push(win);
+  return mountDesktopWindow(win, {
+    id: type,
+    kind: "object",
+    left: Math.round(randomBetween(0.34, 0.58) * window.innerWidth),
+    top: Math.round(randomBetween(0.18, 0.42) * window.innerHeight),
+  });
 }
 
 function closeOldestWindowsForNewOne() {
-  while (state.desktopWindows.length >= 2) {
-    const oldest = state.desktopWindows.shift();
-    oldest?.remove();
+  while (state.desktopWindows.filter((win) => win.dataset.windowKind === "object").length >= 2) {
+    const oldest = state.desktopWindows.find((win) => win.dataset.windowKind === "object");
+    closeDesktopWindow(oldest);
   }
 }
 
 function createDesktopWindow(title, body) {
   const win = document.createElement("article");
   win.className = "desktop-window";
+  win.dataset.windowTitle = title;
   win.innerHTML = [
-    `<div class="desktop-titlebar"><span>| ${title} |</span><button class="desktop-close" aria-label="Close">[x]</button></div>`,
+    `<div class="desktop-titlebar"><span>| ${title} |</span><button class="desktop-close" aria-label="Close">[─][×]</button></div>`,
     `<div class="desktop-body"><pre>+------------------------------+</pre>${body}<pre>+------------------------------+</pre></div>`,
   ].join("");
   win.querySelector(".desktop-close").addEventListener("click", () => closeDesktopWindow(win));
   win.addEventListener("pointerdown", () => bringWindowForward(win));
+  return win;
+}
+
+function mountDesktopWindow(win, options = {}) {
+  if (!win) return null;
+  const id = options.id || win.dataset.windowId || `window-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+  win.dataset.windowId = id;
+  win.dataset.windowKind = options.kind || win.dataset.windowKind || "object";
+  if (!win.dataset.windowTitle) {
+    win.dataset.windowTitle = win.querySelector(".desktop-titlebar span")?.textContent?.replace(/[|]/g, "").trim() || id;
+  }
+  win.style.left = `${options.left ?? Math.round(randomBetween(0.3, 0.62) * window.innerWidth)}px`;
+  win.style.top = `${options.top ?? Math.round(randomBetween(0.16, 0.5) * window.innerHeight)}px`;
+  bringWindowForward(win);
+  makeDraggable(win);
+  dom.objectLayer.appendChild(win);
+  if (!state.desktopWindows.includes(win)) state.desktopWindows.push(win);
+  updateFinderWindow();
+  updateControlPanelWindow();
   return win;
 }
 
@@ -235,17 +422,26 @@ function createSizedDesktopWindow(title, body, className) {
 }
 
 function closeDesktopWindow(win) {
+  if (!win) return;
   if (win.trashTimers) {
     win.trashTimers.forEach((timer) => clearTimeout(timer));
   }
+  if (win.systemTimer) clearInterval(win.systemTimer);
+  if (win.dataset.windowId === "maze") teardownMazeWindow(win);
+  if (win.dataset.windowId === "map") teardownMapWindow(win);
   const index = state.desktopWindows.indexOf(win);
   if (index >= 0) state.desktopWindows.splice(index, 1);
   win.remove();
+  updateFinderWindow();
+  updateControlPanelWindow();
 }
 
 function bringWindowForward(win) {
   state.windowZ += 1;
   win.style.zIndex = state.windowZ;
+  win.classList.add("is-focused");
+  setTimeout(() => win.classList.remove("is-focused"), 280);
+  updateFinderWindow();
 }
 
 function makeDraggable(win) {
@@ -270,6 +466,956 @@ function makeDraggable(win) {
   });
 }
 
+/* SYSTEM WINDOWS --------------------------------------------------------- */
+function setupOperatingSystem() {
+  insertSystemLaunchers();
+  setupTextSeenObserver();
+  applySystemSettings();
+  if (!sessionStorage.getItem("news_issue")) sessionStorage.setItem("news_issue", "0");
+  state.systemIntervals.push(setInterval(() => {
+    updateFinderWindow();
+    updateProfilerWindow();
+  }, 2000));
+}
+
+function insertSystemLaunchers() {
+  const nav = document.querySelector(".chapter-nav");
+  if (!nav || document.getElementById("os-launchers")) return;
+  const group = document.createElement("div");
+  group.id = "os-launchers";
+  [
+    ["finder", "[FIND]"],
+    ["control", "[CTRL]"],
+    ["note", "[NOTE]"],
+    ["calendar", "[CAL]"],
+    ["puzzle", "[PUZ]"],
+    ["profiler", "[PROF]"],
+    ["maze", "[MAZE]"],
+    ["news", "[NEWS]"],
+    ["map", "[MAP]"],
+  ].forEach(([id, label]) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.systemWindow = id;
+    button.textContent = label;
+    button.addEventListener("click", () => openSystemWindow(id));
+    group.appendChild(button);
+  });
+  nav.appendChild(group);
+}
+
+function openSystemWindow(id) {
+  if (id === "search") {
+    openSearchWindow(true);
+    return null;
+  }
+  if (id === "eyu") {
+    const existing = findWindowById("eyu");
+    if (existing) {
+      bringWindowForward(existing);
+      return existing;
+    }
+    return openDesktopObject("eyu");
+  }
+  const existing = findWindowById(id);
+  if (existing) {
+    bringWindowForward(existing);
+    return existing;
+  }
+  const builder = {
+    control: buildControlPanelWindow,
+    finder: buildFinderWindow,
+    note: buildNoteWindow,
+    calendar: buildCalendarWindow,
+    puzzle: buildPuzzleWindow,
+    profiler: buildProfilerWindow,
+    maze: buildMazeWindow,
+    news: buildNewsWindow,
+    map: buildMapWindow,
+  }[id];
+  if (!builder) return null;
+  const win = builder();
+  return mountDesktopWindow(win, { id, kind: "system", ...systemWindowPosition(id) });
+}
+
+function closeSystemWindow(id) {
+  if (id === "search") {
+    openSearchWindow(false);
+    return;
+  }
+  const win = findWindowById(id);
+  if (win) closeDesktopWindow(win);
+}
+
+function setSystemWindowOpen(id, open) {
+  if (open) openSystemWindow(id);
+  else closeSystemWindow(id);
+  updateControlPanelWindow();
+}
+
+function findWindowById(id) {
+  return state.desktopWindows.find((win) => win.dataset.windowId === id && document.body.contains(win));
+}
+
+function systemWindowPosition(id) {
+  const positions = {
+    finder: { left: 86, top: 82 },
+    control: { left: 132, top: 116 },
+    note: { left: 210, top: 128 },
+    calendar: { left: 250, top: 150 },
+    puzzle: { left: 310, top: 92 },
+    profiler: { left: 380, top: 128 },
+    maze: { left: 430, top: 100 },
+    news: { left: 340, top: 72 },
+    map: { left: 520, top: 120 },
+  };
+  return positions[id] || {};
+}
+
+function openSearchWindow(open) {
+  const root = document.getElementById("gazetteer-window");
+  if (root && root.classList.contains("is-open") === open) return;
+  document.getElementById("gazetteer-db-button")?.click();
+}
+
+function isSearchWindowOpen() {
+  return !!document.getElementById("gazetteer-window")?.classList.contains("is-open");
+}
+
+function makeAsciiCheckbox(label, checked, onChange) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "ascii-checkbox";
+  const render = () => {
+    button.textContent = `${checked ? "[■]" : "[□]"} ${label}`;
+  };
+  button.addEventListener("click", () => {
+    checked = !checked;
+    onChange(checked);
+    render();
+  });
+  render();
+  return button;
+}
+
+function makeAsciiSlider(label, value, min, max, step, onChange) {
+  const row = document.createElement("div");
+  row.className = "ascii-slider-row";
+  const name = document.createElement("span");
+  name.className = "ascii-slider-label";
+  name.textContent = label;
+  const track = document.createElement("button");
+  track.type = "button";
+  track.className = "ascii-slider";
+  const valueNode = document.createElement("span");
+  valueNode.className = "ascii-slider-value";
+  let current = value;
+  const render = () => {
+    const units = 10;
+    const ratio = Math.max(0, Math.min(1, (current - min) / (max - min || 1)));
+    const position = Math.round(ratio * units);
+    track.textContent = `${"─".repeat(position)}●${"─".repeat(units - position)}`;
+    valueNode.textContent = current.toFixed(max <= 1 ? 2 : 0);
+  };
+  const setFromClientX = (clientX) => {
+    const rect = track.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / Math.max(1, rect.width)));
+    const next = Math.round((min + ratio * (max - min)) / step) * step;
+    current = Number(Math.max(min, Math.min(max, next)).toFixed(3));
+    onChange(current);
+    render();
+  };
+  track.addEventListener("pointerdown", (event) => {
+    setFromClientX(event.clientX);
+    track.setPointerCapture(event.pointerId);
+  });
+  track.addEventListener("pointermove", (event) => {
+    if (event.buttons) setFromClientX(event.clientX);
+  });
+  render();
+  row.append(name, track, valueNode);
+  return row;
+}
+
+function sectionBlock(title, children) {
+  const block = document.createElement("section");
+  block.className = "os-section";
+  const heading = document.createElement("div");
+  heading.className = "os-section-title";
+  heading.textContent = title;
+  block.appendChild(heading);
+  children.forEach((child) => block.appendChild(child));
+  return block;
+}
+
+function buildControlPanelWindow() {
+  const shell = document.createElement("div");
+  shell.className = "control-panel os-window-body";
+  const layerControls = [
+    makeAsciiCheckbox("signal texture", state.settings.signalTexture, (value) => {
+      state.settings.signalTexture = value;
+      applySystemSettings();
+    }),
+    makeAsciiSlider("opacity", state.settings.signalOpacity, 0, 1, 0.05, (value) => {
+      state.settings.signalOpacity = value;
+      applySystemSettings();
+    }),
+    makeAsciiCheckbox("subdermal text", state.settings.subdermalText, (value) => {
+      state.settings.subdermalText = value;
+      applySystemSettings();
+    }),
+    makeAsciiSlider("opacity", state.settings.subdermalOpacity, 0, 1, 0.01, (value) => {
+      state.settings.subdermalOpacity = value;
+      applySystemSettings();
+    }),
+    makeAsciiCheckbox("scan lines", state.settings.scanLines, (value) => {
+      state.settings.scanLines = value;
+      applySystemSettings();
+    }),
+    makeAsciiCheckbox("data panel", state.settings.dataPanel, (value) => {
+      state.settings.dataPanel = value;
+      applySystemSettings();
+    }),
+  ];
+  const audioControls = [
+    makeAsciiSlider("video", state.settings.audio.video, 0, 1, 0.05, (value) => {
+      state.settings.audio.video = value;
+      applySystemSettings();
+    }),
+    makeAsciiSlider("ambient", state.settings.audio.ambient, 0, 1, 0.05, (value) => {
+      state.settings.audio.ambient = value;
+      applySystemSettings();
+    }),
+    makeAsciiSlider("extract", state.settings.audio.extract, 0, 1, 0.05, (value) => {
+      state.settings.audio.extract = value;
+      applySystemSettings();
+    }),
+  ];
+  const windowControls = document.createElement("div");
+  windowControls.className = "checkbox-grid";
+  [
+    ["search", "search"],
+    [".eyu", "eyu"],
+    ["profiler", "profiler"],
+    ["news", "news"],
+    ["map", "map"],
+  ].forEach(([label, id]) => {
+    windowControls.appendChild(makeAsciiCheckbox(label, isWindowOpen(id), (value) => setSystemWindowOpen(id, value)));
+  });
+  const displayControls = [
+    makeAsciiCheckbox("system chrome", state.settings.systemChrome, (value) => {
+      state.settings.systemChrome = value;
+      applySystemSettings();
+    }),
+    makeAsciiCheckbox("coordinates", state.settings.coordinates, (value) => {
+      state.settings.coordinates = value;
+      applySystemSettings();
+    }),
+    makeAsciiCheckbox("clock", state.settings.clock, (value) => {
+      state.settings.clock = value;
+      applySystemSettings();
+    }),
+  ];
+  shell.append(
+    sectionBlock("LAYERS", layerControls),
+    sectionBlock("AUDIO", audioControls),
+    sectionBlock("WINDOWS", [windowControls]),
+    sectionBlock("DISPLAY", displayControls)
+  );
+  return createSizedDesktopWindow("▣ CONTROL PANEL", shell, "desktop-window-control");
+}
+
+function isWindowOpen(id) {
+  return id === "search" ? isSearchWindowOpen() : !!findWindowById(id);
+}
+
+function updateControlPanelWindow() {
+  const win = findWindowById("control");
+  if (!win) return;
+  win.querySelectorAll(".ascii-checkbox").forEach((button) => {
+    const text = button.textContent.replace(/^\[[■□]\]\s*/, "");
+    const map = { search: "search", ".eyu": "eyu", profiler: "profiler", news: "news", map: "map" };
+    if (map[text]) button.textContent = `${isWindowOpen(map[text]) ? "[■]" : "[□]"} ${text}`;
+  });
+}
+
+function applySystemSettings() {
+  dom.body.classList.toggle("hide-signal-texture", !state.settings.signalTexture);
+  dom.body.classList.toggle("hide-subdermal-text", !state.settings.subdermalText);
+  dom.body.classList.toggle("hide-scan-lines", !state.settings.scanLines);
+  dom.body.classList.toggle("hide-data-panel", !state.settings.dataPanel);
+  dom.body.classList.toggle("hide-system-chrome", !state.settings.systemChrome);
+  dom.body.classList.toggle("hide-coordinates", !state.settings.coordinates);
+  dom.body.classList.toggle("hide-clock", !state.settings.clock);
+  dom.root.style.setProperty("--signal-texture-opacity", state.settings.signalOpacity);
+  dom.root.style.setProperty("--subdermal-opacity", state.settings.subdermalOpacity);
+  dom.video.volume = state.settings.audio.video;
+  if (state.audio.gainVideo) state.audio.gainVideo.gain.value = state.settings.audio.video;
+  if (state.audio.gainExtract) state.audio.gainExtract.gain.value = state.settings.audio.extract;
+  if (state.audio.gainAmbient) state.audio.gainAmbient.gain.value = state.settings.audio.ambient;
+  state.audio.ambientGainBase = state.settings.audio.ambient;
+}
+
+function buildFinderWindow() {
+  const shell = document.createElement("div");
+  shell.className = "finder-panel os-window-body";
+  const win = createSizedDesktopWindow("finder", shell, "desktop-window-finder");
+  requestAnimationFrame(() => updateFinderWindow(win));
+  return win;
+}
+
+function updateFinderWindow(win = findWindowById("finder")) {
+  if (!win) return;
+  const shell = win.querySelector(".finder-panel");
+  if (!shell) return;
+  shell.innerHTML = "";
+  const windows = document.createElement("div");
+  const rows = [
+    ...state.desktopWindows.filter((item) => document.body.contains(item)).map((item) => ({
+      label: item.dataset.windowTitle || item.dataset.windowId,
+      action: () => bringWindowForward(item),
+    })),
+  ];
+  if (isSearchWindowOpen()) {
+    rows.unshift({ label: "search", action: () => openSearchWindow(true) });
+  }
+  windows.appendChild(finderTitle(`WINDOWS (${rows.length} open)`));
+  rows.forEach((row) => windows.appendChild(finderButton(`▶ ${row.label}`, row.action)));
+
+  const objects = document.createElement("div");
+  objects.appendChild(finderTitle("DESKTOP OBJECTS"));
+  [
+    ["📄 NYE_3SEC.MOV", "nye"],
+    ["📄 NANXIANG.MOV", "nanxiang"],
+    ["📄 BRISBANE_WATER.MOV", "brisbane"],
+    ["📄 NO_GPS", "nogps"],
+    [`📄 鳄鱼的美食屋.eyu ${isEyuVisible() ? "" : "(hidden)"}`, "eyu"],
+    ["📄 README.txt", "readme"],
+    ["🗑 trash", "trash"],
+  ].forEach(([label, id]) => objects.appendChild(finderButton(label, () => openDesktopObject(id))));
+
+  const system = document.createElement("div");
+  system.appendChild(finderTitle("SYSTEM"));
+  const clip = state.currentClip || "----";
+  system.appendChild(readoutLine("CHAPTER", state.chapter.toUpperCase()));
+  system.appendChild(readoutLine("CLIP", clip));
+  system.appendChild(readoutLine("UPTIME", sessionDuration()));
+  system.appendChild(readoutLine("MEM", "OK"));
+  shell.append(windows, objects, system);
+}
+
+function finderTitle(text) {
+  const node = document.createElement("div");
+  node.className = "finder-title";
+  node.textContent = text;
+  return node;
+}
+
+function finderButton(text, action) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "finder-row";
+  button.textContent = text;
+  button.addEventListener("click", action);
+  return button;
+}
+
+function readoutLine(label, value) {
+  const node = document.createElement("div");
+  node.className = "readout-line";
+  node.textContent = `${label.padEnd(9, " ")} ${value}`;
+  return node;
+}
+
+function isEyuVisible() {
+  return !document.querySelector('[data-object="eyu"]')?.classList.contains("is-hidden");
+}
+
+function buildNoteWindow() {
+  const shell = document.createElement("div");
+  shell.className = "note-panel os-window-body";
+  const textarea = document.createElement("textarea");
+  textarea.spellcheck = false;
+  textarea.autocapitalize = "off";
+  textarea.autocomplete = "off";
+  textarea.value = sessionStorage.getItem("note_content") || "";
+  const footer = document.createElement("div");
+  footer.className = "note-footer";
+  const clear = document.createElement("button");
+  clear.type = "button";
+  clear.textContent = "[clear]";
+  const count = document.createElement("span");
+  const update = () => {
+    sessionStorage.setItem("note_content", textarea.value);
+    count.textContent = `${textarea.value.length} chars`;
+  };
+  clear.addEventListener("click", () => {
+    textarea.value = "";
+    update();
+    textarea.focus();
+  });
+  textarea.addEventListener("input", update);
+  footer.append(clear, count);
+  shell.append(textarea, footer);
+  update();
+  return createSizedDesktopWindow("note", shell, "desktop-window-note");
+}
+
+function buildCalendarWindow() {
+  const shell = document.createElement("div");
+  shell.className = "calendar-panel os-window-body";
+  renderCalendar(shell);
+  return createSizedDesktopWindow("calendar", shell, "desktop-window-calendar");
+}
+
+function renderCalendar(shell) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const marks = filmingDatesForMonth(year, month);
+  shell.appendChild(finderTitle(`${now.toLocaleString("en-US", { month: "short" }).toUpperCase()}  ${year}`));
+  const grid = document.createElement("div");
+  grid.className = "calendar-grid";
+  ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"].forEach((day) => {
+    const node = document.createElement("div");
+    node.className = "calendar-weekday";
+    node.textContent = day;
+    grid.appendChild(node);
+  });
+  const first = new Date(year, month, 1);
+  const offset = (first.getDay() + 6) % 7;
+  const days = new Date(year, month + 1, 0).getDate();
+  for (let i = 0; i < offset; i += 1) grid.appendChild(document.createElement("div"));
+  for (let day = 1; day <= days; day += 1) {
+    const key = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "calendar-date";
+    button.textContent = `${day}${marks[key] ? "·" : ""}`;
+    button.classList.toggle("is-today", day === now.getDate());
+    if (marks[key]) {
+      button.classList.add("is-marked");
+      button.addEventListener("mouseenter", () => showCalendarTooltip(button, marks[key]));
+      button.addEventListener("focus", () => showCalendarTooltip(button, marks[key]));
+    }
+    grid.appendChild(button);
+  }
+  const footer = document.createElement("div");
+  footer.className = "calendar-footer";
+  footer.textContent = "● filming dates marked";
+  shell.append(grid, footer);
+}
+
+function filmingDatesForMonth(year, month) {
+  return Object.values(state.signal).reduce((map, clip) => {
+    if (!clip.local_time) return map;
+    const date = clip.local_time.slice(0, 10);
+    const clipDate = new Date(`${date}T00:00:00`);
+    if (clipDate.getFullYear() !== year || clipDate.getMonth() !== month) return map;
+    map[date] = map[date] || [];
+    map[date].push(`${clip.filename || clip.clip} / ${clip.location || "—"}`);
+    return map;
+  }, {});
+}
+
+function showCalendarTooltip(target, lines) {
+  let tooltip = document.getElementById("calendar-tooltip");
+  if (!tooltip) {
+    tooltip = document.createElement("div");
+    tooltip.id = "calendar-tooltip";
+    document.body.appendChild(tooltip);
+  }
+  tooltip.textContent = lines.join("\n");
+  const rect = target.getBoundingClientRect();
+  tooltip.style.left = `${Math.min(window.innerWidth - 260, rect.left)}px`;
+  tooltip.style.top = `${rect.bottom + 6}px`;
+  tooltip.classList.add("is-active");
+  clearTimeout(tooltip.dismissTimer);
+  tooltip.dismissTimer = setTimeout(() => tooltip.classList.remove("is-active"), 2500);
+}
+
+function buildPuzzleWindow() {
+  const shell = document.createElement("div");
+  shell.className = "puzzle-panel os-window-body";
+  const state15 = { tiles: [], moves: 0, solved: false };
+  const grid = document.createElement("div");
+  grid.className = "puzzle-grid";
+  const footer = document.createElement("div");
+  footer.className = "puzzle-footer";
+  const shuffle = document.createElement("button");
+  shuffle.type = "button";
+  shuffle.textContent = "[shuffle]";
+  const moves = document.createElement("span");
+  footer.append(shuffle, moves);
+  shell.append(grid, footer);
+  const render = () => {
+    grid.innerHTML = "";
+    state15.tiles.forEach((tile, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "puzzle-tile";
+      button.textContent = tile || "";
+      if (!tile) button.classList.add("is-empty");
+      button.addEventListener("click", () => movePuzzleTile(state15, index, render));
+      grid.appendChild(button);
+    });
+    moves.textContent = state15.solved ? `solved. moves: ${state15.moves}` : `moves ${state15.moves}`;
+  };
+  shuffle.addEventListener("click", () => {
+    shufflePuzzle(state15);
+    render();
+  });
+  shufflePuzzle(state15);
+  render();
+  return createSizedDesktopWindow("puzzle", shell, "desktop-window-puzzle");
+}
+
+function shufflePuzzle(state15) {
+  state15.tiles = [...Array.from({ length: 15 }, (_, index) => index + 1), 0];
+  state15.moves = 0;
+  state15.solved = false;
+  for (let i = 0; i < 220; i += 1) {
+    const empty = state15.tiles.indexOf(0);
+    const choices = adjacentIndexes(empty).filter((idx) => idx >= 0 && idx < 16);
+    const next = choices[Math.floor(Math.random() * choices.length)];
+    [state15.tiles[empty], state15.tiles[next]] = [state15.tiles[next], state15.tiles[empty]];
+  }
+}
+
+function adjacentIndexes(index) {
+  const row = Math.floor(index / 4);
+  const col = index % 4;
+  return [
+    row > 0 ? index - 4 : -1,
+    row < 3 ? index + 4 : -1,
+    col > 0 ? index - 1 : -1,
+    col < 3 ? index + 1 : -1,
+  ];
+}
+
+function movePuzzleTile(state15, index, render) {
+  if (state15.solved) return;
+  const empty = state15.tiles.indexOf(0);
+  if (!adjacentIndexes(empty).includes(index)) return;
+  [state15.tiles[empty], state15.tiles[index]] = [state15.tiles[index], state15.tiles[empty]];
+  state15.moves += 1;
+  state15.solved = state15.tiles.every((tile, idx) => tile === (idx === 15 ? 0 : idx + 1));
+  render();
+}
+
+function buildProfilerWindow() {
+  const shell = document.createElement("div");
+  shell.className = "profiler-panel os-window-body";
+  const win = createSizedDesktopWindow("▣ profiler", shell, "desktop-window-profiler");
+  win.systemTimer = setInterval(() => updateProfilerWindow(win), 5000);
+  requestAnimationFrame(() => updateProfilerWindow(win));
+  return win;
+}
+
+function updateProfilerWindow(win = findWindowById("profiler")) {
+  if (!win) return;
+  const shell = win.querySelector(".profiler-panel");
+  if (!shell) return;
+  const clipsRead = state.metrics.clipsRead.size;
+  const textSeen = state.metrics.textSeen.size;
+  const textTotal = Math.max(1, document.querySelectorAll(".text-slot, .boxed-text, .beishang-fragment, #gps-lost-line, .gps-lost-one, .gps-lost-two").length);
+  const openCount = state.desktopWindows.filter((item) => document.body.contains(item)).length + (isSearchWindowOpen() ? 1 : 0);
+  shell.innerHTML = `
+    <div>
+      <div class="os-section-title">PROCESS</div>
+      <pre>chapters   5
+clips     46
+locations 47
+words   ~3200
+objects    6
+fragments 12
+
+────────────
+STATUS
+running</pre>
+    </div>
+    <div>
+      <div class="os-section-title">MONITOR</div>
+      <pre>clips read   ${tenBar(clipsRead / 46)}
+text seen    ${tenBar(textSeen / textTotal)}
+windows open ${tenBar(openCount / 8)}
+time spent   ${tenBar(sessionSeconds() / 600)}
+
+───────────────
+SESSIONS
+visits    1
+duration  ${sessionDuration()}
+chapter   ${state.chapter.toUpperCase()}
+last seen —</pre>
+    </div>`;
+}
+
+function tenBar(value) {
+  const filled = Math.round(Math.max(0, Math.min(1, value)) * 10);
+  return `${"█".repeat(filled)}${"░".repeat(10 - filled)}`;
+}
+
+function setupTextSeenObserver() {
+  const nodes = document.querySelectorAll(".text-slot, .boxed-text, .beishang-fragment, #gps-lost-line, .gps-lost-one, .gps-lost-two");
+  state.textObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      const id = entry.target.id || entry.target.className || entry.target.textContent.slice(0, 20);
+      state.metrics.textSeen.add(String(id));
+      sessionStorage.setItem("text_seen", JSON.stringify([...state.metrics.textSeen]));
+    });
+  }, { threshold: 0.1 });
+  nodes.forEach((node) => state.textObserver.observe(node));
+}
+
+function trackClipReadProgress() {
+  const clip = state.currentClip;
+  if (!clip) return;
+  state.metrics.clipWatch[clip] = Math.max(state.metrics.clipWatch[clip] || 0, dom.video.currentTime || 0);
+  if (state.metrics.clipWatch[clip] > 3 && !state.metrics.clipsRead.has(clip)) {
+    state.metrics.clipsRead.add(clip);
+    sessionStorage.setItem("clips_read", JSON.stringify([...state.metrics.clipsRead]));
+    updateProfilerWindow();
+  }
+}
+
+function buildMazeWindow() {
+  const shell = document.createElement("div");
+  shell.className = "maze-panel os-window-body";
+  const grid = document.createElement("pre");
+  grid.className = "maze-grid";
+  const message = document.createElement("div");
+  message.className = "maze-message";
+  const footer = document.createElement("div");
+  footer.className = "maze-footer";
+  shell.append(grid, message, footer);
+  const win = createSizedDesktopWindow("maze", shell, "desktop-window-maze");
+  win.mazeState = initMazeState();
+  win.mazeHandler = (event) => handleMazeKey(event, win);
+  win.tabIndex = 0;
+  win.addEventListener("keydown", win.mazeHandler);
+  requestAnimationFrame(() => {
+    win.focus();
+    renderMaze(win);
+  });
+  return win;
+}
+
+function initMazeState() {
+  const levels = [
+    {
+      name: "LEVEL 1 — LUDLOW ST",
+      rows: ["██████████", "█@        █", "█ ██████ █", "█ █    █ █", "█ █ ██ █ █", "█   ██   █", "████████ █", "█       E█", "██████████"],
+    },
+    {
+      name: "LEVEL 2 — ARXAN FOREST",
+      rows: ["██████████████", "█@           █", "█ ████████ ██", "█ █        █ ", "██ ████ ████", "█      █   █ ", "█ ████ █ ██ ", "█ █    █   █", "█ █████████ ", "█          E█", "██████████████"],
+      signalTile: { x: 7, y: 5 },
+    },
+    {
+      name: "LEVEL 3 — QILIAN PASS",
+      rows: ["████████████████", "█@             █", "██ ████████ ███", "█  █        █  ", "█ ██ ██████ █ █", "█ █  █      █ █", "█ █ ██ ████ █ █", "█ █  █  █   █ █", "█ ████ ██ ███ █", "█      █      █", "████████ ██████", "█             E█", "████████████████"],
+    },
+  ];
+  return { levels, level: 0, rows: [...levels[0].rows], steps: 0, complete: false, shrinkRows: 0, message: "" };
+}
+
+function handleMazeKey(event, win) {
+  const key = event.key.toLowerCase();
+  if (win.mazeState.complete) {
+    closeDesktopWindow(win);
+    return;
+  }
+  const delta = {
+    arrowup: [0, -1], w: [0, -1],
+    arrowdown: [0, 1], s: [0, 1],
+    arrowleft: [-1, 0], a: [-1, 0],
+    arrowright: [1, 0], d: [1, 0],
+  }[key];
+  if (!delta) return;
+  event.preventDefault();
+  moveMazePlayer(win, delta);
+}
+
+function moveMazePlayer(win, [dx, dy]) {
+  const ms = win.mazeState;
+  const rows = mazeRows(ms);
+  const pos = findMazeChar(rows, "@");
+  if (!pos) return;
+  const nx = pos.x + dx;
+  const ny = pos.y + dy;
+  const target = rows[ny]?.[nx];
+  if (!target || target === "█") return;
+  if (ms.level === 1 && nx === ms.levels[1].signalTile.x && ny === ms.levels[1].signalTile.y) {
+    ms.message = "signal lost";
+    whiteFlash();
+    teleportMazePlayer(rows, pos);
+    setTimeout(() => {
+      if (document.body.contains(win)) {
+        win.mazeState.message = "";
+        renderMaze(win);
+      }
+    }, 2000);
+    renderMaze(win, rows);
+    return;
+  }
+  rows[pos.y] = replaceAt(rows[pos.y], pos.x, " ");
+  rows[ny] = replaceAt(rows[ny], nx, "@");
+  ms.steps += 1;
+  if (target === "E") advanceMazeLevel(win);
+  else {
+    renderMaze(win, maybeShrinkMaze(win, rows));
+  }
+}
+
+function mazeRows(ms) {
+  if (!Array.isArray(ms.rows)) ms.rows = [...ms.levels[ms.level].rows];
+  return ms.rows;
+}
+
+function renderMaze(win, rows = mazeRows(win.mazeState)) {
+  const ms = win.mazeState;
+  const grid = win.querySelector(".maze-grid");
+  const footer = win.querySelector(".maze-footer");
+  const message = win.querySelector(".maze-message");
+  if (ms.complete) {
+    grid.textContent = "出口在这里。或者说，这里有一个出口。";
+    footer.textContent = "press any key";
+    message.textContent = "";
+    return;
+  }
+  grid.textContent = rows.join("\n");
+  message.textContent = ms.message;
+  footer.textContent = `${ms.levels[ms.level].name} / steps ${ms.steps}`;
+}
+
+function findMazeChar(rows, char) {
+  for (let y = 0; y < rows.length; y += 1) {
+    const x = rows[y].indexOf(char);
+    if (x >= 0) return { x, y };
+  }
+  return null;
+}
+
+function teleportMazePlayer(rows, pos) {
+  const choices = [[0, -1], [0, 1], [-1, 0], [1, 0]]
+    .map(([dx, dy]) => ({ x: pos.x + dx, y: pos.y + dy }))
+    .filter(({ x, y }) => rows[y]?.[x] === " ");
+  const next = choices[Math.floor(Math.random() * choices.length)] || pos;
+  rows[pos.y] = replaceAt(rows[pos.y], pos.x, " ");
+  rows[next.y] = replaceAt(rows[next.y], next.x, "@");
+}
+
+function advanceMazeLevel(win) {
+  const ms = win.mazeState;
+  if (ms.level >= ms.levels.length - 1) {
+    ms.complete = true;
+  } else {
+    ms.level += 1;
+    ms.rows = [...ms.levels[ms.level].rows];
+    ms.steps = 0;
+    ms.shrinkRows = 0;
+    ms.message = "";
+  }
+  renderMaze(win);
+}
+
+function maybeShrinkMaze(win, rows) {
+  const ms = win.mazeState;
+  if (ms.level !== 2 || ms.steps <= 80) return rows;
+  const shrink = Math.floor((ms.steps - 81) / 10) + 1;
+  if (shrink <= ms.shrinkRows) return rows;
+  ms.shrinkRows = shrink;
+  const pos = findMazeChar(rows, "@");
+  if (pos && pos.y >= rows.length - shrink) {
+    ms.steps = 0;
+    ms.shrinkRows = 0;
+    ms.rows = [...ms.levels[ms.level].rows];
+    return ms.rows;
+  }
+  rows.splice(rows.length - shrink, shrink);
+  return rows;
+}
+
+function replaceAt(text, index, char) {
+  return `${text.slice(0, index)}${char}${text.slice(index + 1)}`;
+}
+
+function teardownMazeWindow(win) {
+  if (win?.mazeHandler) win.removeEventListener("keydown", win.mazeHandler);
+}
+
+function buildNewsWindow() {
+  const shell = document.createElement("div");
+  shell.className = "news-panel os-window-body";
+  const win = createSizedDesktopWindow("news", shell, "desktop-window-news");
+  win.newsPage = 1;
+  requestAnimationFrame(() => renderNewsWindow(win));
+  return win;
+}
+
+function renderNewsWindow(win = findWindowById("news")) {
+  if (!win) return;
+  const shell = win.querySelector(".news-panel");
+  if (!shell) return;
+  const key = currentNewsKey();
+  const content = window.NEWS_CONTENT?.[key] || window.NEWS_CONTENT?.CH00;
+  const total = content?.pages || 1;
+  win.newsPage = Math.max(1, Math.min(total, win.newsPage || 1));
+  const body = content[`body_p${win.newsPage}`] || content.body || "";
+  shell.innerHTML = "";
+  const issue = sessionStorage.getItem("news_issue") || "0";
+  const header = document.createElement("div");
+  header.className = "news-header";
+  header.innerHTML = `<div class="news-logo">NEWS!!!</div><div class="news-issue">issue ${issue}</div>`;
+  const subtitle = document.createElement("div");
+  subtitle.className = "news-subtitle";
+  subtitle.textContent = content.subtitle;
+  const bodyWrap = document.createElement("div");
+  bodyWrap.className = "news-body";
+  const figure = document.createElement("div");
+  figure.className = "news-figure";
+  figure.innerHTML = `<div>${"░░░░░░░░░░░░\n".repeat(6)}</div><span>[${content.fig}]</span>`;
+  const article = document.createElement("article");
+  article.className = "news-copy";
+  article.innerHTML = `<h2>${content.headline}</h2><p>${body}</p>`;
+  bodyWrap.append(figure, article);
+  const footer = document.createElement("div");
+  footer.className = "news-footer";
+  const prev = document.createElement("button");
+  prev.type = "button";
+  prev.textContent = "[←]";
+  const next = document.createElement("button");
+  next.type = "button";
+  next.textContent = "[→]";
+  prev.addEventListener("click", () => {
+    win.newsPage = win.newsPage <= 1 ? total : win.newsPage - 1;
+    renderNewsWindow(win);
+  });
+  next.addEventListener("click", () => {
+    win.newsPage = win.newsPage >= total ? 1 : win.newsPage + 1;
+    renderNewsWindow(win);
+  });
+  footer.append(prev, next, Object.assign(document.createElement("span"), { textContent: `page ${win.newsPage} / ${total}` }));
+  shell.append(header, subtitle, hrNode(), bodyWrap, footer);
+}
+
+function buildMapWindow() {
+  const shell = document.createElement("div");
+  shell.className = "map-panel os-window-body";
+  const canvas = document.createElement("div");
+  canvas.className = "map-canvas";
+  const footer = document.createElement("div");
+  footer.className = "map-footer";
+  const zoomOut = document.createElement("button");
+  zoomOut.type = "button";
+  zoomOut.textContent = "[-]";
+  const zoomIn = document.createElement("button");
+  zoomIn.type = "button";
+  zoomIn.textContent = "[+]";
+  const coords = document.createElement("span");
+  coords.className = "map-coordinates";
+  footer.append(zoomOut, zoomIn, coords);
+  shell.append(canvas, footer);
+  const win = createSizedDesktopWindow("map", shell, "desktop-window-map");
+  win.mapCanvas = canvas;
+  win.mapCoords = coords;
+  zoomOut.addEventListener("click", () => win.leafletMap?.zoomOut());
+  zoomIn.addEventListener("click", () => win.leafletMap?.zoomIn());
+  requestAnimationFrame(() => initializeMapWindow(win));
+  return win;
+}
+
+function initializeMapWindow(win) {
+  if (!win?.mapCanvas) return;
+  const center = currentMapCenter();
+  if (!window.L) {
+    win.mapCanvas.textContent = "Leaflet.js unavailable";
+    if (win.mapCoords) win.mapCoords.textContent = formatMapCoords(center);
+    return;
+  }
+  const map = L.map(win.mapCanvas, { zoomControl: false }).setView([center.lat, center.lon], center.zoom);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap",
+  }).addTo(map);
+  const color = currentChapterColor();
+  const marker = L.circleMarker([center.lat, center.lon], {
+    radius: 6,
+    weight: 1,
+    color,
+    fillColor: color,
+    fillOpacity: 1,
+  }).addTo(map);
+  win.leafletMap = map;
+  win.mapMarker = marker;
+  state.map.instance = map;
+  state.map.marker = marker;
+  state.map.ready = true;
+  updateMapWindow(win, false);
+  setTimeout(() => map.invalidateSize(), 80);
+}
+
+function updateMapWindow(win = findWindowById("map"), fly = true) {
+  if (!win) return;
+  const center = currentMapCenter();
+  if (win.mapCoords) win.mapCoords.textContent = formatMapCoords(center);
+  if (!win.leafletMap || !win.mapMarker) return;
+  const color = currentChapterColor();
+  const latLng = [center.lat, center.lon];
+  win.mapMarker.setLatLng(latLng);
+  win.mapMarker.setStyle({ color, fillColor: color });
+  if (fly) win.leafletMap.flyTo(latLng, center.zoom, { duration: 1.5 });
+  else win.leafletMap.setView(latLng, center.zoom);
+}
+
+function teardownMapWindow(win) {
+  if (win?.leafletMap) win.leafletMap.remove();
+  if (state.map.instance === win?.leafletMap) {
+    state.map.instance = null;
+    state.map.marker = null;
+    state.map.ready = false;
+  }
+}
+
+function currentMapCenter() {
+  const key = state.chapter === "int" ? "INT" : state.chapter.toUpperCase();
+  return MAP_CENTERS[key] || MAP_CENTERS.CH00;
+}
+
+function currentChapterColor() {
+  return getComputedStyle(dom.root).getPropertyValue("--chapter-primary").trim() || "#f0f0f0";
+}
+
+function formatMapCoords(center) {
+  return `${center.lat.toFixed(5)}, ${center.lon.toFixed(5)}`;
+}
+
+function currentNewsKey() {
+  return state.chapter === "int" ? "INT" : state.chapter.toUpperCase();
+}
+
+function hrNode() {
+  const node = document.createElement("div");
+  node.className = "os-hr";
+  node.textContent = "────────────────────────────";
+  return node;
+}
+
+function incrementNewsIssue() {
+  const next = Number(sessionStorage.getItem("news_issue") || "0") + 1;
+  sessionStorage.setItem("news_issue", String(next));
+}
+
+function sessionSeconds() {
+  return Math.floor((performance.now() - state.startedAt) / 1000);
+}
+
+function sessionDuration() {
+  const seconds = sessionSeconds();
+  return `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+}
+
 function buildVideoObjectWindow(title, clipKey, extraHtml, autoCloseMs = null) {
   const clip = state.signal[clipKey];
   const body = [
@@ -278,7 +1424,7 @@ function buildVideoObjectWindow(title, clipKey, extraHtml, autoCloseMs = null) {
   ].join("");
   const win = createDesktopWindow(title, body);
   const video = win.querySelector("video");
-  video.volume = 0.2;
+  video.volume = state.settings.audio.video;
   video.loop = false;
   setTimeout(() => video.play().catch(() => {}), 0);
   if (autoCloseMs) {
@@ -329,11 +1475,53 @@ MOTION: 0.136</pre>`,
 }
 
 function buildTrashWindow() {
-  const body = `<div class="trash-list"><button data-trash-item="untitled">untitled.txt</button></div>`;
-  const win = createDesktopWindow("TRASH - 1 item", body);
-  win.querySelector("[data-trash-item]").addEventListener("click", () => {
-    openTrashTextWindow();
+  const body = `<div class="trash-list"></div>`;
+  const win = createDesktopWindow(`TRASH - ${TRASH_ITEMS.length} items`, body);
+  const list = win.querySelector(".trash-list");
+  TRASH_ITEMS.forEach((item) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.trashItem = item.id;
+    button.textContent = item.filename;
+    button.addEventListener("click", () => openTrashItem(item.id));
+    list.appendChild(button);
   });
+  return win;
+}
+
+function openTrashItem(id) {
+  const item = TRASH_ITEMS.find((entry) => entry.id === id);
+  if (!item) return;
+  if (item.statusSequence) {
+    openTrashTextWindow(item.filename);
+    return;
+  }
+  closeOldestWindowsForNewOne();
+  const shell = document.createElement("pre");
+  shell.className = `trash-doc trash-doc-${item.type}`;
+  shell.textContent = (item.content || []).join("\n");
+  const win = createSizedDesktopWindow(item.filename, shell, item.type === "pdf" ? "desktop-window-pdf" : "");
+  mountDesktopWindow(win, {
+    id: `trash-${item.id}`,
+    kind: "object",
+    left: Math.round(randomBetween(0.36, 0.62) * window.innerWidth),
+    top: Math.round(randomBetween(0.18, 0.46) * window.innerHeight),
+  });
+}
+
+function buildReadmeWindow() {
+  const shell = document.createElement("pre");
+  shell.className = "readme-file";
+  shell.textContent = "loading README.txt...";
+  const win = createSizedDesktopWindow("README.txt", shell, "desktop-window-readme");
+  fetch("README.txt")
+    .then((response) => response.ok ? response.text() : Promise.reject(new Error(`README ${response.status}`)))
+    .then((text) => {
+      if (document.body.contains(win)) shell.textContent = text;
+    })
+    .catch(() => {
+      if (document.body.contains(win)) shell.textContent = "README.txt unavailable";
+    });
   return win;
 }
 
@@ -460,15 +1648,15 @@ function renderEyuSection(container, section) {
   }
 }
 
-function openTrashTextWindow() {
+function openTrashTextWindow(filename = "还是应该有.txt") {
   closeOldestWindowsForNewOne();
-  const win = createDesktopWindow("untitled.txt", `<textarea class="trash-empty-file" readonly></textarea><div class="trash-status"></div>`);
-  win.style.left = `${Math.round(randomBetween(0.4, 0.6) * window.innerWidth)}px`;
-  win.style.top = `${Math.round(randomBetween(0.26, 0.46) * window.innerHeight)}px`;
-  bringWindowForward(win);
-  makeDraggable(win);
-  dom.objectLayer.appendChild(win);
-  state.desktopWindows.push(win);
+  const win = createDesktopWindow(filename, `<textarea class="trash-empty-file" readonly></textarea><div class="trash-status"></div>`);
+  mountDesktopWindow(win, {
+    id: "trash-still",
+    kind: "object",
+    left: Math.round(randomBetween(0.4, 0.6) * window.innerWidth),
+    top: Math.round(randomBetween(0.26, 0.46) * window.innerHeight),
+  });
   startTrashSequence(win);
 }
 
@@ -490,12 +1678,63 @@ function startTrashSequence(win) {
 }
 
 function onKeyDown(event) {
+  trackShutdownPhrase(event);
+  if (state.shuttingDown) return;
   if (event.key.toLowerCase() === "n" && state.chapter === "ch01") {
     triggerNyeInterrupt();
   }
   if (event.key === "Escape" && dom.interruptStage.classList.contains("is-active")) {
     exitInterrupt();
   }
+}
+
+function trackShutdownPhrase(event) {
+  if (state.shuttingDown || event.key.length !== 1) return;
+  state.shutdownBuffer = `${state.shutdownBuffer}${event.key.toLowerCase()}`.slice(-8);
+  if (state.shutdownBuffer === "shutdown") startShutdownSequence();
+}
+
+function startShutdownSequence() {
+  if (state.shuttingDown) return;
+  state.shuttingDown = true;
+  state.desktopWindows.slice().forEach((win) => closeDesktopWindow(win));
+  openSearchWindow(false);
+  dom.video.pause();
+  dom.interruptVideo.pause();
+  document.querySelectorAll(".desktop-window video").forEach((video) => video.pause());
+  fadeAudioToZero(1000);
+  dom.shutdownText.textContent = "";
+  dom.shutdownSubtext.textContent = "";
+  dom.shutdownFinal.textContent = "";
+  dom.shutdownScreen.classList.add("is-active");
+  dom.shutdownScreen.setAttribute("aria-hidden", "false");
+  setTimeout(() => {
+    dom.shutdownText.textContent = SHUTDOWN_TEXT;
+  }, 2000);
+  setTimeout(() => {
+    dom.shutdownSubtext.textContent = SHUTDOWN_SUBTEXT;
+  }, 3000);
+  setTimeout(() => {
+    dom.shutdownFinal.textContent = SHUTDOWN_FINAL;
+  }, 6000);
+}
+
+function fadeAudioToZero(duration) {
+  const started = performance.now();
+  const videoVolume = dom.video.volume;
+  const interruptVolume = dom.interruptVideo.volume;
+  const gains = [state.audio.gainVideo, state.audio.gainAmbient, state.audio.gainExtract].filter(Boolean);
+  const gainStarts = gains.map((gain) => gain.gain.value);
+  const step = (now) => {
+    const t = Math.min(1, (now - started) / duration);
+    dom.video.volume = videoVolume * (1 - t);
+    dom.interruptVideo.volume = interruptVolume * (1 - t);
+    gains.forEach((gain, index) => {
+      gain.gain.value = gainStarts[index] * (1 - t);
+    });
+    if (t < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
 }
 
 function onWheel(event) {
@@ -548,6 +1787,7 @@ function activateChapter(chapter) {
 
   state.previousChapter = state.chapter;
   state.chapter = chapter;
+  sessionStorage.setItem("last_chapter", chapter);
   state.clipIndex = 0;
   state.wasInterrupted = false;
 
@@ -556,6 +1796,10 @@ function activateChapter(chapter) {
   updateChrome(spec);
   updateNav(chapter);
   updateDesktopObjectVisibility(chapter);
+  updateMapWindow();
+  incrementNewsIssue();
+  renderNewsWindow();
+  updateFinderWindow();
   dom.chapter00.classList.toggle("is-active", chapter === "ch00");
   dom.stage.classList.toggle("is-active", chapter !== "ch00");
   dom.stage.dataset.mode = chapter;
@@ -605,7 +1849,7 @@ function setClip(clipKey) {
 
   dom.video.dataset.clip = clipKey;
   dom.video.loop = false;
-  dom.video.volume = 0.2;
+  dom.video.volume = state.settings.audio.video;
   dom.video.src = clip.filename;
   dom.video.load();
   dom.video.play().catch(() => {});
@@ -619,6 +1863,7 @@ function setClip(clipKey) {
   updateRouteCurrent();
   updateAmbientGain(clip);
   handleGpsLost(clipKey);
+  updateFinderWindow();
 }
 
 function advanceClip() {
@@ -651,11 +1896,16 @@ function triggerNyeInterrupt() {
 function enterInterrupt() {
   state.previousChapter = state.chapter === "int" ? "ch01" : state.chapter;
   state.chapter = "int";
+  sessionStorage.setItem("last_chapter", "int");
   const clip = state.signal.IMG_8863;
   setPalette(CHAPTERS.int);
+  updateMapWindow();
+  incrementNewsIssue();
+  renderNewsWindow();
+  updateFinderWindow();
   dom.body.classList.add("is-interrupt");
   dom.interruptStage.classList.add("is-active");
-  dom.interruptVideo.volume = 0.2;
+  dom.interruptVideo.volume = state.settings.audio.video;
   dom.interruptVideo.src = clip.filename;
   dom.interruptVideo.load();
   hardCut(() => dom.interruptVideo.play().catch(() => {}));
@@ -1045,9 +2295,9 @@ function setupAudioUnlock() {
     state.audio.gainVideo = context.createGain();
     state.audio.gainExtract = context.createGain();
     state.audio.gainAmbient = context.createGain();
-    state.audio.gainVideo.gain.value = 0.2;
-    state.audio.gainExtract.gain.value = 0.0;
-    state.audio.gainAmbient.gain.value = state.audio.ambientGainBase;
+    state.audio.gainVideo.gain.value = state.settings.audio.video;
+    state.audio.gainExtract.gain.value = state.settings.audio.extract;
+    state.audio.gainAmbient.gain.value = state.settings.audio.ambient;
     state.audio.gainVideo.connect(context.destination);
     state.audio.gainExtract.connect(context.destination);
     state.audio.gainAmbient.connect(context.destination);
@@ -1063,3 +2313,652 @@ function updateAmbientGain(clip) {
   gain.gain.cancelScheduledValues(state.audio.context.currentTime);
   gain.gain.linearRampToValueAtTime(target, state.audio.context.currentTime + 0.25);
 }
+
+/* GAZETTEER.db ------------------------------------------------------------ */
+(function setupGazetteerDb() {
+  const db = {
+    env: null,
+    manifest: {},
+    entries: [],
+    lookup: [],
+    selectedKey: null,
+    query: "",
+    chapterFilter: "ALL",
+    unverifiedOnly: false,
+    tooltipTimer: null,
+    z: 58,
+  };
+
+  function bootGazetteer() {
+    insertDbButton();
+    createGazetteerWindow();
+    createGazetteerTooltip();
+    loadGazetteerData();
+    wrapChapterActivationForGazetteer();
+  }
+
+  function insertDbButton() {
+    const nav = document.querySelector(".chapter-nav");
+    if (!nav || document.getElementById("gazetteer-db-button")) return;
+    const button = document.createElement("button");
+    button.id = "gazetteer-db-button";
+    button.type = "button";
+    button.className = "gazetteer-nav-button";
+    button.textContent = "[DB]";
+    button.setAttribute("aria-label", "Open GAZETTEER.db");
+    button.addEventListener("click", toggleGazetteerWindow);
+    nav.appendChild(button);
+  }
+
+  function createGazetteerWindow() {
+    if (document.getElementById("gazetteer-window")) return;
+    const root = document.createElement("section");
+    root.id = "gazetteer-window";
+    root.setAttribute("aria-label", "GAZETTEER.db window");
+    root.innerHTML = `
+      <div class="gazetteer-frame">
+        <pre class="gazetteer-ascii">+------------------------------------------------------------------+</pre>
+        <div class="gazetteer-titlebar">
+          <span>GAZETTEER.db</span>
+          <button class="gazetteer-close" type="button" aria-label="Close GAZETTEER.db">[x]</button>
+        </div>
+        <div class="gazetteer-body">
+          <aside class="gazetteer-left">
+            <label class="gazetteer-search-row"><span>&gt;</span><input id="gazetteer-search" autocomplete="off" spellcheck="false" aria-label="Search gazetteer"></label>
+            <div class="gazetteer-results" id="gazetteer-results" aria-label="Gazetteer results"></div>
+            <div class="gazetteer-browse">
+              <label for="gazetteer-chapter-filter">BROWSE BY [CHAPTER v]</label>
+              <select id="gazetteer-chapter-filter" aria-label="Browse by chapter"></select>
+            </div>
+            <button class="gazetteer-unverified" id="gazetteer-unverified" type="button">UNVERIFIED 0</button>
+          </aside>
+          <article class="gazetteer-right" id="gazetteer-detail" aria-label="Gazetteer entry detail">
+            <div class="gazetteer-entry-header">LOADING LOCAL DATA</div>
+            <div class="gazetteer-row-value">signal_data/environment.json<br>signal_data/MANIFEST.json</div>
+          </article>
+        </div>
+        <pre class="gazetteer-footer-ascii">+------------------------------------------------------------------+</pre>
+      </div>`;
+
+    document.body.appendChild(root);
+    makeGazetteerDraggable(root, root.querySelector(".gazetteer-titlebar"));
+    root.querySelector(".gazetteer-close").addEventListener("click", closeGazetteerWindow);
+    root.querySelector("#gazetteer-search").addEventListener("input", (event) => {
+      db.query = event.target.value.trim();
+      db.unverifiedOnly = false;
+      updateUnverifiedButton();
+      renderGazetteerResults();
+    });
+    root.querySelector("#gazetteer-chapter-filter").addEventListener("change", (event) => {
+      db.chapterFilter = event.target.value;
+      db.unverifiedOnly = false;
+      updateUnverifiedButton();
+      renderGazetteerResults();
+    });
+    root.querySelector("#gazetteer-unverified").addEventListener("click", () => {
+      db.unverifiedOnly = !db.unverifiedOnly;
+      updateUnverifiedButton();
+      renderGazetteerResults();
+    });
+  }
+
+  function createGazetteerTooltip() {
+    if (document.getElementById("gazetteer-tooltip")) return;
+    const tooltip = document.createElement("div");
+    tooltip.id = "gazetteer-tooltip";
+    tooltip.setAttribute("role", "tooltip");
+    document.body.appendChild(tooltip);
+
+    document.addEventListener("mouseover", (event) => {
+      const term = event.target.closest?.(".gazetteer-term");
+      if (!term) return;
+      const entry = db.entries.find((item) => item.key === term.dataset.gazetteerKey);
+      if (entry) showGazetteerTooltip(entry, term);
+    });
+  }
+
+  async function loadGazetteerData() {
+    try {
+      const [env, manifest] = await Promise.all([
+        fetch("signal_data/environment.json").then((response) => response.json()),
+        fetch("signal_data/MANIFEST.json").then((response) => response.json()),
+      ]);
+      db.env = env;
+      db.manifest = normalizeManifest(manifest);
+      if (typeof state !== "undefined" && state.signal && Object.keys(state.signal).length) {
+        db.manifest = { ...db.manifest, ...state.signal };
+      }
+      window.ENV = env;
+      window.SIGNAL = { ...(window.SIGNAL || {}), ...db.manifest };
+      db.entries = flattenEnvironment(env);
+      db.lookup = buildGazetteerLookup(db.entries);
+      populateChapterFilter();
+      renderGazetteerResults();
+      enhanceNarrativeLocationTerms();
+    } catch (error) {
+      const detail = document.getElementById("gazetteer-detail");
+      if (detail) {
+        detail.innerHTML = "";
+        detail.appendChild(headerNode("GAZETTEER LOAD ERROR"));
+        detail.appendChild(valueNode(String(error.message || error)));
+      }
+    }
+  }
+
+  function normalizeManifest(raw) {
+    const normalized = {};
+    if (Array.isArray(raw)) {
+      raw.forEach((clip) => {
+        const key = clip.clip || clip.filename?.replace(/\.[^.]+$/, "");
+        if (key) normalized[key] = { ...clip, clip: key };
+      });
+      return normalized;
+    }
+    Object.entries(raw || {}).forEach(([key, clip]) => {
+      if (!clip || typeof clip !== "object") return;
+      const clipKey = clip.clip || key;
+      normalized[clipKey] = { ...clip, clip: clipKey };
+    });
+    return normalized;
+  }
+
+  function flattenEnvironment(env) {
+    const sparseKeys = new Set((env.sparse_or_unverifiable_after_deep_search || []).map((item) => item.key || item));
+    return Object.keys(env)
+      .filter((group) => group.startsWith("GROUP_"))
+      .flatMap((group) => Object.entries(env[group] || {}).map(([key, raw]) => {
+        const sparse = sparseKeys.has(key) || textHasSparseStatus(raw);
+        const chineseNames = collectChineseStrings(raw).slice(0, 8);
+        const searchBlob = [key, key.replaceAll("_", " "), raw.full_name, raw.narrative_note, ...chineseNames]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+        return {
+          key,
+          group,
+          raw,
+          sparse,
+          chineseNames,
+          chapter: raw.chapter_relevance || "—",
+          searchBlob,
+        };
+      }));
+  }
+
+  function textHasSparseStatus(value) {
+    return JSON.stringify(value || {}).toLowerCase().includes("sparse") || JSON.stringify(value || {}).toLowerCase().includes("unverified");
+  }
+
+  function collectChineseStrings(value, result = []) {
+    if (!value || result.length > 24) return result;
+    if (typeof value === "string") {
+      const matches = value.match(/[\u3400-\u9fff][\u3400-\u9fff\u3000-\u303f，。、：；（）《》「」“”\w\s-]{1,28}/g);
+      if (matches) matches.forEach((item) => result.push(item.trim()));
+      return result;
+    }
+    if (Array.isArray(value)) {
+      value.forEach((item) => collectChineseStrings(item, result));
+      return result;
+    }
+    if (typeof value === "object") {
+      Object.values(value).forEach((item) => collectChineseStrings(item, result));
+    }
+    return [...new Set(result.filter(Boolean))];
+  }
+
+  function buildGazetteerLookup(entries) {
+    const stop = new Set(["city", "county", "province", "area", "road", "street", "china", "australia", "new york", "urban", "mountain"]);
+    const seen = new Set();
+    const terms = [];
+    entries.forEach((entry) => {
+      const raw = entry.raw;
+      const candidates = [
+        entry.key,
+        entry.key.replace(/IMG_\d{4}_?/g, "").replaceAll("_", " "),
+        raw.full_name,
+        ...(raw.full_name ? raw.full_name.split(",") : []),
+        ...entry.chineseNames,
+      ];
+      candidates.forEach((candidate) => {
+        const term = String(candidate || "").trim().replace(/\s+/g, " ");
+        if (term.length < 2) return;
+        if (/^IMG_\d{4}$/.test(term)) return;
+        if (stop.has(term.toLowerCase())) return;
+        const id = term.toLowerCase();
+        if (seen.has(id)) return;
+        seen.add(id);
+        terms.push({ term, key: entry.key, isChinese: /[\u3400-\u9fff]/.test(term) });
+      });
+    });
+    return terms.sort((a, b) => b.term.length - a.term.length).slice(0, 600);
+  }
+
+  function populateChapterFilter() {
+    const select = document.getElementById("gazetteer-chapter-filter");
+    if (!select) return;
+    const counts = db.entries.reduce((map, entry) => {
+      map.set(entry.chapter, (map.get(entry.chapter) || 0) + 1);
+      return map;
+    }, new Map());
+    select.innerHTML = "";
+    select.appendChild(optionNode("ALL", `ALL (${db.entries.length})`));
+    ["CH01", "CH02", "CH03", "CH04", "INT", "EYU", "BEISHANG"].forEach((chapter) => {
+      if (counts.has(chapter)) select.appendChild(optionNode(chapter, `${chapter} (${counts.get(chapter)})`));
+    });
+  }
+
+  function optionNode(value, label) {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = label;
+    return option;
+  }
+
+  function renderGazetteerResults() {
+    const results = document.getElementById("gazetteer-results");
+    if (!results) return;
+    const matches = filteredEntries();
+    results.innerHTML = "";
+    matches.forEach((entry) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `gazetteer-result ${entry.key === db.selectedKey ? "is-selected" : ""}`;
+      button.dataset.key = entry.key;
+      const sparse = entry.sparse ? `<span class="gazetteer-sparse-dot">●</span>` : "";
+      button.innerHTML = `${sparse}${escapeHtml(displayName(entry))}<span class="gazetteer-result-key">${escapeHtml(entry.key)}</span>`;
+      button.addEventListener("click", () => selectGazetteerEntry(entry.key));
+      results.appendChild(button);
+    });
+
+    if (!matches.length) {
+      results.appendChild(valueNode("NO MATCH"));
+      renderGazetteerDetail(null);
+      return;
+    }
+    if (!db.selectedKey || !matches.some((entry) => entry.key === db.selectedKey)) {
+      db.selectedKey = matches[0].key;
+    }
+    renderGazetteerDetail(db.entries.find((entry) => entry.key === db.selectedKey));
+    updateUnverifiedButton();
+  }
+
+  function filteredEntries() {
+    const query = db.query.toLowerCase();
+    return db.entries.filter((entry) => {
+      if (db.unverifiedOnly && !entry.sparse) return false;
+      if (db.chapterFilter !== "ALL" && entry.chapter !== db.chapterFilter) return false;
+      if (query && !entry.searchBlob.includes(query)) return false;
+      return true;
+    });
+  }
+
+  function updateUnverifiedButton() {
+    const button = document.getElementById("gazetteer-unverified");
+    if (!button) return;
+    const count = db.entries.filter((entry) => entry.sparse).length;
+    button.textContent = `UNVERIFIED ${count}`;
+    button.classList.toggle("is-active", db.unverifiedOnly);
+  }
+
+  function selectGazetteerEntry(key) {
+    db.selectedKey = key;
+    renderGazetteerResults();
+  }
+
+  function renderGazetteerDetail(entry) {
+    const detail = document.getElementById("gazetteer-detail");
+    if (!detail) return;
+    detail.innerHTML = "";
+    if (!entry) {
+      detail.appendChild(headerNode("NO ENTRY"));
+      return;
+    }
+
+    const raw = entry.raw;
+    detail.appendChild(headerNode(`${entry.key.toUpperCase()}${entry.chineseNames[0] ? ` / ${entry.chineseNames[0]}` : ""}`));
+    if (entry.sparse) detail.appendChild(bannerNode("DATA SPARSE — unverified"));
+
+    const coords = extractCoordinates(raw);
+    const altitude = extractAltitude(raw);
+    detail.appendChild(fieldRows([
+      ["COORDINATES", coords || "—"],
+      ["ALTITUDE", altitude || "—"],
+      ["TERRAIN", raw.terrain || raw.terrain_detail || "—"],
+      ["CHAPTER", entry.chapter || "—"],
+    ]));
+
+    detail.appendChild(sectionTitle("CLIPS"));
+    renderClipSection(detail, entry);
+    detail.appendChild(sectionTitle("SIGNAL"));
+    renderSignalSection(detail, entry);
+    detail.appendChild(sectionTitle("ENVIRONMENT"));
+    renderEnvironmentSection(detail, entry);
+    detail.appendChild(sectionTitle("NOTE"));
+    const note = document.createElement("div");
+    note.className = "gazetteer-note";
+    note.textContent = raw.narrative_note || "—";
+    detail.appendChild(note);
+  }
+
+  function renderClipSection(detail, entry) {
+    const clips = findClipsForEntry(entry);
+    if (!clips.length) {
+      detail.appendChild(valueNode("—"));
+      return;
+    }
+    const list = document.createElement("div");
+    list.className = "gazetteer-clip-list";
+    clips.forEach((clip) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "gazetteer-clip-button";
+      const local = clip.local_time_short || clip.local_time?.slice(11, 16) || "--:--";
+      const duration = clip.duration_human || (Number.isFinite(clip.duration_sec) ? `${Math.round(clip.duration_sec)}s` : "--");
+      button.textContent = `${clip.clip || clip.filename} | ${local} | ${duration}`;
+      button.addEventListener("click", () => jumpToClip(clip.clip));
+      list.appendChild(button);
+    });
+    detail.appendChild(list);
+  }
+
+  function renderSignalSection(detail, entry) {
+    const clips = findClipsForEntry(entry);
+    if (!clips.length) {
+      detail.appendChild(valueNode("—"));
+      return;
+    }
+    detail.appendChild(fieldRows([
+      ["GLITCH", range(clips.map((clip) => clip.glitch_weight))],
+      ["LUMINANCE", range(clips.map((clip) => clip.rgb?.luminance_mean))],
+      ["MOTION", range(clips.map((clip) => clip.rgb?.motion_score))],
+    ]));
+  }
+
+  function renderEnvironmentSection(detail, entry) {
+    const skip = new Set(["clips", "full_name", "coordinates_verified", "altitude_verified", "terrain", "terrain_detail", "chapter_relevance", "narrative_note"]);
+    const fields = Object.entries(entry.raw).filter(([key]) => !skip.has(key));
+    if (!fields.length) {
+      detail.appendChild(valueNode("—"));
+      return;
+    }
+    fields.forEach(([key, value]) => {
+      const row = document.createElement("div");
+      row.className = "gazetteer-row";
+      const label = document.createElement("div");
+      label.className = "gazetteer-row-label";
+      label.textContent = key.replaceAll("_", " ").toUpperCase();
+      const body = document.createElement("div");
+      body.className = "gazetteer-env-value";
+      body.textContent = formatValue(value);
+      row.append(label, body);
+      detail.appendChild(row);
+    });
+  }
+
+  function findClipsForEntry(entry) {
+    const raw = entry.raw;
+    const explicit = new Set([...(raw.clips || []), ...(entry.key.match(/IMG_\d{4}/g) || [])]);
+    const clips = Object.values(db.manifest).filter((clip) => explicit.has(clip.clip));
+    if (clips.length) return clips.sort(compareClipsByTime);
+
+    const name = String(raw.full_name || entry.key).toLowerCase();
+    return Object.values(db.manifest)
+      .filter((clip) => {
+        const place = String(clip.location || clip.place || "").toLowerCase();
+        return place && (name.includes(place) || place.includes(firstPlaceToken(name)));
+      })
+      .sort(compareClipsByTime);
+  }
+
+  function firstPlaceToken(name) {
+    return name.split(/[,/]/)[0].replace(/\b(city|county|province|area|district)\b/g, "").trim();
+  }
+
+  function compareClipsByTime(a, b) {
+    return String(a.local_time || a.creation_time || "").localeCompare(String(b.local_time || b.creation_time || ""));
+  }
+
+  function jumpToClip(clipKey) {
+    if (!clipKey || typeof CHAPTERS === "undefined") return;
+    const chapter = Object.entries(CHAPTERS).find(([, spec]) => spec.clips?.includes(clipKey))?.[0];
+    if (!chapter) return;
+    if (chapter === "int") {
+      enterInterrupt();
+      return;
+    }
+    activateChapter(chapter);
+    requestAnimationFrame(() => {
+      const spec = CHAPTERS[chapter];
+      state.clipIndex = Math.max(0, spec.clips.indexOf(clipKey));
+      setClip(clipKey);
+    });
+  }
+
+  function extractCoordinates(raw) {
+    const source = raw.coordinates_verified?.manifest || raw.coordinates_verified?.requested || raw.coordinates || raw;
+    const lat = Number(source.lat ?? source.latitude);
+    const lon = Number(source.lon ?? source.lng ?? source.longitude);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return "";
+    return `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+  }
+
+  function extractAltitude(raw) {
+    const altitude = raw.altitude_verified;
+    if (typeof altitude === "number") return `${Math.round(altitude)}m`;
+    if (altitude && typeof altitude === "object") {
+      const meters = altitude.meters ?? altitude.manifest_meters ?? altitude.altitude_m;
+      if (Number.isFinite(Number(meters))) return `${Math.round(Number(meters))}m`;
+      if (altitude.status) return altitude.status;
+    }
+    return "";
+  }
+
+  function range(values) {
+    const nums = values.map(Number).filter(Number.isFinite);
+    if (!nums.length) return "—";
+    const min = Math.min(...nums);
+    const max = Math.max(...nums);
+    return min === max ? min.toFixed(3) : `${min.toFixed(3)} - ${max.toFixed(3)}`;
+  }
+
+  function formatValue(value) {
+    if (value === null || typeof value === "undefined" || value === "") return "—";
+    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") return String(value);
+    if (Array.isArray(value) && value.every((item) => typeof item === "string" || typeof item === "number")) return value.join("\n");
+    return JSON.stringify(value, null, 2);
+  }
+
+  function displayName(entry) {
+    return entry.raw.full_name || entry.key.replaceAll("_", " ");
+  }
+
+  function headerNode(text) {
+    const node = document.createElement("div");
+    node.className = "gazetteer-entry-header";
+    node.textContent = text;
+    return node;
+  }
+
+  function valueNode(text) {
+    const node = document.createElement("div");
+    node.className = "gazetteer-row-value";
+    node.textContent = text;
+    return node;
+  }
+
+  function bannerNode(text) {
+    const node = document.createElement("div");
+    node.className = "gazetteer-sparse-banner";
+    node.textContent = text;
+    return node;
+  }
+
+  function sectionTitle(text) {
+    const node = document.createElement("div");
+    node.className = "gazetteer-section-title";
+    node.textContent = `────── ${text}`;
+    return node;
+  }
+
+  function fieldRows(rows) {
+    const fragment = document.createDocumentFragment();
+    rows.forEach(([label, value]) => {
+      const row = document.createElement("div");
+      row.className = "gazetteer-row";
+      const left = document.createElement("div");
+      left.className = "gazetteer-row-label";
+      left.textContent = label;
+      const right = document.createElement("div");
+      right.className = "gazetteer-row-value";
+      right.textContent = value || "—";
+      row.append(left, right);
+      fragment.appendChild(row);
+    });
+    return fragment;
+  }
+
+  function toggleGazetteerWindow() {
+    const root = document.getElementById("gazetteer-window");
+    if (!root) return;
+    root.classList.toggle("is-open");
+    document.getElementById("gazetteer-db-button")?.classList.toggle("is-open", root.classList.contains("is-open"));
+    if (root.classList.contains("is-open")) {
+      root.style.zIndex = String(++db.z);
+      renderGazetteerResults();
+    }
+  }
+
+  function closeGazetteerWindow() {
+    document.getElementById("gazetteer-window")?.classList.remove("is-open");
+    document.getElementById("gazetteer-db-button")?.classList.remove("is-open");
+  }
+
+  function makeGazetteerDraggable(root, handle) {
+    if (!root || !handle) return;
+    let drag = null;
+    handle.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
+      drag = {
+        x: event.clientX,
+        y: event.clientY,
+        left: root.offsetLeft,
+        top: root.offsetTop,
+      };
+      root.style.zIndex = String(++db.z);
+      handle.setPointerCapture(event.pointerId);
+    });
+    handle.addEventListener("pointermove", (event) => {
+      if (!drag) return;
+      root.style.left = `${Math.max(0, Math.min(window.innerWidth - 80, drag.left + event.clientX - drag.x))}px`;
+      root.style.top = `${Math.max(0, Math.min(window.innerHeight - 48, drag.top + event.clientY - drag.y))}px`;
+    });
+    handle.addEventListener("pointerup", () => { drag = null; });
+    handle.addEventListener("pointercancel", () => { drag = null; });
+  }
+
+  function enhanceNarrativeLocationTerms() {
+    if (!db.lookup.length) return;
+    const containers = document.querySelectorAll("#narrative-layer, .beishang-fragment, #gps-lost-line, .gps-lost-beishang, .interrupt-stage");
+    containers.forEach((container) => wrapTextNodes(container));
+  }
+
+  function wrapTextNodes(root) {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        if (node.parentElement?.closest(".gazetteer-term, #gazetteer-window, #gazetteer-tooltip")) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(wrapNodeTerms);
+  }
+
+  function wrapNodeTerms(node) {
+    const text = node.nodeValue;
+    const matches = findTermMatches(text);
+    if (!matches.length) return;
+    const fragment = document.createDocumentFragment();
+    let cursor = 0;
+    matches.forEach((match) => {
+      if (match.start > cursor) fragment.appendChild(document.createTextNode(text.slice(cursor, match.start)));
+      const span = document.createElement("span");
+      span.className = "gazetteer-term";
+      span.dataset.gazetteerKey = match.key;
+      span.textContent = text.slice(match.start, match.end);
+      fragment.appendChild(span);
+      cursor = match.end;
+    });
+    if (cursor < text.length) fragment.appendChild(document.createTextNode(text.slice(cursor)));
+    node.parentNode.replaceChild(fragment, node);
+  }
+
+  function findTermMatches(text) {
+    const lower = text.toLowerCase();
+    const matches = [];
+    db.lookup.forEach(({ term, key }) => {
+      const needle = term.toLowerCase();
+      if (needle.length < 2) return;
+      let index = lower.indexOf(needle);
+      while (index !== -1) {
+        matches.push({ start: index, end: index + needle.length, key });
+        index = lower.indexOf(needle, index + needle.length);
+      }
+    });
+    matches.sort((a, b) => a.start - b.start || (b.end - b.start) - (a.end - a.start));
+    const accepted = [];
+    let lastEnd = -1;
+    matches.forEach((match) => {
+      if (match.start >= lastEnd) {
+        accepted.push(match);
+        lastEnd = match.end;
+      }
+    });
+    return accepted;
+  }
+
+  function showGazetteerTooltip(entry, target) {
+    const tooltip = document.getElementById("gazetteer-tooltip");
+    if (!tooltip) return;
+    clearTimeout(db.tooltipTimer);
+    tooltip.innerHTML = "";
+    const coords = document.createElement("div");
+    coords.className = "gazetteer-tooltip-coords";
+    coords.textContent = extractCoordinates(entry.raw) || "COORDINATES —";
+    const note = document.createElement("div");
+    note.className = "gazetteer-tooltip-note";
+    note.textContent = entry.raw.narrative_note || "—";
+    tooltip.append(coords, note);
+
+    const rect = target.getBoundingClientRect();
+    tooltip.style.left = `${Math.min(window.innerWidth - 256, Math.max(12, rect.left))}px`;
+    tooltip.style.top = `${Math.min(window.innerHeight - 130, Math.max(12, rect.bottom + 8))}px`;
+    tooltip.classList.add("is-active");
+    db.tooltipTimer = setTimeout(() => tooltip.classList.remove("is-active"), 3000);
+  }
+
+  function wrapChapterActivationForGazetteer() {
+    if (typeof activateChapter !== "function" || activateChapter.gazetteerWrapped) return;
+    const originalActivateChapter = activateChapter;
+    activateChapter = function gazetteerAwareActivateChapter(chapter) {
+      const result = originalActivateChapter.apply(this, arguments);
+      setTimeout(() => {
+        renderGazetteerResults();
+        enhanceNarrativeLocationTerms();
+      }, 0);
+      return result;
+    };
+    activateChapter.gazetteerWrapped = true;
+  }
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[char]));
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootGazetteer, { once: true });
+  } else {
+    bootGazetteer();
+  }
+})();

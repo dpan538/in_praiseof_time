@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -15,6 +16,12 @@
 
   <div id="noise-frame" aria-hidden="true"></div>
   <div id="white-flash" aria-hidden="true"></div>
+  <div id="boot-screen" class="boot-screen" aria-live="polite" aria-hidden="true"><pre id="boot-lines"></pre></div>
+  <div id="shutdown-screen" class="shutdown-screen" aria-hidden="true">
+    <div id="shutdown-text"></div>
+    <div id="shutdown-subtext"></div>
+    <div id="shutdown-final"></div>
+  </div>
 
   <header id="system-chrome" aria-label="System chrome">
     <div class="chrome-line chrome-top-left">| IN_PRAISE_OF_TIME |</div>
@@ -139,6 +146,10 @@
         <span>[///]</span>
         <span>Trash</span>
       </button>
+      <button class="desktop-icon desktop-icon-readme" data-object="readme" aria-label="Open README">
+        <span>[txt]</span>
+        <span>README.txt</span>
+      </button>
     </section>
 
     <section class="interrupt-stage" id="interrupt-stage" aria-label="Interrupt">
@@ -160,7 +171,9 @@
   <!-- AUDIO_CH04: ferry_engine.mp3 -->
   <!-- AUDIO: extracted audio tracks TBD -->
 
+  <script src="news_content.js"></script>
   <script src="eyu_articles.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="main.js"></script>
 </body>
 </html>
