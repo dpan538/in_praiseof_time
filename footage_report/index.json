@@ -1,0 +1,930 @@
+{
+  "project": "in_praise_of_time",
+  "scanned_at": "2026-05-14T13:11:44.349975",
+  "source_folder": "/Users/jarlgiovanni/Desktop/in_praiseof_time",
+  "total_clips": 46,
+  "total_duration_sec": 771.24,
+  "total_duration_human": "12m 51s",
+  "clips": [
+    {
+      "filename": "IMG_0196.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_0196.MOV",
+      "size_mb": 2.59,
+      "duration_sec": 10.54,
+      "duration_human": "0m 10s",
+      "width": 1920,
+      "height": 1080,
+      "fps": 30.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-01-12T12:55:17.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_0196/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_0196/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_0196/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_0196/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_0902.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_0902.mov",
+      "size_mb": 9.48,
+      "duration_sec": 5.6,
+      "duration_human": "0m 5s",
+      "width": 1920,
+      "height": 1080,
+      "fps": 30.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-02-10T05:14:29.000000Z",
+      "time_of_day": "morning",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_0902/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_0902/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_0902/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_0902/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_0945.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_0945.mov",
+      "size_mb": 30.02,
+      "duration_sec": 17.93,
+      "duration_human": "0m 17s",
+      "width": 1920,
+      "height": 1080,
+      "fps": 30.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-02-10T20:42:29.000000Z",
+      "time_of_day": "evening",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_0945/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_0945/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_0945/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_0945/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_1043.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_1043.mov",
+      "size_mb": 21.18,
+      "duration_sec": 12.66,
+      "duration_human": "0m 12s",
+      "width": 1920,
+      "height": 1080,
+      "fps": 30.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-02-11T18:44:12.000000Z",
+      "time_of_day": "evening",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1043/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1043/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1043/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1043/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_1113.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_1113.MOV",
+      "size_mb": 12.39,
+      "duration_sec": 11.13,
+      "duration_human": "0m 11s",
+      "width": 1920,
+      "height": 1080,
+      "fps": 30.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-02-13T15:12:35.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1113/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1113/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1113/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1113/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_1401.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_1401.MOV",
+      "size_mb": 175.42,
+      "duration_sec": 16.71,
+      "duration_human": "0m 16s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 59.94,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-09-02T00:01:45.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1401/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1401/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1401/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1401/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_1410.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_1410.mov",
+      "size_mb": 42.79,
+      "duration_sec": 10.7,
+      "duration_human": "0m 10s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 30.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-09-03T00:31:36.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1410/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1410/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1410/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1410/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_1448.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_1448.mov",
+      "size_mb": 51.27,
+      "duration_sec": 10.73,
+      "duration_human": "0m 10s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 30.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-04-27T05:39:48.000000Z",
+      "time_of_day": "morning",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1448/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1448/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1448/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1448/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_1565.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_1565.mov",
+      "size_mb": 216.03,
+      "duration_sec": 45.79,
+      "duration_human": "0m 45s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 30.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-05-02T04:40:35.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1565/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1565/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1565/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1565/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_1627.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_1627.mov",
+      "size_mb": 282.72,
+      "duration_sec": 60.56,
+      "duration_human": "1m 0s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 30.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-05-04T05:31:37.000000Z",
+      "time_of_day": "morning",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1627/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1627/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1627/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_1627/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_2140.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_2140.MOV",
+      "size_mb": 101.77,
+      "duration_sec": 10.86,
+      "duration_human": "0m 10s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 59.94,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-09-15T03:05:49.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2140/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2140/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2140/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2140/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_2361.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_2361.mov",
+      "size_mb": 96.8,
+      "duration_sec": 20.53,
+      "duration_human": "0m 20s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 30.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-09-21T02:49:05.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2361/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2361/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2361/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2361/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_2685.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_2685.MOV",
+      "size_mb": 13.28,
+      "duration_sec": 10.07,
+      "duration_human": "0m 10s",
+      "width": 1920,
+      "height": 1080,
+      "fps": 30.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-03-17T15:07:27.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2685/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2685/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2685/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2685/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_2719.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_2719.mov",
+      "size_mb": 56.6,
+      "duration_sec": 4.92,
+      "duration_human": "0m 4s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2026-05-13T14:23:24.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2719/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2719/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2719/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_2719/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_3212.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_3212.mov",
+      "size_mb": 13.71,
+      "duration_sec": 6.66,
+      "duration_human": "0m 6s",
+      "width": 1620,
+      "height": 1080,
+      "fps": 59.94,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-03-30T14:39:07.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3212/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3212/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3212/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3212/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_3483.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_3483.mov",
+      "size_mb": 21.56,
+      "duration_sec": 7.8,
+      "duration_human": "0m 7s",
+      "width": 3590,
+      "height": 2158,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2026-05-13T22:57:29.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3483/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3483/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3483/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3483/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_3484.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_3484.mov",
+      "size_mb": 30.46,
+      "duration_sec": 10.66,
+      "duration_human": "0m 10s",
+      "width": 3704,
+      "height": 2082,
+      "fps": 30.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-07-04T09:57:15.000000Z",
+      "time_of_day": "morning",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3484/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3484/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3484/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3484/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_3549.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_3549.mov",
+      "size_mb": 43.66,
+      "duration_sec": 15.92,
+      "duration_human": "0m 15s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-07-05T12:24:13.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3549/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3549/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3549/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3549/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_3551.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_3551.mov",
+      "size_mb": 81.32,
+      "duration_sec": 13.9,
+      "duration_human": "0m 13s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 59.94,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-07-05T12:40:47.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3551/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3551/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3551/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3551/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_3567.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_3567.mov",
+      "size_mb": 49.24,
+      "duration_sec": 13.44,
+      "duration_human": "0m 13s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-07-06T02:21:43.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3567/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3567/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3567/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3567/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_3612.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_3612.MOV",
+      "size_mb": 121.01,
+      "duration_sec": 21.18,
+      "duration_human": "0m 21s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-07-06T04:09:34.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3612/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3612/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3612/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3612/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_3618.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_3618.MOV",
+      "size_mb": 87.16,
+      "duration_sec": 15.11,
+      "duration_human": "0m 15s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-07-06T04:58:30.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3618/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3618/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3618/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3618/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_3682.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_3682.MOV",
+      "size_mb": 91.74,
+      "duration_sec": 16.06,
+      "duration_human": "0m 16s",
+      "width": 2816,
+      "height": 1584,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-07-06T12:03:48.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3682/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3682/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3682/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3682/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_3727.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_3727.MOV",
+      "size_mb": 52.4,
+      "duration_sec": 9.24,
+      "duration_human": "0m 9s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-07-07T04:15:15.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3727/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3727/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3727/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3727/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_3773.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_3773.MOV",
+      "size_mb": 59.19,
+      "duration_sec": 10.14,
+      "duration_human": "0m 10s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-07-07T10:17:25.000000Z",
+      "time_of_day": "morning",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3773/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3773/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3773/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3773/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_3798.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_3798.MOV",
+      "size_mb": 106.01,
+      "duration_sec": 18.54,
+      "duration_human": "0m 18s",
+      "width": 2816,
+      "height": 1584,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-07-07T12:17:42.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3798/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3798/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3798/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3798/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_3810.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_3810.MOV",
+      "size_mb": 44.81,
+      "duration_sec": 7.7,
+      "duration_human": "0m 7s",
+      "width": 2816,
+      "height": 1584,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-07-07T12:31:06.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3810/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3810/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3810/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3810/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_3840.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_3840.MOV",
+      "size_mb": 66.68,
+      "duration_sec": 11.19,
+      "duration_human": "0m 11s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-07-08T05:56:48.000000Z",
+      "time_of_day": "morning",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3840/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3840/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3840/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3840/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_3940.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_3940.MOV",
+      "size_mb": 119.68,
+      "duration_sec": 20.74,
+      "duration_human": "0m 20s",
+      "width": 2816,
+      "height": 1584,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-07-08T21:47:37.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3940/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3940/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3940/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_3940/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_4700.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_4700.MOV",
+      "size_mb": 166.35,
+      "duration_sec": 15.83,
+      "duration_human": "0m 15s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 59.94,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-11-22T03:37:31.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_4700/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_4700/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_4700/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_4700/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_5521.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_5521.mov",
+      "size_mb": 16.17,
+      "duration_sec": 5.87,
+      "duration_human": "0m 5s",
+      "width": 3790,
+      "height": 2130,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-08-22T21:10:17.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5521/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5521/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5521/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5521/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_5523.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_5523.MOV",
+      "size_mb": 52.03,
+      "duration_sec": 9.04,
+      "duration_human": "0m 9s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-08-22T07:20:13.000000Z",
+      "time_of_day": "morning",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5523/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5523/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5523/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5523/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_5671.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_5671.mov",
+      "size_mb": 22.67,
+      "duration_sec": 8.4,
+      "duration_human": "0m 8s",
+      "width": 2868,
+      "height": 2160,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2026-05-13T14:23:25.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5671/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5671/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5671/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5671/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_5811.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_5811.MOV",
+      "size_mb": 37.55,
+      "duration_sec": 3.92,
+      "duration_human": "0m 3s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 59.94,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-01-01T03:14:49.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5811/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5811/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5811/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_5811/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_6010.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_6010.mov",
+      "size_mb": 32.01,
+      "duration_sec": 10.57,
+      "duration_human": "0m 10s",
+      "width": 2992,
+      "height": 2138,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2026-05-13T14:23:36.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_6010/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_6010/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_6010/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_6010/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_7948.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_7948.MOV",
+      "size_mb": 45.04,
+      "duration_sec": 7.74,
+      "duration_human": "0m 7s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-07-02T11:35:24.000000Z",
+      "time_of_day": "morning",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_7948/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_7948/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_7948/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_7948/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_8033.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_8033.MOV",
+      "size_mb": 64.85,
+      "duration_sec": 11.42,
+      "duration_human": "0m 11s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-07-03T04:23:36.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8033/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8033/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8033/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8033/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_8084.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_8084.MOV",
+      "size_mb": 105.99,
+      "duration_sec": 18.26,
+      "duration_human": "0m 18s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-07-04T01:46:56.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8084/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8084/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8084/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8084/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_8191.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_8191.MOV",
+      "size_mb": 320.6,
+      "duration_sec": 30.59,
+      "duration_human": "0m 30s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 59.94,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-07-05T12:49:42.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8191/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8191/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8191/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8191/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_8220.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_8220.MOV",
+      "size_mb": 175.9,
+      "duration_sec": 30.76,
+      "duration_human": "0m 30s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-07-05T15:14:17.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8220/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8220/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8220/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8220/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_8224.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_8224.MOV",
+      "size_mb": 174.36,
+      "duration_sec": 25.13,
+      "duration_human": "0m 25s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 59.94,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-07-05T15:33:53.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8224/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8224/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8224/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8224/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_8284.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_8284.MOV",
+      "size_mb": 276.28,
+      "duration_sec": 30.84,
+      "duration_human": "0m 30s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 59.94,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-07-06T15:37:03.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8284/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8284/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8284/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8284/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_8300.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_8300.MOV",
+      "size_mb": 180.95,
+      "duration_sec": 31.68,
+      "duration_human": "0m 31s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 60.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-07-07T05:47:26.000000Z",
+      "time_of_day": "morning",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8300/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8300/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8300/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8300/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_8669.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_8669.mov",
+      "size_mb": 33.81,
+      "duration_sec": 12.0,
+      "duration_human": "0m 11s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 30.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-03-03T21:42:09.000000Z",
+      "time_of_day": "night",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8669/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8669/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8669/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8669/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_8722.mov",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_8722.mov",
+      "size_mb": 31.17,
+      "duration_sec": 10.03,
+      "duration_human": "0m 10s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 30.0,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2024-07-13T11:11:14.000000Z",
+      "time_of_day": "morning",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8722/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8722/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8722/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8722/frame_85pct.jpg"
+      ]
+    },
+    {
+      "filename": "IMG_8863.MOV",
+      "path": "/Users/jarlgiovanni/Desktop/in_praiseof_time/IMG_8863.MOV",
+      "size_mb": 652.07,
+      "duration_sec": 62.15,
+      "duration_human": "1m 2s",
+      "width": 3840,
+      "height": 2160,
+      "fps": 59.94,
+      "video_codec": "hevc",
+      "audio_codec": "aac",
+      "creation_time": "2025-12-23T14:02:11.000000Z",
+      "time_of_day": "afternoon",
+      "frames": [
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8863/frame_10pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8863/frame_30pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8863/frame_60pct.jpg",
+        "/Users/jarlgiovanni/Desktop/in_praiseof_time/footage_report/frames/IMG_8863/frame_85pct.jpg"
+      ]
+    }
+  ]
+}

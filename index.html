@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IN_PRAISE_OF_TIME</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="signal-texture" aria-hidden="true"></canvas>
+  <div id="subdermal-text" aria-hidden="true"></div>
+
+  <div id="noise-frame" aria-hidden="true"></div>
+  <div id="white-flash" aria-hidden="true"></div>
+
+  <header id="system-chrome" aria-label="System chrome">
+    <div class="chrome-line chrome-top-left">| IN_PRAISE_OF_TIME |</div>
+    <div class="chrome-line chrome-top-right" id="chapter-label">| CH.00 / LOCATING... |</div>
+    <nav class="chapter-nav" aria-label="Chapter navigation">
+      <button data-chapter="ch00">CH.00</button>
+      <button data-chapter="ch01">CH.01</button>
+      <button data-chapter="ch02">CH.02</button>
+      <button data-chapter="ch03">CH.03</button>
+      <button data-chapter="ch04">CH.04</button>
+      <button data-chapter="int">INT</button>
+    </nav>
+    <div class="chrome-line chrome-bottom-left" id="clock">| 00:00:00 |</div>
+    <div class="chrome-line chrome-bottom-right" id="coordinates">| --.----, ---.---- |</div>
+  </header>
+
+  <main id="app">
+    <section class="chapter chapter-00 is-active" id="chapter-00" data-chapter="ch00" aria-label="Chapter 00 locating">
+      <div class="locating-grid">
+        <div class="scan-column">
+          <div class="scan-label">LATITUDE</div>
+          <div class="scan-value" id="lat-scan">00.0000</div>
+        </div>
+        <div class="scan-column">
+          <div class="scan-label">LONGITUDE</div>
+          <div class="scan-value" id="lon-scan">000.0000</div>
+        </div>
+      </div>
+      <div class="ios-scroll" id="ios-scroll">iOS 16.6 -> 17.2 -> 17.3 -> 17.5 -> 17.6 -> 18.0 -> 18.1 -> 26.0</div>
+      <div class="beishang-fragment fragment-ch00">这已经是我第四次开始回顾这些照片。</div>
+      <div class="signal-acquired" id="signal-acquired">SIGNAL ACQUIRED</div>
+    </section>
+
+    <section class="chapter chapter-stage" id="chapter-stage" data-chapter="stage" aria-label="Active chapter stage">
+      <div class="chapter-layer video-layer">
+        <div class="crt-shell" id="crt-shell">
+          <pre class="ascii-top" aria-hidden="true">+--------------------------------------+</pre>
+          <div class="crt-frame" id="crt-frame">
+            <video id="chapter-video" playsinline preload="metadata"></video>
+          </div>
+          <pre class="ascii-bottom" aria-hidden="true">+--------------------------------------+</pre>
+        </div>
+      </div>
+
+      <aside class="data-panel" id="data-panel" aria-label="Signal monitor">
+        <pre id="signal-monitor">+-----------------------------+
+| SIGNAL MONITOR              |
++-----------------------------+
+| CLIP     | ----             |
+| LOCAL    | ----             |
+| ALT      | ----             |
+| GPS SIG  | ----             |
+| LUM      | ----             |
+| MOTION   | ----             |
+| GLITCH   | ----             |
+| RMS PEAK | ----             |
+| iOS      | ----             |
++-----------------------------+</pre>
+      </aside>
+
+      <div class="narrative-layer" id="narrative-layer">
+        <div class="text-slot text-slot-top"><!-- CH01_TEXT_01 --></div>
+        <div class="text-slot text-slot-left"><!-- CH01_TEXT_02 --></div>
+        <div class="text-slot text-slot-bottom"><!-- CH01_TEXT_03 --></div>
+        <div class="boxed-text ch03-box ch03-box-a">
+          <div class="box-label">| CH03_TEXT_01 |</div>
+          <div><!-- CH03_TEXT_01 --></div>
+        </div>
+        <div class="boxed-text ch03-box ch03-box-b">
+          <div class="box-label">| CH03_TEXT_02 |</div>
+          <div><!-- CH03_TEXT_02 --></div>
+        </div>
+        <div class="boxed-text ch04-box">
+          <div class="box-label">| CH04_TEXT_01 |</div>
+          <div><!-- CH04_TEXT_01 --></div>
+        </div>
+      </div>
+
+      <div id="p5-layer" class="p5-layer" aria-hidden="true">
+        <div id="ch02-text-source"><!-- CH02_TEXT --></div>
+        <div id="gps-lost-line"><!-- CH02_GPS_LOST_TEXT --></div>
+        <div id="gps-lost-beishang" class="gps-lost-beishang">
+          <div class="gps-lost-one">草原太大。留下来的代价，不明。</div>
+          <div class="gps-lost-two">绿色是那样的单纯，生命，顽强的跗骨之蛆。</div>
+        </div>
+      </div>
+
+      <div id="chapter-03-grid" class="chapter-03-grid" aria-hidden="true"></div>
+      <svg id="altitude-route" class="altitude-route" viewBox="0 0 320 680" preserveAspectRatio="none" aria-label="Altitude route"></svg>
+      <div id="altitude-scale" class="altitude-scale" aria-hidden="true"></div>
+
+      <div id="brisbane-sun" aria-hidden="true"></div>
+      <div class="beishang-fragment fragment-ch01">那个抽屉里堆满了登机牌和票根。</div>
+      <div class="beishang-fragment fragment-ch02" id="ch02-beishang-fragment">在如此长时间的段落中，我写过许多东西，但无法与人分享。</div>
+      <div class="beishang-fragment fragment-ch03-right">这原定是一趟找寻信仰的旅程。</div>
+      <div class="beishang-fragment fragment-ch03-left">我喜欢那些在长久的时间中并没有染上多余颜色的物件。</div>
+      <div class="beishang-fragment fragment-ch04">当你终于获得了看清世界的眼睛，也许，又开始想念那些厚重的镜片。</div>
+    </section>
+
+    <section id="desktop-object-layer" aria-label="Desktop object layer">
+      <button class="desktop-icon" data-object="nye" aria-label="Open NYE 3 second clip">
+        <span>[▶ MOV]</span>
+        <span>IMG_5811 / 00:03</span>
+      </button>
+      <button class="desktop-icon" data-object="nanxiang" aria-label="Open Nanxiang clip">
+        <span>[▶ MOV]</span>
+        <span>IMG_0196 / 00:10</span>
+      </button>
+      <button class="desktop-icon" data-object="brisbane" aria-label="Open Brisbane water clip">
+        <span>[▶ MOV]</span>
+        <span>IMG_6010 / 00:10</span>
+      </button>
+      <button class="desktop-icon desktop-icon-lost" data-object="nogps" aria-label="Open no GPS object">
+        <span>[? ---]</span>
+        <span>IMG_8084 / SIGNAL LOST</span>
+      </button>
+      <button class="desktop-icon" data-object="trash" aria-label="Open trash">
+        <span>[///]</span>
+        <span>Trash</span>
+      </button>
+    </section>
+
+    <section class="interrupt-stage" id="interrupt-stage" aria-label="Interrupt">
+      <video id="interrupt-video" playsinline preload="metadata"></video>
+      <div class="interrupt-coordinates">| 36.2043, 117.0843 |</div>
+      <div id="interrupt-beishang-text" class="interrupt-beishang-text"></div>
+      <pre class="interrupt-panel">+-------------------+
+| ALTITUDE | 196m   |
+| LOCAL    | 22:02  |
+| DATE     | 2025-12-23 |
+| iOS      | 26.0.1 |
++-------------------+</pre>
+    </section>
+  </main>
+
+  <!-- AUDIO_CH01: nyc_ambient.mp3 -->
+  <!-- AUDIO_CH02: steppe_wind.mp3 -->
+  <!-- AUDIO_CH03: altitude_drone.mp3 -->
+  <!-- AUDIO_CH04: ferry_engine.mp3 -->
+  <!-- AUDIO: extracted audio tracks TBD -->
+
+  <script src="main.js"></script>
+</body>
+</html>

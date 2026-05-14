@@ -1,0 +1,11 @@
+.DS_Store
+**/.DS_Store
+
+# Local/editor noise
+*.log
+*.tmp
+
+# Personal/source documents not used by the web project
+*.pdf
+*.docx
+*.psd

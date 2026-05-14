@@ -1,0 +1,186 @@
+{
+  "IMG_0196": {
+    "altitude_m": 11.671,
+    "normalized": 0.0032639044300222723
+  },
+  "IMG_0902": {
+    "altitude_m": 22.927,
+    "normalized": 0.006262721527755576
+  },
+  "IMG_0945": {
+    "altitude_m": 12.04,
+    "normalized": 0.003362213199484212
+  },
+  "IMG_1043": {
+    "altitude_m": 17.745,
+    "normalized": 0.004882136044417447
+  },
+  "IMG_1113": {
+    "altitude_m": 66.909,
+    "normalized": 0.017980380873216323
+  },
+  "IMG_1401": {
+    "altitude_m": 8.063,
+    "normalized": 0.0023026631286166437
+  },
+  "IMG_1410": {
+    "altitude_m": 52.075,
+    "normalized": 0.014028315056960474
+  },
+  "IMG_1448": {
+    "altitude_m": 13.331,
+    "normalized": 0.0037061606828862814
+  },
+  "IMG_1565": {
+    "altitude_m": 12.56,
+    "normalized": 0.00350075130279101
+  },
+  "IMG_1627": {
+    "altitude_m": 11.479,
+    "normalized": 0.0032127518995705316
+  },
+  "IMG_2140": {
+    "altitude_m": 13.07,
+    "normalized": 0.0036366252118034464
+  },
+  "IMG_2361": {
+    "altitude_m": 18.443,
+    "normalized": 0.00506809680616388
+  },
+  "IMG_2685": {
+    "altitude_m": -0.58,
+    "normalized": 0.0
+  },
+  "IMG_2719": {
+    "altitude_m": 171.755,
+    "normalized": 0.0459133923718789
+  },
+  "IMG_3212": {
+    "altitude_m": 7.39,
+    "normalized": 0.0021233628526061148
+  },
+  "IMG_3483": {
+    "altitude_m": 6.194,
+    "normalized": 0.0018047252150004795
+  },
+  "IMG_3484": {
+    "altitude_m": 1723.81,
+    "normalized": 0.4594109999254025
+  },
+  "IMG_3549": {
+    "altitude_m": 1908.817,
+    "normalized": 0.5087004593070963
+  },
+  "IMG_3551": {
+    "altitude_m": 1860.992,
+    "normalized": 0.49595895009431246
+  },
+  "IMG_3567": {
+    "altitude_m": 1952.84,
+    "normalized": 0.5204290418491639
+  },
+  "IMG_3612": {
+    "altitude_m": 3119.302,
+    "normalized": 0.8311971823481143
+  },
+  "IMG_3618": {
+    "altitude_m": 2269.722,
+    "normalized": 0.6048525634877501
+  },
+  "IMG_3682": {
+    "altitude_m": 2635.293,
+    "normalized": 0.7022477807261528
+  },
+  "IMG_3727": {
+    "altitude_m": 2800.85,
+    "normalized": 0.7463553822053134
+  },
+  "IMG_3773": {
+    "altitude_m": 3408.378,
+    "normalized": 0.9082126453317988
+  },
+  "IMG_3798": {
+    "altitude_m": 3491.633,
+    "normalized": 0.9303933949295053
+  },
+  "IMG_3810": {
+    "altitude_m": 3752.9,
+    "normalized": 1.0
+  },
+  "IMG_3840": {
+    "altitude_m": 3167.801,
+    "normalized": 0.8441182582563381
+  },
+  "IMG_3940": {
+    "altitude_m": 3227.04,
+    "normalized": 0.8599006788367062
+  },
+  "IMG_4700": {
+    "altitude_m": 16.242,
+    "normalized": 0.004481707641974914
+  },
+  "IMG_5521": {
+    "altitude_m": 3.457,
+    "normalized": 0.0010755352366337372
+  },
+  "IMG_5523": {
+    "altitude_m": 5.422,
+    "normalized": 0.0015990494154757718
+  },
+  "IMG_5671": {
+    "altitude_m": 12.709,
+    "normalized": 0.0035404477977769963
+  },
+  "IMG_5811": {
+    "altitude_m": 11.443,
+    "normalized": 0.0032031608001108305
+  },
+  "IMG_6010": {
+    "altitude_m": 3.118,
+    "normalized": 0.0009852190500548824
+  },
+  "IMG_7948": {
+    "altitude_m": 156.614,
+    "normalized": 0.041879535790786154
+  },
+  "IMG_8033": {
+    "altitude_m": 146.229,
+    "normalized": 0.03911277001609174
+  },
+  "IMG_8084": {
+    "altitude_m": null,
+    "normalized": 0.0
+  },
+  "IMG_8191": {
+    "altitude_m": 555.153,
+    "normalized": 0.14805806877883992
+  },
+  "IMG_8220": {
+    "altitude_m": 550.797,
+    "normalized": 0.14689754574421604
+  },
+  "IMG_8224": {
+    "altitude_m": 561.653,
+    "normalized": 0.1497897950701749
+  },
+  "IMG_8284": {
+    "altitude_m": 910.957,
+    "normalized": 0.2428511674499398
+  },
+  "IMG_8300": {
+    "altitude_m": 953.542,
+    "normalized": 0.25419663885247823
+  },
+  "IMG_8669": {
+    "altitude_m": 337.972,
+    "normalized": 0.09019683067446742
+  },
+  "IMG_8722": {
+    "altitude_m": 189.415,
+    "normalized": 0.050618359495721306
+  },
+  "IMG_8863": {
+    "altitude_m": 196.576,
+    "normalized": 0.05252618902991357
+  }
+}
