@@ -11,6 +11,32 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <pattern id="dither-25" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+        <rect width="4" height="4" fill="white"/>
+        <rect width="1" height="1" fill="black"/>
+      </pattern>
+      <pattern id="dither-50" x="0" y="0" width="2" height="2" patternUnits="userSpaceOnUse">
+        <rect width="2" height="2" fill="white"/>
+        <rect width="1" height="1" fill="black"/>
+        <rect x="1" y="1" width="1" height="1" fill="black"/>
+      </pattern>
+      <pattern id="dither-75" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+        <rect width="4" height="4" fill="black"/>
+        <rect x="2" y="0" width="1" height="1" fill="white"/>
+        <rect x="0" y="2" width="1" height="1" fill="white"/>
+      </pattern>
+      <pattern id="dither-lines" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+        <rect width="4" height="4" fill="white"/>
+        <line x1="0" y1="4" x2="4" y2="0" stroke="black" stroke-width="1"/>
+      </pattern>
+      <pattern id="dither-hlines" x="0" y="0" width="2" height="2" patternUnits="userSpaceOnUse">
+        <rect width="2" height="2" fill="white"/>
+        <rect y="1" width="2" height="1" fill="black"/>
+      </pattern>
+    </defs>
+  </svg>
   <canvas id="signal-texture" aria-hidden="true"></canvas>
   <div id="subdermal-text" aria-hidden="true"></div>
 
@@ -24,7 +50,7 @@
   </div>
 
   <header id="system-chrome" aria-label="System chrome">
-    <div class="chrome-line chrome-top-left">| IN_PRAISE_OF_TIME |</div>
+    <div class="chrome-line chrome-top-left">■ | IN_PRAISE_OF_TIME |</div>
     <div class="chrome-line chrome-top-right" id="chapter-label">| CH.00 / LOCATING... |</div>
     <nav class="chapter-nav" aria-label="Chapter navigation">
       <button data-chapter="ch00">CH.00</button>
@@ -33,6 +59,7 @@
       <button data-chapter="ch03">CH.03</button>
       <button data-chapter="ch04">CH.04</button>
     </nav>
+    <div class="system-readout" id="system-readout" aria-label="System readout"></div>
     <div class="chrome-line chrome-bottom-left" id="clock">| 00:00:00 |</div>
     <div class="chrome-line chrome-bottom-right" id="coordinates">| --.----, ---.---- |</div>
   </header>
@@ -66,6 +93,7 @@
             <button id="video-toggle" type="button">[‖]</button>
             <span id="video-time">00:00 / 00:00</span>
           </div>
+          <div class="muted-indicator" id="muted-indicator">♪ click to unmute</div>
           <pre class="ascii-bottom" aria-hidden="true">+--------------------------------------+</pre>
         </div>
       </div>

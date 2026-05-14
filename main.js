@@ -158,6 +158,27 @@ const TRASH_ITEMS = [
   },
 ];
 
+const PROJECT_EVENTS = [
+  { date: "2021-09-01", label: "enrolled SVA, New York" },
+  { date: "2021-01-01", label: "first film camera (Nikon F80)" },
+  { date: "2024-01-12", label: "Shanghai Nanxiang (last days before NY)" },
+  { date: "2024-02-10", label: "arrived New York / NJ" },
+  { date: "2024-07-02", label: "northeast traverse begins" },
+  { date: "2024-07-13", label: "northeast traverse ends (Jilin)" },
+  { date: "2024-09-01", label: "Lower East Side begins (Ludlow 18F)" },
+  { date: "2024-12-31", label: "New Year's Eve, New York" },
+  { date: "2025-01-08", label: "UQ conditional offer received (in NY)" },
+  { date: "2025-05-04", label: "last NYC clip (IMG_1627)" },
+  { date: "2025-06-01", label: "SVA graduation (approximate)" },
+  { date: "2025-07-04", label: "Gansu-Qinghai traverse begins" },
+  { date: "2025-07-09", label: "traverse ends (Gandi)" },
+  { date: "2025-07-21", label: "UQ orientation Brisbane" },
+  { date: "2025-07-28", label: "UQ classes begin" },
+  { date: "2025-08-22", label: "first Brisbane clip (Ascot)" },
+  { date: "2025-12-23", label: "Mt Tai night climb" },
+  { date: "2026-05-13", label: "most recent clips (Brisbane)" },
+];
+
 const state = {
   signal: {},
   chapter: "ch00",
@@ -196,6 +217,13 @@ const state = {
   shuttingDown: false,
   environmentEntries: null,
   minimizedWindows: new Map(),
+  dockApps: new Map(),
+  stickyNotes: [],
+  stickyZ: 300,
+  nextStickyId: 1,
+  calendarCursor: new Date(2024, 0, 1),
+  userInteracted: false,
+  mutedForAutoplay: true,
   map: {
     instance: null,
     marker: null,
@@ -273,6 +301,8 @@ const dom = {
   interruptBeishangText: document.getElementById("interrupt-beishang-text"),
   hiddenIntButton: document.getElementById("hidden-int-button"),
   dockBar: document.getElementById("dock-bar"),
+  systemReadout: document.getElementById("system-readout"),
+  mutedIndicator: document.getElementById("muted-indicator"),
 };
 
 const textureCtx = dom.texture.getContext("2d");
@@ -283,6 +313,8 @@ async function init() {
   const response = await fetch(MANIFEST_URL);
   state.signal = await response.json();
   window.SIGNAL = state.signal;
+  dom.video.muted = true;
+  dom.interruptVideo.muted = true;
   loadSubdermalText();
 
   bindEvents();
@@ -291,6 +323,7 @@ async function init() {
   setupAudioUnlock();
   setupDesktopObjects();
   setupOperatingSystem();
+  restoreStickyNotes();
   resizeTexture();
   if (sessionStorage.getItem("booted") === "1") {
     const chapter = sessionStorage.getItem("last_chapter") || "ch00";
@@ -322,6 +355,12 @@ function bindEvents() {
     positionDesktopIcons();
   });
   document.addEventListener("keydown", onKeyDown);
+  document.addEventListener("pointerdown", handleFirstUserInteraction, { once: true });
+  document.addEventListener("keydown", handleFirstUserInteraction, { once: true });
+  window.addEventListener("mousedown", (event) => {
+    const win = event.target.closest?.(".desktop-window");
+    if (win) bringWindowForward(win);
+  });
   document.addEventListener("click", dismissCalendarPanel, true);
   document.addEventListener("pointerdown", dismissCalendarPanel, true);
   window.addEventListener("pointerdown", dismissCalendarPanel, true);
@@ -529,9 +568,10 @@ function closeOldestWindowsForNewOne() {
 function createDesktopWindow(title, body) {
   const win = document.createElement("article");
   win.className = "desktop-window";
+  win.tabIndex = 0;
   win.dataset.windowTitle = title;
   win.innerHTML = [
-    `<div class="desktop-titlebar"><span>${title}</span><button class="desktop-minimize" type="button" aria-label="Minimize">[─]</button><button class="desktop-close" type="button" aria-label="Close">[×]</button></div>`,
+    `<div class="desktop-titlebar"><button class="desktop-close" type="button" aria-label="Close">×</button><button class="desktop-minimize" type="button" aria-label="Minimize">−</button><span>${title}</span></div>`,
     `<div class="desktop-body"><pre>+------------------------------+</pre>${body}<pre>+------------------------------+</pre></div>`,
   ].join("");
   win.querySelector(".desktop-close").addEventListener("pointerdown", (event) => {
@@ -565,6 +605,7 @@ function mountDesktopWindow(win, options = {}) {
   if (!state.desktopWindows.includes(win)) state.desktopWindows.push(win);
   updateFinderWindow();
   updateControlPanelWindow();
+  updateDockState();
   return win;
 }
 
@@ -605,6 +646,7 @@ function closeDesktopWindow(win) {
   win.style.display = "none";
   updateFinderWindow();
   updateControlPanelWindow();
+  updateDockState();
 }
 
 function bringWindowForward(win) {
@@ -614,7 +656,9 @@ function bringWindowForward(win) {
   state.desktopWindows.forEach((item) => item.classList.remove("is-focused"));
   win.style.zIndex = state.windowZ;
   win.classList.add("is-focused");
+  win.focus?.({ preventScroll: true });
   updateFinderWindow();
+  updateDockState();
 }
 
 function minimizeDesktopWindow(win) {
@@ -625,6 +669,7 @@ function minimizeDesktopWindow(win) {
   addDockIcon(win);
   updateFinderWindow();
   updateControlPanelWindow();
+  updateDockState();
 }
 
 function restoreDesktopWindow(win) {
@@ -642,6 +687,7 @@ function restoreDesktopWindow(win) {
   }
   removeDockIcon(win);
   bringWindowForward(win);
+  updateDockState();
 }
 
 function saveWindowBounds(win) {
@@ -661,11 +707,13 @@ function addDockIcon(win) {
   if (!dom.dockBar || state.minimizedWindows.has(win.dataset.windowId)) return;
   const button = document.createElement("button");
   button.type = "button";
-  button.className = "dock-icon";
-  button.textContent = String(win.dataset.windowTitle || win.dataset.windowId || "window").slice(0, 12);
+  button.className = "dock-thumb";
+  button.dataset.windowId = win.dataset.windowId;
+  button.innerHTML = `<span>${String(win.dataset.windowTitle || win.dataset.windowId || "window").slice(0, 12)}</span>`;
   button.addEventListener("click", () => restoreDesktopWindow(win));
   state.minimizedWindows.set(win.dataset.windowId, button);
-  dom.dockBar.appendChild(button);
+  const tray = dom.dockBar.querySelector("#dock-minimized") || dom.dockBar;
+  tray.appendChild(button);
 }
 
 function removeDockIcon(win) {
@@ -689,8 +737,11 @@ function makeDraggable(win) {
   });
   handle.addEventListener("pointermove", (event) => {
     if (!drag) return;
-    win.style.left = `${drag.left + event.clientX - drag.x}px`;
-    win.style.top = `${drag.top + event.clientY - drag.y}px`;
+    const rect = win.getBoundingClientRect();
+    const nextLeft = Math.max(0, Math.min(window.innerWidth - rect.width, drag.left + event.clientX - drag.x));
+    const nextTop = Math.max(20, Math.min(window.innerHeight - rect.height - 52, drag.top + event.clientY - drag.y));
+    win.style.left = `${nextLeft}px`;
+    win.style.top = `${nextTop}px`;
   });
   handle.addEventListener("pointerup", () => {
     drag = null;
@@ -699,50 +750,134 @@ function makeDraggable(win) {
 
 /* SYSTEM WINDOWS --------------------------------------------------------- */
 function setupOperatingSystem() {
-  insertSystemLaunchers();
+  setupDock();
   setupTextSeenObserver();
   applySystemSettings();
   if (!sessionStorage.getItem("news_issue")) sessionStorage.setItem("news_issue", "0");
   state.systemIntervals.push(setInterval(() => {
     updateFinderWindow();
     updateProfilerWindow();
+    updateSystemReadout();
+    updateDockState();
   }, 2000));
-  openInitialSystemWindows();
+  updateSystemReadout();
 }
 
-function openInitialSystemWindows() {
-  ["finder", "control", "news", "note", "calendar"].forEach((id) => openSystemWindow(id));
-}
-
-function insertSystemLaunchers() {
-  const nav = document.querySelector(".chapter-nav");
-  if (!nav || document.getElementById("os-launchers")) return;
-  const group = document.createElement("div");
-  group.id = "os-launchers";
+function setupDock() {
+  if (!dom.dockBar) return;
+  dom.dockBar.innerHTML = "";
+  const apps = document.createElement("div");
+  apps.className = "dock-apps";
+  const divider = document.createElement("div");
+  divider.className = "dock-divider";
+  const minimized = document.createElement("div");
+  minimized.className = "dock-minimized";
+  minimized.id = "dock-minimized";
+  dom.dockBar.append(apps, divider, minimized);
   [
-    ["finder", "[FIND]"],
-    ["control", "[CTRL]"],
-    ["note", "[NOTE]"],
-    ["calendar", "[CAL]"],
-    ["puzzle", "[PUZ]"],
-    ["profiler", "[PROF]"],
-    ["maze", "[MAZE]"],
-    ["news", "[NEWS]"],
-    ["map", "[MAP]"],
-  ].forEach(([id, label]) => {
+    ["finder", "FINDER", dockIconFinder()],
+    ["search", "SEARCH", dockIconSearch()],
+    ["control", "SETTINGS", dockIconGear()],
+    ["news", "NEWS", dockIconNews()],
+    ["chess", "CHESS", dockIconChess()],
+    ["note", "NOTE", dockIconNote()],
+    ["calendar", "CALENDAR", dockIconCalendar()],
+    ["profiler", "PROFILER", dockIconProfiler()],
+    ["eyu", ".EYU", dockIconEyu()],
+  ].forEach(([id, label, svg]) => {
     const button = document.createElement("button");
     button.type = "button";
-    button.dataset.systemWindow = id;
-    button.textContent = label;
-    button.addEventListener("click", () => openSystemWindow(id));
-    group.appendChild(button);
+    button.className = "dock-app-icon";
+    button.dataset.dockApp = id;
+    button.innerHTML = `<span class="dock-svg">${svg}</span><span class="dock-label">${label}</span><span class="dock-dot"></span>`;
+    button.addEventListener("click", () => handleDockApp(id));
+    apps.appendChild(button);
+    state.dockApps.set(id, button);
   });
-  nav.appendChild(group);
+  updateDockState();
+}
+
+function handleDockApp(id) {
+  if (id === "note") {
+    createStickyNote();
+    return;
+  }
+  if (id === "eyu" && !canOpenEyuFromDock()) return;
+  toggleSystemWindow(id);
+}
+
+function toggleSystemWindow(id) {
+  const win = id === "search" ? findWindowById("search") : findWindowById(id);
+  if (isWindowVisible(win)) closeSystemWindow(id);
+  else openSystemWindow(id);
+  updateDockState();
+}
+
+function canOpenEyuFromDock() {
+  return state.chapter === "ch01" || state.chapter === "ch04";
+}
+
+function dockIconFinder() {
+  return `<svg viewBox="0 0 36 36" aria-hidden="true"><rect x="5" y="5" width="26" height="26" fill="white" stroke="black" stroke-width="2"/><path d="M18 5v26" stroke="black" stroke-width="1"/><circle cx="13" cy="16" r="2" fill="black"/><circle cx="23" cy="16" r="2" fill="black"/><path d="M11 23h14" stroke="black" stroke-width="2"/></svg>`;
+}
+
+function dockIconSearch() {
+  return `<svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="16" cy="16" r="9" fill="white" stroke="black" stroke-width="3"/><path d="M23 23l8 8" stroke="black" stroke-width="3"/></svg>`;
+}
+
+function dockIconGear() {
+  return `<svg viewBox="0 0 36 36" aria-hidden="true"><path d="M18 4l3 5 6-1 1 6 5 4-5 4-1 6-6-1-3 5-3-5-6 1-1-6-5-4 5-4 1-6 6 1z" fill="white" stroke="black" stroke-width="2"/><circle cx="18" cy="18" r="5" fill="white" stroke="black" stroke-width="2"/></svg>`;
+}
+
+function dockIconNews() {
+  return `<svg viewBox="0 0 36 36" aria-hidden="true"><path d="M6 8h22l2 4v16H6z" fill="white" stroke="black" stroke-width="2"/><path d="M10 13h9M10 18h16M10 23h16M22 11h5v5h-5z" stroke="black" stroke-width="2" fill="white"/></svg>`;
+}
+
+function dockIconChess() {
+  return `<svg viewBox="0 0 36 36" aria-hidden="true"><path d="M12 30h14v-4h-3c2-3 4-6 1-10l-5-6 3-3-4-2-5 4 2 4-4 4c-2 3-1 6 2 9h-1z" fill="white" stroke="black" stroke-width="2"/><circle cx="20" cy="12" r="1.5" fill="black"/></svg>`;
+}
+
+function dockIconNote() {
+  return `<svg viewBox="0 0 36 36" aria-hidden="true"><path d="M8 7h20v22H8z" fill="white" stroke="black" stroke-width="2"/><path d="M22 7v7h6" fill="none" stroke="black" stroke-width="2"/><path d="M12 16h10M12 21h10" stroke="black" stroke-width="2"/></svg>`;
+}
+
+function dockIconCalendar() {
+  return `<svg viewBox="0 0 36 36" aria-hidden="true"><rect x="6" y="8" width="24" height="22" fill="white" stroke="black" stroke-width="2"/><path d="M6 14h24M12 8v6M24 8v6M12 19h4M20 19h4M12 24h4M20 24h4" stroke="black" stroke-width="2"/></svg>`;
+}
+
+function dockIconProfiler() {
+  return `<svg viewBox="0 0 36 36" aria-hidden="true"><rect x="5" y="6" width="26" height="24" fill="white" stroke="black" stroke-width="2"/><path d="M8 24l4-6 4 3 4-9 4 12 4-5" fill="none" stroke="black" stroke-width="2"/></svg>`;
+}
+
+function dockIconEyu() {
+  return `<svg viewBox="0 0 36 36" aria-hidden="true"><path d="M9 5h15l4 4v22H9z" fill="white" stroke="black" stroke-width="2"/><path d="M24 5v7h6" fill="none" stroke="black" stroke-width="2"/><text x="18" y="24" text-anchor="middle" font-size="12" font-family="monospace" fill="black">鳄</text></svg>`;
+}
+
+function updateDockState() {
+  state.dockApps.forEach((button, id) => {
+    const open = id === "note"
+      ? state.stickyNotes.some((note) => document.body.contains(note))
+      : isWindowOpen(id);
+    button.classList.toggle("is-open", open);
+    button.classList.toggle("is-disabled", id === "eyu" && !canOpenEyuFromDock());
+  });
+  const minimized = dom.dockBar?.querySelector("#dock-minimized");
+  const divider = dom.dockBar?.querySelector(".dock-divider");
+  if (divider) divider.classList.toggle("has-items", !!state.minimizedWindows.size);
+  if (!minimized) return;
+  [...minimized.querySelectorAll(".dock-thumb")].forEach((thumb) => {
+    const id = thumb.dataset.windowId;
+    if (!state.minimizedWindows.has(id)) thumb.remove();
+  });
 }
 
 function openSystemWindow(id) {
   if (id === "search") {
     openSearchWindow(true);
+    return null;
+  }
+  if (id === "note") {
+    createStickyNote();
     return null;
   }
   if (id === "eyu") {
@@ -765,7 +900,7 @@ function openSystemWindow(id) {
     finder: buildFinderWindow,
     note: buildNoteWindow,
     calendar: buildCalendarWindow,
-    puzzle: buildPuzzleWindow,
+    chess: buildChessWindow,
     profiler: buildProfilerWindow,
     maze: buildMazeWindow,
     news: buildNewsWindow,
@@ -796,13 +931,23 @@ function findWindowById(id) {
 }
 
 function systemWindowPosition(id) {
+  if (id === "finder") {
+    const existing = findWindowById("finder");
+    if (existing?.dataset.restoreLeft) {
+      return { left: Number(existing.dataset.restoreLeft), top: Number(existing.dataset.restoreTop) };
+    }
+    return {
+      left: Math.max(12, Math.round((window.innerWidth - 260) / 2)),
+      top: Math.max(36, Math.round((window.innerHeight - 360) / 2)),
+      width: 260,
+      height: 360,
+    };
+  }
   const positions = {
-    finder: { left: 10, top: 60 },
     control: { right: 10, top: 60 },
     news: { left: 220, top: 60 },
-    note: { left: 10, bottom: 80 },
     calendar: { right: 10, bottom: 80 },
-    puzzle: { left: 460, top: 120 },
+    chess: { left: 420, top: 80 },
     profiler: { left: 480, top: 150 },
     maze: { left: 520, top: 180 },
     map: { left: 540, top: 80 },
@@ -820,9 +965,11 @@ function openSearchWindow(open) {
     }
     const win = buildSearchWindow();
     mountDesktopWindow(win, { id: "search", kind: "system", left: 90, top: 90, width: 360, height: 440 });
+    updateDockState();
     return;
   }
   if (existing) closeDesktopWindow(existing);
+  updateDockState();
 }
 
 function isSearchWindowOpen() {
@@ -1060,7 +1207,7 @@ function buildControlPanelWindow() {
     makeLayerControl("signal texture", state.settings.signalTexture, (value) => {
       state.settings.signalTexture = value;
       applySystemSettings();
-    }, { value: state.settings.signalOpacity, min: 0, max: 1, step: 0.05, onChange: (value) => {
+    }, { value: state.settings.signalOpacity, min: 0, max: 1, step: 0.01, onChange: (value) => {
       state.settings.signalOpacity = value;
       applySystemSettings();
     } }),
@@ -1081,15 +1228,15 @@ function buildControlPanelWindow() {
     }),
   ];
   const audioControls = [
-    makeRangeSlider("video", state.settings.audio.video, 0, 1, 0.05, (value) => {
+    makeRangeSlider("video", state.settings.audio.video, 0, 1, 0.01, (value) => {
       state.settings.audio.video = value;
       applySystemSettings();
     }),
-    makeRangeSlider("ambient", state.settings.audio.ambient, 0, 1, 0.05, (value) => {
+    makeRangeSlider("ambient", state.settings.audio.ambient, 0, 1, 0.01, (value) => {
       state.settings.audio.ambient = value;
       applySystemSettings();
     }),
-    makeRangeSlider("extract", state.settings.audio.extract, 0, 1, 0.05, (value) => {
+    makeRangeSlider("extract", state.settings.audio.extract, 0, 1, 0.01, (value) => {
       state.settings.audio.extract = value;
       applySystemSettings();
     }),
@@ -1101,6 +1248,7 @@ function buildControlPanelWindow() {
     [".eyu", "eyu"],
     ["profiler", "profiler"],
     ["news", "news"],
+    ["chess", "chess"],
     ["map", "map"],
   ].forEach(([label, id]) => {
     windowControls.appendChild(makeAsciiCheckbox(label, isWindowOpen(id), (value) => setSystemWindowOpen(id, value)));
@@ -1137,7 +1285,7 @@ function updateControlPanelWindow() {
   if (!win) return;
   win.querySelectorAll(".ascii-checkbox").forEach((button) => {
     const text = button.textContent.replace(/^\[[■□]\]\s*/, "");
-    const map = { search: "search", ".eyu": "eyu", profiler: "profiler", news: "news", map: "map" };
+    const map = { search: "search", ".eyu": "eyu", profiler: "profiler", news: "news", chess: "chess", map: "map" };
     if (map[text]) button.textContent = `${isWindowOpen(map[text]) ? "[■]" : "[□]"} ${text}`;
   });
 }
@@ -1265,6 +1413,90 @@ function buildNoteWindow() {
   return createSizedDesktopWindow("note", shell, "desktop-window-note");
 }
 
+function restoreStickyNotes() {
+  const stored = JSON.parse(sessionStorage.getItem("sticky_notes") || "[]");
+  if (!Array.isArray(stored)) return;
+  stored.forEach((note) => createStickyNote(note));
+}
+
+function createStickyNote(saved = null) {
+  if (!saved && state.stickyNotes.length >= 8) return null;
+  const id = saved?.id || `sticky-${Date.now()}-${state.nextStickyId++}`;
+  const note = document.createElement("section");
+  note.className = "sticky-note";
+  note.dataset.stickyId = id;
+  note.style.left = `${saved?.left ?? 120 + state.stickyNotes.length * 18}px`;
+  note.style.top = `${saved?.top ?? 92 + state.stickyNotes.length * 18}px`;
+  note.style.zIndex = ++state.stickyZ;
+  note.innerHTML = [
+    `<div class="sticky-strip"><span class="sticky-state">○</span><button type="button" aria-label="Delete note">×</button></div>`,
+    `<textarea spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="off"></textarea>`,
+  ].join("");
+  const textarea = note.querySelector("textarea");
+  const stateDot = note.querySelector(".sticky-state");
+  textarea.value = saved?.content || "";
+  const updateDot = () => {
+    stateDot.textContent = textarea.value.trim() ? "●" : "○";
+  };
+  updateDot();
+  textarea.addEventListener("input", () => {
+    updateDot();
+    saveStickyNotes();
+  });
+  note.querySelector("button").addEventListener("click", () => {
+    note.remove();
+    state.stickyNotes = state.stickyNotes.filter((item) => item !== note);
+    saveStickyNotes();
+    updateDockState();
+  });
+  note.addEventListener("pointerdown", () => {
+    note.style.zIndex = ++state.stickyZ;
+  });
+  makeStickyDraggable(note);
+  document.body.appendChild(note);
+  state.stickyNotes.push(note);
+  saveStickyNotes();
+  updateDockState();
+  textarea.focus();
+  return note;
+}
+
+function makeStickyDraggable(note) {
+  const handle = note.querySelector(".sticky-strip");
+  let drag = null;
+  handle.addEventListener("pointerdown", (event) => {
+    if (event.target.closest("button")) return;
+    drag = {
+      x: event.clientX,
+      y: event.clientY,
+      left: parseFloat(note.style.left) || 0,
+      top: parseFloat(note.style.top) || 0,
+    };
+    handle.setPointerCapture(event.pointerId);
+  });
+  handle.addEventListener("pointermove", (event) => {
+    if (!drag) return;
+    note.style.left = `${Math.max(0, drag.left + event.clientX - drag.x)}px`;
+    note.style.top = `${Math.max(24, drag.top + event.clientY - drag.y)}px`;
+  });
+  handle.addEventListener("pointerup", () => {
+    if (drag) saveStickyNotes();
+    drag = null;
+  });
+}
+
+function saveStickyNotes() {
+  const notes = state.stickyNotes
+    .filter((note) => document.body.contains(note))
+    .map((note) => ({
+      id: note.dataset.stickyId,
+      left: Math.round(parseFloat(note.style.left) || 0),
+      top: Math.round(parseFloat(note.style.top) || 0),
+      content: note.querySelector("textarea")?.value || "",
+    }));
+  sessionStorage.setItem("sticky_notes", JSON.stringify(notes));
+}
+
 function buildCalendarWindow() {
   const shell = document.createElement("div");
   shell.className = "calendar-panel os-window-body";
@@ -1274,53 +1506,44 @@ function buildCalendarWindow() {
 
 function renderCalendar(shell) {
   shell.innerHTML = "";
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const marks = filmingDatesForMonth(year, month);
-  shell.appendChild(finderTitle(`${now.toLocaleString("en-US", { month: "short" }).toUpperCase()}  ${year}`));
-  const grid = document.createElement("div");
-  grid.className = "calendar-grid";
-  ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"].forEach((day) => {
-    const node = document.createElement("div");
-    node.className = "calendar-weekday";
-    node.textContent = day;
-    grid.appendChild(node);
-  });
-  const first = new Date(year, month, 1);
-  const offset = (first.getDay() + 6) % 7;
-  const days = new Date(year, month + 1, 0).getDate();
-  for (let i = 0; i < offset; i += 1) grid.appendChild(document.createElement("div"));
-  for (let day = 1; day <= days; day += 1) {
-    const key = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "calendar-date";
-    button.textContent = `${day}${marks[key] ? "·" : ""}`;
-    button.classList.toggle("is-today", day === now.getDate());
-    if (marks[key]) {
-      button.classList.add("is-marked");
-      button.addEventListener("click", (event) => {
-        event.stopPropagation();
-        showCalendarInlinePanel(shell, key, marks[key]);
-      });
+  const header = document.createElement("div");
+  header.className = "calendar-header";
+  const prev = document.createElement("button");
+  prev.type = "button";
+  prev.textContent = "[←]";
+  const label = document.createElement("span");
+  const next = document.createElement("button");
+  next.type = "button";
+  next.textContent = "[→]";
+  header.append(prev, label, next);
+
+  const scroller = document.createElement("div");
+  scroller.className = "calendar-scroll";
+  const data = calendarTimelineData();
+  for (let year = 2023; year <= 2026; year += 1) {
+    for (let month = 0; month < 12; month += 1) {
+      scroller.appendChild(renderCalendarMonth(year, month, data));
     }
-    grid.appendChild(button);
   }
-  const panel = document.createElement("div");
-  panel.className = "calendar-inline-panel";
-  const footer = document.createElement("div");
-  footer.className = "calendar-footer";
-  footer.textContent = "● filming dates marked";
-  shell.append(grid, panel, footer);
+  const updateLabel = () => {
+    const month = visibleCalendarMonth(scroller);
+    label.textContent = month || "2023-2026";
+  };
+  prev.addEventListener("click", () => jumpCalendarMonth(scroller, -1));
+  next.addEventListener("click", () => jumpCalendarMonth(scroller, 1));
+  scroller.addEventListener("scroll", updateLabel);
+  shell.append(header, scroller);
+  requestAnimationFrame(() => {
+    const target = scroller.querySelector(`[data-month="${formatMonthKey(state.calendarCursor)}"]`) || scroller.firstElementChild;
+    target?.scrollIntoView({ block: "start" });
+    updateLabel();
+  });
 }
 
-function filmingDatesForMonth(year, month) {
-  return Object.values(state.signal).reduce((map, clip) => {
+function calendarTimelineData() {
+  const clips = Object.values(state.signal).reduce((map, clip) => {
     const date = clipDisplayDateKey(clip);
     if (!date) return map;
-    const clipDate = new Date(`${date}T00:00:00`);
-    if (clipDate.getFullYear() !== year || clipDate.getMonth() !== month) return map;
     map[date] = map[date] || [];
     map[date].push({
       clip: clip.clip || String(clip.filename || "").replace(/\..+$/, ""),
@@ -1331,18 +1554,98 @@ function filmingDatesForMonth(year, month) {
     });
     return map;
   }, {});
+  const events = PROJECT_EVENTS.reduce((map, event) => {
+    map[event.date] = map[event.date] || [];
+    map[event.date].push(event.label);
+    return map;
+  }, {});
+  return { clips, events };
 }
 
-function showCalendarInlinePanel(shell, date, clips) {
-  const panel = shell.querySelector(".calendar-inline-panel");
+function renderCalendarMonth(year, month, data) {
+  const section = document.createElement("section");
+  section.className = "calendar-month";
+  section.dataset.month = `${year}-${String(month + 1).padStart(2, "0")}`;
+  section.appendChild(finderTitle(`${new Date(year, month, 1).toLocaleString("en-US", { month: "short" }).toUpperCase()}  ${year}`));
+  const grid = document.createElement("div");
+  grid.className = "calendar-grid";
+  ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"].forEach((day) => {
+    const node = document.createElement("div");
+    node.className = "calendar-weekday";
+    node.textContent = day;
+    grid.appendChild(node);
+  });
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  const first = new Date(year, month, 1);
+  const offset = (first.getDay() + 6) % 7;
+  const days = new Date(year, month + 1, 0).getDate();
+  for (let i = 0; i < offset; i += 1) grid.appendChild(document.createElement("div"));
+  for (let day = 1; day <= days; day += 1) {
+    const key = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    const clips = data.clips[key] || [];
+    const events = data.events[key] || [];
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "calendar-date";
+    button.innerHTML = `<span>${day}</span><small>${clips.length ? "●" : ""}${events.length ? "◆" : ""}</small>`;
+    button.classList.toggle("is-today", key === today);
+    if (clips.length || events.length) {
+      button.classList.add("is-marked");
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        showCalendarInlinePanel(section, key, { clips, events });
+      });
+    }
+    grid.appendChild(button);
+  }
+  const panel = document.createElement("div");
+  panel.className = "calendar-inline-panel";
+  section.append(grid, panel);
+  return section;
+}
+
+function showCalendarInlinePanel(monthNode, date, payload) {
+  document.querySelectorAll(".calendar-inline-panel").forEach((panel) => {
+    panel.classList.remove("is-active");
+    panel.textContent = "";
+  });
+  const panel = monthNode.querySelector(".calendar-inline-panel");
   if (!panel) return;
   panel.classList.add("is-active");
+  const clips = payload.clips || [];
+  const events = payload.events || [];
   panel.textContent = [
     "────────────────────────────",
     date,
+    ...events.map((label) => `◆ ${label}`),
     ...clips.map((clip) => `${clip.clip}  ${clip.time}  ${clip.location}  ${clip.duration ? `${Math.round(clip.duration)}s` : "—s"}`),
     "────────────────────────────",
   ].join("\n");
+}
+
+function visibleCalendarMonth(scroller) {
+  const rect = scroller.getBoundingClientRect();
+  const months = [...scroller.querySelectorAll(".calendar-month")];
+  const found = months.find((month) => month.getBoundingClientRect().bottom > rect.top + 48) || months[0];
+  if (!found) return "";
+  const [year, month] = found.dataset.month.split("-");
+  const label = new Date(Number(year), Number(month) - 1, 1).toLocaleString("en-US", { month: "short" }).toUpperCase();
+  state.calendarCursor = new Date(Number(year), Number(month) - 1, 1);
+  return `${label} ${year}`;
+}
+
+function jumpCalendarMonth(scroller, delta) {
+  const current = new Date(state.calendarCursor);
+  current.setMonth(current.getMonth() + delta);
+  const year = Math.max(2023, Math.min(2026, current.getFullYear()));
+  const month = year === 2023 ? Math.max(0, current.getMonth()) : year === 2026 ? Math.min(11, current.getMonth()) : current.getMonth();
+  state.calendarCursor = new Date(year, month, 1);
+  scroller.querySelector(`[data-month="${formatMonthKey(state.calendarCursor)}"]`)?.scrollIntoView({ block: "start" });
+}
+
+function formatMonthKey(date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 }
 
 function dismissCalendarPanel(event) {
@@ -1351,6 +1654,150 @@ function dismissCalendarPanel(event) {
     panel.classList.remove("is-active");
     panel.textContent = "";
   });
+}
+
+function buildChessWindow() {
+  const shell = document.createElement("div");
+  shell.className = "chess-panel os-window-body";
+  const board = document.createElement("div");
+  board.className = "chess-board";
+  const captured = document.createElement("div");
+  captured.className = "chess-captured";
+  const footer = document.createElement("div");
+  footer.className = "chess-footer";
+  const newGame = document.createElement("button");
+  newGame.type = "button";
+  newGame.textContent = "[New Game]";
+  const turn = document.createElement("span");
+  footer.append(newGame, turn);
+  shell.append(board, captured, footer);
+  const win = createSizedDesktopWindow("chess", shell, "desktop-window-chess");
+  win.chessState = newChessState();
+  newGame.addEventListener("click", () => {
+    win.chessState = newChessState();
+    renderChess(win);
+  });
+  renderChess(win);
+  return win;
+}
+
+function newChessState() {
+  return {
+    board: [
+      ["r", "n", "b", "q", "k", "b", "n", "r"],
+      ["p", "p", "p", "p", "p", "p", "p", "p"],
+      ["", "", "", "", "", "", "", ""],
+      ["", "", "", "", "", "", "", ""],
+      ["", "", "", "", "", "", "", ""],
+      ["", "", "", "", "", "", "", ""],
+      ["P", "P", "P", "P", "P", "P", "P", "P"],
+      ["R", "N", "B", "Q", "K", "B", "N", "R"],
+    ],
+    turn: "white",
+    selected: null,
+    captured: { white: [], black: [] },
+  };
+}
+
+function renderChess(win) {
+  const cs = win.chessState;
+  const board = win.querySelector(".chess-board");
+  const captured = win.querySelector(".chess-captured");
+  const turn = win.querySelector(".chess-footer span");
+  board.innerHTML = "";
+  cs.board.forEach((row, y) => {
+    row.forEach((piece, x) => {
+      const square = document.createElement("button");
+      square.type = "button";
+      square.className = "chess-square";
+      square.classList.toggle("is-dark", (x + y) % 2 === 1);
+      square.classList.toggle("is-selected", cs.selected?.x === x && cs.selected?.y === y);
+      square.textContent = chessGlyph(piece);
+      square.addEventListener("click", () => handleChessSquare(win, x, y));
+      board.appendChild(square);
+    });
+  });
+  captured.textContent = `captured white: ${cs.captured.white.map(chessGlyph).join(" ")}\ncaptured black: ${cs.captured.black.map(chessGlyph).join(" ")}`;
+  turn.textContent = `${cs.turn.toUpperCase()} / no check detection`;
+}
+
+function handleChessSquare(win, x, y) {
+  const cs = win.chessState;
+  const piece = cs.board[y][x];
+  if (!cs.selected) {
+    if (piece && chessColor(piece) === cs.turn) cs.selected = { x, y };
+    renderChess(win);
+    return;
+  }
+  const from = cs.selected;
+  const moving = cs.board[from.y][from.x];
+  if (from.x === x && from.y === y) {
+    cs.selected = null;
+    renderChess(win);
+    return;
+  }
+  if (piece && chessColor(piece) === cs.turn) {
+    cs.selected = { x, y };
+    renderChess(win);
+    return;
+  }
+  if (isLegalChessMove(cs.board, from.x, from.y, x, y)) {
+    if (piece) cs.captured[chessColor(piece)].push(piece);
+    cs.board[y][x] = moving;
+    cs.board[from.y][from.x] = "";
+    cs.turn = cs.turn === "white" ? "black" : "white";
+  }
+  cs.selected = null;
+  renderChess(win);
+}
+
+function chessGlyph(piece) {
+  return {
+    K: "♔", Q: "♕", R: "♖", B: "♗", N: "♘", P: "♙",
+    k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟",
+  }[piece] || "";
+}
+
+function chessColor(piece) {
+  return piece === piece.toUpperCase() ? "white" : "black";
+}
+
+function isLegalChessMove(board, sx, sy, tx, ty) {
+  const piece = board[sy][sx];
+  if (!piece || (sx === tx && sy === ty)) return false;
+  const target = board[ty]?.[tx];
+  if (typeof target === "undefined" || (target && chessColor(target) === chessColor(piece))) return false;
+  const dx = tx - sx;
+  const dy = ty - sy;
+  const adx = Math.abs(dx);
+  const ady = Math.abs(dy);
+  const lower = piece.toLowerCase();
+  if (lower === "p") {
+    const dir = chessColor(piece) === "white" ? -1 : 1;
+    const start = chessColor(piece) === "white" ? 6 : 1;
+    if (dx === 0 && dy === dir && !target) return true;
+    if (dx === 0 && sy === start && dy === dir * 2 && !target && !board[sy + dir][sx]) return true;
+    return adx === 1 && dy === dir && !!target;
+  }
+  if (lower === "n") return (adx === 1 && ady === 2) || (adx === 2 && ady === 1);
+  if (lower === "k") return adx <= 1 && ady <= 1;
+  if (lower === "b") return adx === ady && chessPathClear(board, sx, sy, tx, ty);
+  if (lower === "r") return (dx === 0 || dy === 0) && chessPathClear(board, sx, sy, tx, ty);
+  if (lower === "q") return (adx === ady || dx === 0 || dy === 0) && chessPathClear(board, sx, sy, tx, ty);
+  return false;
+}
+
+function chessPathClear(board, sx, sy, tx, ty) {
+  const stepX = Math.sign(tx - sx);
+  const stepY = Math.sign(ty - sy);
+  let x = sx + stepX;
+  let y = sy + stepY;
+  while (x !== tx || y !== ty) {
+    if (board[y][x]) return false;
+    x += stepX;
+    y += stepY;
+  }
+  return true;
 }
 
 function buildPuzzleWindow() {
@@ -1745,16 +2192,21 @@ function renderNewsWindow(win = findWindowById("news")) {
   const next = document.createElement("button");
   next.type = "button";
   next.textContent = "[→]";
-  prev.addEventListener("click", () => {
-    win.newsPage = win.newsPage <= 1 ? total : win.newsPage - 1;
-    renderNewsWindow(win);
-  });
-  next.addEventListener("click", () => {
-    win.newsPage = win.newsPage >= total ? 1 : win.newsPage + 1;
-    renderNewsWindow(win);
-  });
+  prev.addEventListener("click", () => turnNewsPage(win, -1));
+  next.addEventListener("click", () => turnNewsPage(win, 1));
   footer.append(prev, next, Object.assign(document.createElement("span"), { textContent: `page ${win.newsPage} / ${total}` }));
   shell.append(header, subtitle, hrNode(), bodyWrap, footer);
+}
+
+function turnNewsPage(win = findWindowById("news"), direction = 1) {
+  if (!win) return;
+  const key = currentNewsKey();
+  const content = window.NEWS_CONTENT?.[key] || window.NEWS_CONTENT?.CH00;
+  const total = content?.pages || 1;
+  win.newsPage = direction > 0
+    ? (win.newsPage >= total ? 1 : win.newsPage + 1)
+    : (win.newsPage <= 1 ? total : win.newsPage - 1);
+  renderNewsWindow(win);
 }
 
 function buildMapWindow() {
@@ -2214,12 +2666,35 @@ function startTrashSequence(win) {
 function onKeyDown(event) {
   trackShutdownPhrase(event);
   if (state.shuttingDown) return;
+  const target = event.target;
+  const isTyping = target?.matches?.("input, textarea, [contenteditable='true']");
+  const focused = document.querySelector(".desktop-window.is-focused");
+  if (!isTyping && event.key === " ") {
+    event.preventDefault();
+    toggleMainVideoPlayback();
+    return;
+  }
+  if (focused?.dataset.windowId === "news" && (event.key === "ArrowLeft" || event.key === "ArrowRight")) {
+    event.preventDefault();
+    turnNewsPage(focused, event.key === "ArrowRight" ? 1 : -1);
+    return;
+  }
   if (event.key.toLowerCase() === "n" && state.chapter === "ch01") {
     triggerNyeInterrupt();
   }
   if (event.key === "Escape" && dom.interruptStage.classList.contains("is-active")) {
     exitInterrupt();
   }
+}
+
+function handleFirstUserInteraction() {
+  state.userInteracted = true;
+  state.mutedForAutoplay = false;
+  dom.video.muted = false;
+  dom.interruptVideo.muted = false;
+  dom.video.volume = state.settings.audio.video;
+  dom.interruptVideo.volume = state.settings.audio.video;
+  dom.body.classList.add("is-unmuted");
 }
 
 function trackShutdownPhrase(event) {
@@ -2281,9 +2756,21 @@ function startClock() {
   const tick = () => {
     const now = new Date();
     dom.clock.textContent = `| ${now.toLocaleTimeString("en-AU", { hour12: false })} |`;
+    updateSystemReadout();
   };
   tick();
   setInterval(tick, 1000);
+}
+
+function updateSystemReadout() {
+  if (!dom.systemReadout) return;
+  dom.systemReadout.textContent = [
+    "SYSTEM",
+    `CHAPTER ${state.chapter.toUpperCase()}`,
+    `CLIP    ${state.currentClip || "----"}`,
+    `UPTIME  ${sessionDuration()}`,
+    "MEM     OK",
+  ].join("\n");
 }
 
 function runLocating() {
@@ -2442,7 +2929,8 @@ function showSystemDialog(title, lines, onOk) {
 function updateDesktopObjectVisibility(chapter) {
   const eyuIcon = dom.objectLayer?.querySelector('[data-object="eyu"]');
   if (!eyuIcon) return;
-  eyuIcon.classList.toggle("is-hidden", !(chapter === "ch00" || chapter === "ch01" || chapter === "ch04"));
+  eyuIcon.classList.remove("is-hidden");
+  updateDockState();
 }
 
 function setPalette(spec) {
@@ -2471,6 +2959,7 @@ function setClip(clipKey) {
   applyVideoLayoutForClip(clipKey);
   dom.video.dataset.clip = clipKey;
   dom.video.loop = false;
+  dom.video.muted = state.mutedForAutoplay;
   dom.video.volume = state.settings.audio.video;
   dom.video.src = clip.filename;
   dom.video.load();
@@ -2483,6 +2972,7 @@ function setClip(clipKey) {
   showNextNarrativeText();
   updateVideoControls();
   updateFinderWindow();
+  updateSystemReadout();
 }
 
 function applyVideoLayoutForClip(clipKey) {
