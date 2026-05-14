@@ -66,13 +66,37 @@ const SHUTDOWN_TEXT = "in_praise_of_time  —  session ended";
 const SHUTDOWN_SUBTEXT = "2024 – 2026";
 const SHUTDOWN_FINAL = "daipan.art  /  daipan.ink";
 
+const DATE_OVERRIDES = {
+  IMG_6010: "2025-09-05T06:26:16+1000",
+};
+
+const NARRATIVE_TEXTS = {
+  ch01: [
+    "September. 不准开冷气了。\n窗缝里进来的风\n比预期的要少。",
+    "40.7194° N\n−73.9896° W\nfloor 18",
+    "楼下有人在尖叫。\n这不是痛苦。\n或者也是。\n不确定。                    04:23",
+  ],
+  ch02: [
+    "On a prairie of green and cattle,\nto be left behind might be death.",
+    "GPS lost.\nSignal loss = suspension,\nnot liberation.",
+  ],
+  ch03: [
+    "银行给了我工资。\n我用它买了一张去西边的票。\n这是我第一次\n用自己的钱\n去一个没有人要我去的地方。",
+    "有路线。有地图。\n有人告诉我该往哪里走。\n我就往那里走。\n这不是没有选择。\n这是我选择了有选择。",
+    "空気が薄い。\n但很好呼吸。\n期待は重さがある。\n重さは証明だ。\n被人需要，\n是一种重量。\n我喜欢这种重量。",
+  ],
+  ch04: [
+    "船。\n一个半小时。\n什么都做不了，\n也无法睡觉。\n\n太阳让人感到\n不安。\n不是热。\n是它的存在方式。\n\nDiese Stadt ist nicht schlecht.\n「悪い」でもない。\n这个地方让人\n不放松。\n\n没有更准确的词了。",
+  ],
+};
+
 const MAP_CENTERS = {
-  CH00: { lat: 40.7194, lon: -73.9896, zoom: 15 },
-  CH01: { lat: 40.7194, lon: -73.9896, zoom: 15 },
-  CH02: { lat: 48.9213, lon: 117.1130, zoom: 9 },
-  CH03: { lat: 37.3784, lon: 101.4117, zoom: 10 },
-  CH04: { lat: -27.443, lon: 153.064, zoom: 13 },
-  INT: { lat: 36.2043, lon: 117.0843, zoom: 12 },
+  CH00: { lat: 40.7194, lon: -73.9896, zoom: 15, city: "New York" },
+  CH01: { lat: 40.7194, lon: -73.9896, zoom: 15, city: "New York" },
+  CH02: { lat: 48.9213, lon: 117.1130, zoom: 9, city: "Arxan" },
+  CH03: { lat: 37.3784, lon: 101.4117, zoom: 10, city: "Qilian" },
+  CH04: { lat: -27.443, lon: 153.064, zoom: 13, city: "Brisbane" },
+  INT: { lat: 36.2043, lon: 117.0843, zoom: 12, city: "Tai'an" },
 };
 
 const TRASH_ITEMS = [
@@ -142,6 +166,18 @@ const state = {
   currentClip: null,
   previousClip: null,
   wasInterrupted: false,
+  videoHoldTimer: null,
+  isVideoHold: false,
+  textTimer: null,
+  textFadeTimer: null,
+  ch00BootLogTimer: null,
+  ch04DriftTimer: null,
+  textCycle: {
+    ch01: -1,
+    ch02: -1,
+    ch03: -1,
+    ch04: -1,
+  },
   textureRects: [],
   textureTarget: [],
   p5Loaded: false,
@@ -204,6 +240,7 @@ const dom = {
   flash: document.getElementById("white-flash"),
   bootScreen: document.getElementById("boot-screen"),
   bootLines: document.getElementById("boot-lines"),
+  ch00BootLog: document.getElementById("ch00-boot-log"),
   shutdownScreen: document.getElementById("shutdown-screen"),
   shutdownText: document.getElementById("shutdown-text"),
   shutdownSubtext: document.getElementById("shutdown-subtext"),
@@ -219,6 +256,9 @@ const dom = {
   signalAcquired: document.getElementById("signal-acquired"),
   video: document.getElementById("chapter-video"),
   crtFrame: document.getElementById("crt-frame"),
+  crtShell: document.getElementById("crt-shell"),
+  videoToggle: document.getElementById("video-toggle"),
+  videoTime: document.getElementById("video-time"),
   monitor: document.getElementById("signal-monitor"),
   route: document.getElementById("altitude-route"),
   scale: document.getElementById("altitude-scale"),
@@ -282,6 +322,9 @@ function bindEvents() {
     positionDesktopIcons();
   });
   document.addEventListener("keydown", onKeyDown);
+  document.addEventListener("click", dismissCalendarPanel, true);
+  document.addEventListener("pointerdown", dismissCalendarPanel, true);
+  window.addEventListener("pointerdown", dismissCalendarPanel, true);
   window.addEventListener("wheel", onWheel, { passive: false });
 
   dom.navButtons.forEach((button) => {
@@ -295,8 +338,23 @@ function bindEvents() {
     });
   });
 
-  dom.video.addEventListener("ended", () => advanceClip());
-  dom.video.addEventListener("timeupdate", trackClipReadProgress);
+  dom.video.addEventListener("ended", onVideoEnded);
+  dom.video.addEventListener("loadedmetadata", updateVideoControls);
+  dom.video.addEventListener("timeupdate", () => {
+    trackClipReadProgress();
+    updateVideoControls();
+  });
+  dom.video.addEventListener("play", updateVideoControls);
+  dom.video.addEventListener("pause", updateVideoControls);
+  dom.crtFrame?.addEventListener("click", () => {
+    if (state.isVideoHold) finishVideoHold();
+  });
+  dom.crtShell?.addEventListener("keydown", (event) => {
+    if (event.key !== " ") return;
+    event.preventDefault();
+    toggleMainVideoPlayback();
+  });
+  dom.videoToggle?.addEventListener("click", toggleMainVideoPlayback);
   dom.interruptVideo.addEventListener("ended", () => exitInterrupt());
   dom.hiddenIntButton?.addEventListener("click", () => enterInterrupt());
 }
@@ -350,9 +408,30 @@ function buildBootSequence() {
 
 function formatBootClipLine(clip) {
   const name = String(clip.filename || clip.clip || "").padEnd(20, " ");
-  const time = String(clip.local_time || "").slice(11, 16) || "--:--";
+  const time = clipDisplayTime(clip);
   const location = String(clip.location || "unknown").replace(",", "");
   return `${name}${time}  ${location.padEnd(16, " ")}✓`;
+}
+
+function clipDisplayLocalTime(clipOrKey) {
+  const clip = typeof clipOrKey === "string" ? state.signal[clipOrKey] : clipOrKey;
+  const key = typeof clipOrKey === "string" ? clipOrKey : clip?.clip;
+  if (key && DATE_OVERRIDES[key]) return formatOverrideLocalTime(DATE_OVERRIDES[key]);
+  return clip?.local_time || "";
+}
+
+function clipDisplayDateKey(clipOrKey) {
+  return clipDisplayLocalTime(clipOrKey).slice(0, 10);
+}
+
+function clipDisplayTime(clipOrKey) {
+  return clipDisplayLocalTime(clipOrKey).slice(11, 16) || "--:--";
+}
+
+function formatOverrideLocalTime(isoLike) {
+  const match = String(isoLike).match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+  if (!match) return String(isoLike);
+  return `${match[1]}-${match[2]}-${match[3]} ${match[4]}:${match[5]}`;
 }
 
 function hideBootScreen() {
@@ -397,6 +476,13 @@ function selectDesktopIcon(icon) {
 }
 
 function openDesktopObject(type) {
+  const existing = findWindowById(type);
+  if (existing) {
+    restoreDesktopWindow(existing);
+    bringWindowForward(existing);
+    if (type === "trash") maybeShowTrashDialog();
+    return existing;
+  }
   const builders = {
     eyu: buildEyuWindow,
     nye: buildNyeWindow,
@@ -434,8 +520,8 @@ function desktopObjectWindowPosition(type) {
 }
 
 function closeOldestWindowsForNewOne() {
-  while (state.desktopWindows.filter((win) => win.dataset.windowKind === "object").length >= 2) {
-    const oldest = state.desktopWindows.find((win) => win.dataset.windowKind === "object");
+  while (state.desktopWindows.filter((win) => win.dataset.windowKind === "object" && isWindowVisible(win)).length >= 2) {
+    const oldest = state.desktopWindows.find((win) => win.dataset.windowKind === "object" && isWindowVisible(win));
     closeDesktopWindow(oldest);
   }
 }
@@ -471,9 +557,11 @@ function mountDesktopWindow(win, options = {}) {
     win.dataset.windowTitle = win.querySelector(".desktop-titlebar span")?.textContent?.replace(/[|]/g, "").trim() || id;
   }
   setWindowPosition(win, options);
+  win.classList.remove("is-closed", "is-minimized");
+  win.style.display = "";
   bringWindowForward(win);
   makeDraggable(win);
-  dom.objectLayer.appendChild(win);
+  if (!document.body.contains(win)) dom.objectLayer.appendChild(win);
   if (!state.desktopWindows.includes(win)) state.desktopWindows.push(win);
   updateFinderWindow();
   updateControlPanelWindow();
@@ -507,21 +595,21 @@ function createSizedDesktopWindow(title, body, className) {
 function closeDesktopWindow(win) {
   if (!win) return;
   removeDockIcon(win);
+  saveWindowBounds(win);
   if (win.trashTimers) {
     win.trashTimers.forEach((timer) => clearTimeout(timer));
   }
-  if (win.systemTimer) clearInterval(win.systemTimer);
-  if (win.dataset.windowId === "maze") teardownMazeWindow(win);
-  if (win.dataset.windowId === "map") teardownMapWindow(win);
-  const index = state.desktopWindows.indexOf(win);
-  if (index >= 0) state.desktopWindows.splice(index, 1);
-  win.remove();
+  win.querySelectorAll("video").forEach((video) => video.pause());
+  win.classList.remove("is-minimized", "is-focused");
+  win.classList.add("is-closed");
+  win.style.display = "none";
   updateFinderWindow();
   updateControlPanelWindow();
 }
 
 function bringWindowForward(win) {
-  if (win.classList.contains("is-minimized")) return;
+  if (win.classList.contains("is-minimized") || win.classList.contains("is-closed")) return;
+  if (win.dataset.windowId !== "calendar") dismissCalendarPanel({ target: document.body });
   state.windowZ += 1;
   state.desktopWindows.forEach((item) => item.classList.remove("is-focused"));
   win.style.zIndex = state.windowZ;
@@ -531,11 +619,7 @@ function bringWindowForward(win) {
 
 function minimizeDesktopWindow(win) {
   if (!win || win.classList.contains("is-minimized")) return;
-  const rect = win.getBoundingClientRect();
-  win.dataset.restoreLeft = String(rect.left);
-  win.dataset.restoreTop = String(rect.top);
-  win.dataset.restoreWidth = String(rect.width);
-  win.dataset.restoreHeight = String(rect.height);
+  saveWindowBounds(win);
   win.classList.add("is-minimized");
   win.style.display = "none";
   addDockIcon(win);
@@ -545,16 +629,32 @@ function minimizeDesktopWindow(win) {
 
 function restoreDesktopWindow(win) {
   if (!win) return;
-  win.classList.remove("is-minimized");
+  const shouldRestoreGeometry = win.classList.contains("is-minimized") || win.classList.contains("is-closed");
+  win.classList.remove("is-minimized", "is-closed");
   win.style.display = "";
-  win.style.left = `${Math.round(Number(win.dataset.restoreLeft || 80))}px`;
-  win.style.top = `${Math.round(Number(win.dataset.restoreTop || 80))}px`;
-  win.style.right = "";
-  win.style.bottom = "";
-  if (win.dataset.restoreWidth) win.style.width = `${Math.round(Number(win.dataset.restoreWidth))}px`;
-  if (win.dataset.restoreHeight) win.style.height = `${Math.round(Number(win.dataset.restoreHeight))}px`;
+  if (shouldRestoreGeometry) {
+    win.style.left = `${Math.round(Number(win.dataset.restoreLeft || parseFloat(win.style.left) || 80))}px`;
+    win.style.top = `${Math.round(Number(win.dataset.restoreTop || parseFloat(win.style.top) || 80))}px`;
+    win.style.right = "";
+    win.style.bottom = "";
+    if (win.dataset.restoreWidth) win.style.width = `${Math.round(Number(win.dataset.restoreWidth))}px`;
+    if (win.dataset.restoreHeight) win.style.height = `${Math.round(Number(win.dataset.restoreHeight))}px`;
+  }
   removeDockIcon(win);
   bringWindowForward(win);
+}
+
+function saveWindowBounds(win) {
+  const rect = win.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+  win.dataset.restoreLeft = String(rect.left);
+  win.dataset.restoreTop = String(rect.top);
+  win.dataset.restoreWidth = String(rect.width);
+  win.dataset.restoreHeight = String(rect.height);
+}
+
+function isWindowVisible(win) {
+  return !!win && document.body.contains(win) && !win.classList.contains("is-closed") && !win.classList.contains("is-minimized");
 }
 
 function addDockIcon(win) {
@@ -648,6 +748,7 @@ function openSystemWindow(id) {
   if (id === "eyu") {
     const existing = findWindowById("eyu");
     if (existing) {
+      restoreDesktopWindow(existing);
       bringWindowForward(existing);
       return existing;
     }
@@ -655,6 +756,7 @@ function openSystemWindow(id) {
   }
   const existing = findWindowById(id);
   if (existing) {
+    restoreDesktopWindow(existing);
     bringWindowForward(existing);
     return existing;
   }
@@ -724,7 +826,7 @@ function openSearchWindow(open) {
 }
 
 function isSearchWindowOpen() {
-  return !!findWindowById("search");
+  return isWindowVisible(findWindowById("search"));
 }
 
 function buildSearchWindow() {
@@ -803,7 +905,7 @@ function renderSearchDetail(entry, detail) {
     ["climate", raw.climate_note || raw.climate || raw.seasonal_light],
     ["light", raw.light_note || raw.sensory_atmospheric],
     ["population", raw.population_density],
-    ["signal coverage", raw.signal_coverage],
+    ["signal", raw.signal_coverage],
     ["one_fact", raw.one_fact],
     ["narrative_note", raw.narrative_note],
   ].forEach(([label, value]) => {
@@ -891,6 +993,55 @@ function makeAsciiSlider(label, value, min, max, step, onChange) {
   return row;
 }
 
+function makeRangeSlider(label, value, min, max, step, onChange) {
+  const row = document.createElement("label");
+  row.className = "range-slider-row";
+  const name = document.createElement("span");
+  name.textContent = label;
+  const input = document.createElement("input");
+  input.type = "range";
+  input.min = min;
+  input.max = max;
+  input.step = step;
+  input.value = value;
+  const valueNode = document.createElement("span");
+  valueNode.className = "range-slider-value";
+  const render = () => {
+    valueNode.textContent = Number(input.value).toFixed(max <= 1 ? 2 : 0);
+  };
+  input.addEventListener("input", () => {
+    const next = Number(input.value);
+    onChange(next);
+    render();
+  });
+  render();
+  row.append(name, input, valueNode);
+  return row;
+}
+
+function makeLayerControl(label, checked, onToggle, slider) {
+  const group = document.createElement("div");
+  group.className = "layer-control";
+  let isChecked = checked;
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "ascii-checkbox";
+  const sliderRow = slider ? makeRangeSlider("opacity", slider.value, slider.min, slider.max, slider.step, slider.onChange) : null;
+  const render = () => {
+    button.textContent = `${isChecked ? "[■]" : "[□]"} ${label}`;
+    if (sliderRow) sliderRow.style.display = isChecked ? "grid" : "none";
+  };
+  button.addEventListener("click", () => {
+    isChecked = !isChecked;
+    onToggle(isChecked);
+    render();
+  });
+  render();
+  group.append(button);
+  if (sliderRow) group.append(sliderRow);
+  return group;
+}
+
 function sectionBlock(title, children) {
   const block = document.createElement("section");
   block.className = "os-section";
@@ -906,41 +1057,39 @@ function buildControlPanelWindow() {
   const shell = document.createElement("div");
   shell.className = "control-panel os-window-body";
   const layerControls = [
-    makeAsciiCheckbox("signal texture", state.settings.signalTexture, (value) => {
+    makeLayerControl("signal texture", state.settings.signalTexture, (value) => {
       state.settings.signalTexture = value;
       applySystemSettings();
-    }),
-    makeAsciiSlider("opacity", state.settings.signalOpacity, 0, 1, 0.05, (value) => {
+    }, { value: state.settings.signalOpacity, min: 0, max: 1, step: 0.05, onChange: (value) => {
       state.settings.signalOpacity = value;
       applySystemSettings();
-    }),
-    makeAsciiCheckbox("subdermal text", state.settings.subdermalText, (value) => {
+    } }),
+    makeLayerControl("subdermal text", state.settings.subdermalText, (value) => {
       state.settings.subdermalText = value;
       applySystemSettings();
-    }),
-    makeAsciiSlider("opacity", state.settings.subdermalOpacity, 0, 1, 0.01, (value) => {
+    }, { value: state.settings.subdermalOpacity, min: 0, max: 1, step: 0.01, onChange: (value) => {
       state.settings.subdermalOpacity = value;
       applySystemSettings();
-    }),
-    makeAsciiCheckbox("scan lines", state.settings.scanLines, (value) => {
+    } }),
+    makeLayerControl("scan lines", state.settings.scanLines, (value) => {
       state.settings.scanLines = value;
       applySystemSettings();
     }),
-    makeAsciiCheckbox("data panel", state.settings.dataPanel, (value) => {
+    makeLayerControl("data panel", state.settings.dataPanel, (value) => {
       state.settings.dataPanel = value;
       applySystemSettings();
     }),
   ];
   const audioControls = [
-    makeAsciiSlider("video", state.settings.audio.video, 0, 1, 0.05, (value) => {
+    makeRangeSlider("video", state.settings.audio.video, 0, 1, 0.05, (value) => {
       state.settings.audio.video = value;
       applySystemSettings();
     }),
-    makeAsciiSlider("ambient", state.settings.audio.ambient, 0, 1, 0.05, (value) => {
+    makeRangeSlider("ambient", state.settings.audio.ambient, 0, 1, 0.05, (value) => {
       state.settings.audio.ambient = value;
       applySystemSettings();
     }),
-    makeAsciiSlider("extract", state.settings.audio.extract, 0, 1, 0.05, (value) => {
+    makeRangeSlider("extract", state.settings.audio.extract, 0, 1, 0.05, (value) => {
       state.settings.audio.extract = value;
       applySystemSettings();
     }),
@@ -980,7 +1129,7 @@ function buildControlPanelWindow() {
 }
 
 function isWindowOpen(id) {
-  return id === "search" ? isSearchWindowOpen() : !!findWindowById(id);
+  return id === "search" ? isSearchWindowOpen() : isWindowVisible(findWindowById(id));
 }
 
 function updateControlPanelWindow() {
@@ -1025,7 +1174,7 @@ function updateFinderWindow(win = findWindowById("finder")) {
   shell.innerHTML = "";
   const windows = document.createElement("div");
   const rows = [
-    ...state.desktopWindows.filter((item) => document.body.contains(item)).map((item) => ({
+    ...state.desktopWindows.filter(isWindowVisible).map((item) => ({
       label: item.dataset.windowTitle || item.dataset.windowId,
       action: () => bringWindowForward(item),
     })),
@@ -1124,6 +1273,7 @@ function buildCalendarWindow() {
 }
 
 function renderCalendar(shell) {
+  shell.innerHTML = "";
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth();
@@ -1150,43 +1300,57 @@ function renderCalendar(shell) {
     button.classList.toggle("is-today", day === now.getDate());
     if (marks[key]) {
       button.classList.add("is-marked");
-      button.addEventListener("mouseenter", () => showCalendarTooltip(button, marks[key]));
-      button.addEventListener("focus", () => showCalendarTooltip(button, marks[key]));
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        showCalendarInlinePanel(shell, key, marks[key]);
+      });
     }
     grid.appendChild(button);
   }
+  const panel = document.createElement("div");
+  panel.className = "calendar-inline-panel";
   const footer = document.createElement("div");
   footer.className = "calendar-footer";
   footer.textContent = "● filming dates marked";
-  shell.append(grid, footer);
+  shell.append(grid, panel, footer);
 }
 
 function filmingDatesForMonth(year, month) {
   return Object.values(state.signal).reduce((map, clip) => {
-    if (!clip.local_time) return map;
-    const date = clip.local_time.slice(0, 10);
+    const date = clipDisplayDateKey(clip);
+    if (!date) return map;
     const clipDate = new Date(`${date}T00:00:00`);
     if (clipDate.getFullYear() !== year || clipDate.getMonth() !== month) return map;
     map[date] = map[date] || [];
-    map[date].push(`${clip.filename || clip.clip} / ${clip.location || "—"}`);
+    map[date].push({
+      clip: clip.clip || String(clip.filename || "").replace(/\..+$/, ""),
+      filename: clip.filename || clip.clip,
+      time: clipDisplayTime(clip),
+      location: clip.location || "—",
+      duration: clip.duration_s || clip.duration || clip.seconds || null,
+    });
     return map;
   }, {});
 }
 
-function showCalendarTooltip(target, lines) {
-  let tooltip = document.getElementById("calendar-tooltip");
-  if (!tooltip) {
-    tooltip = document.createElement("div");
-    tooltip.id = "calendar-tooltip";
-    document.body.appendChild(tooltip);
-  }
-  tooltip.textContent = lines.join("\n");
-  const rect = target.getBoundingClientRect();
-  tooltip.style.left = `${Math.min(window.innerWidth - 260, rect.left)}px`;
-  tooltip.style.top = `${rect.bottom + 6}px`;
-  tooltip.classList.add("is-active");
-  clearTimeout(tooltip.dismissTimer);
-  tooltip.dismissTimer = setTimeout(() => tooltip.classList.remove("is-active"), 2500);
+function showCalendarInlinePanel(shell, date, clips) {
+  const panel = shell.querySelector(".calendar-inline-panel");
+  if (!panel) return;
+  panel.classList.add("is-active");
+  panel.textContent = [
+    "────────────────────────────",
+    date,
+    ...clips.map((clip) => `${clip.clip}  ${clip.time}  ${clip.location}  ${clip.duration ? `${Math.round(clip.duration)}s` : "—s"}`),
+    "────────────────────────────",
+  ].join("\n");
+}
+
+function dismissCalendarPanel(event) {
+  if (event?.target?.closest?.(".calendar-panel")) return;
+  document.querySelectorAll(".calendar-inline-panel").forEach((panel) => {
+    panel.classList.remove("is-active");
+    panel.textContent = "";
+  });
 }
 
 function buildPuzzleWindow() {
@@ -1274,7 +1438,7 @@ function updateProfilerWindow(win = findWindowById("profiler")) {
   const clipsRead = state.metrics.clipsRead.size;
   const textSeen = state.metrics.textSeen.size;
   const textTotal = Math.max(1, document.querySelectorAll(".text-slot, .boxed-text, .beishang-fragment, #gps-lost-line, .gps-lost-one, .gps-lost-two").length);
-  const openCount = state.desktopWindows.filter((item) => document.body.contains(item)).length + (isSearchWindowOpen() ? 1 : 0);
+  const openCount = state.desktopWindows.filter(isWindowVisible).length + (isSearchWindowOpen() ? 1 : 0);
   shell.innerHTML = `
     <div>
       <div class="os-section-title">PROCESS</div>
@@ -1634,7 +1798,7 @@ function initializeMapWindow(win) {
   }).addTo(map);
   const applyTileFilter = () => {
     win.querySelectorAll(".leaflet-tile").forEach((tile) => {
-      tile.style.filter = "grayscale(100%) brightness(0.75) contrast(0.9)";
+      tile.style.filter = "grayscale(100%) brightness(0.6) contrast(1.2) invert(0)";
     });
   };
   map.on("load", applyTileFilter);
@@ -1646,8 +1810,22 @@ function initializeMapWindow(win) {
     fillColor: "#000000",
     fillOpacity: 1,
   }).addTo(map);
+  const label = L.marker([center.lat, center.lon], {
+    interactive: false,
+    icon: L.divIcon({
+      className: "map-city-label",
+      html: center.city || "",
+      iconSize: [90, 16],
+      iconAnchor: [-8, 8],
+    }),
+  }).addTo(map);
   win.leafletMap = map;
   win.mapMarker = marker;
+  win.mapLabel = label;
+  win.mapResizeObserver = new ResizeObserver(() => {
+    setTimeout(() => map.invalidateSize(), 0);
+  });
+  win.mapResizeObserver.observe(win);
   state.map.instance = map;
   state.map.marker = marker;
   state.map.ready = true;
@@ -1663,11 +1841,21 @@ function updateMapWindow(win = findWindowById("map"), fly = true) {
   const latLng = [center.lat, center.lon];
   win.mapMarker.setLatLng(latLng);
   win.mapMarker.setStyle({ color: "#000000", fillColor: "#000000" });
+  if (win.mapLabel) {
+    win.mapLabel.setLatLng(latLng);
+    win.mapLabel.setIcon(L.divIcon({
+      className: "map-city-label",
+      html: center.city || "",
+      iconSize: [90, 16],
+      iconAnchor: [-8, 8],
+    }));
+  }
   if (fly) win.leafletMap.flyTo(latLng, center.zoom, { duration: 1.5 });
   else win.leafletMap.setView(latLng, center.zoom);
 }
 
 function teardownMapWindow(win) {
+  win?.mapResizeObserver?.disconnect();
   if (win?.leafletMap) win.leafletMap.remove();
   if (state.map.instance === win?.leafletMap) {
     state.map.instance = null;
@@ -1752,7 +1940,7 @@ function buildNanxiangWindow() {
 
 function buildBrisbaneWindow() {
   return buildVideoObjectWindow(
-    "14 MAY 2026  00:23  BALMORAL",
+    "05 SEP 2025  06:26  BRISBANE",
     "IMG_6010",
     `<div>LUM 0.473  MOTION 0.245</div><div class="desktop-text-slot"><!-- BRISBANE_TEXT --></div>`
   );
@@ -2099,6 +2287,7 @@ function startClock() {
 }
 
 function runLocating() {
+  startCh00BootLog();
   const started = performance.now();
   const duration = 4800;
   const targetLat = 40.7194;
@@ -2117,11 +2306,47 @@ function runLocating() {
       requestAnimationFrame(step);
     } else {
       dom.signalAcquired.classList.add("is-active");
-      setTimeout(() => hardCut(() => activateChapter("ch01")), 850);
+      showCh00OnboardingDialog();
     }
   }
 
   requestAnimationFrame(step);
+}
+
+function startCh00BootLog() {
+  if (!dom.ch00BootLog) return;
+  clearInterval(state.ch00BootLogTimer);
+  const entries = buildBootSequence().filter((entry) => entry.text !== "");
+  const lines = [];
+  let index = 0;
+  dom.ch00BootLog.textContent = "";
+  state.ch00BootLogTimer = setInterval(() => {
+    lines.push(entries[index % entries.length].text);
+    dom.ch00BootLog.textContent = lines.slice(-24).join("\n");
+    dom.ch00BootLog.scrollTop = dom.ch00BootLog.scrollHeight;
+    index += 1;
+  }, 70);
+}
+
+function stopCh00BootLog() {
+  clearInterval(state.ch00BootLogTimer);
+  state.ch00BootLogTimer = null;
+}
+
+function showCh00OnboardingDialog() {
+  stopCh00BootLog();
+  showSystemDialog("■ in_praise_of_time", [
+    "This is an archive.",
+    "46 clips. 47 locations.",
+    "2024 – 2026.",
+    "",
+    "Double-click desktop objects to open.",
+    "Windows can be moved and resized.",
+    "Type \"shutdown\" to end.",
+  ], () => {
+    sessionStorage.setItem("onboarding_ch01", "1");
+    hardCut(() => activateChapter("ch01"));
+  });
 }
 
 function activateChapter(chapter) {
@@ -2149,11 +2374,16 @@ function activateChapter(chapter) {
   dom.chapter00.classList.toggle("is-active", chapter === "ch00");
   dom.stage.classList.toggle("is-active", chapter !== "ch00");
   dom.stage.dataset.mode = chapter;
+  if (chapter !== "ch00") stopCh00BootLog();
 
   if (chapter === "ch00") {
+    dom.signalAcquired.classList.remove("is-active");
     dom.video.pause();
     dom.video.removeAttribute("src");
     dom.video.load();
+    clearVideoHold();
+    clearNarrativeTimers();
+    hideNarrativeText();
     setTextureChapter("ch00");
     return;
   }
@@ -2189,7 +2419,7 @@ function maybeShowTrashDialog() {
   ]);
 }
 
-function showSystemDialog(title, lines) {
+function showSystemDialog(title, lines, onOk) {
   const existing = document.querySelector(".system-dialog");
   if (existing) existing.remove();
   const dialog = document.createElement("section");
@@ -2201,7 +2431,10 @@ function showSystemDialog(title, lines) {
     `<div class="system-dialog-body"><pre></pre><button type="button">[ OK ]</button></div>`,
   ].join("");
   dialog.querySelector("pre").textContent = `\n${lines.join("\n")}\n`;
-  dialog.querySelector("button").addEventListener("click", () => dialog.remove());
+  dialog.querySelector("button").addEventListener("click", () => {
+    dialog.remove();
+    if (onOk) onOk();
+  });
   document.body.appendChild(dialog);
   dialog.querySelector("button").focus();
 }
@@ -2209,7 +2442,7 @@ function showSystemDialog(title, lines) {
 function updateDesktopObjectVisibility(chapter) {
   const eyuIcon = dom.objectLayer?.querySelector('[data-object="eyu"]');
   if (!eyuIcon) return;
-  eyuIcon.classList.toggle("is-hidden", !(chapter === "ch01" || chapter === "ch04"));
+  eyuIcon.classList.toggle("is-hidden", !(chapter === "ch00" || chapter === "ch01" || chapter === "ch04"));
 }
 
 function setPalette(spec) {
@@ -2231,9 +2464,11 @@ function updateNav(chapter) {
 
 function setClip(clipKey) {
   if (!clipKey || !state.signal[clipKey]) return;
+  clearVideoHold();
   state.currentClip = clipKey;
   const clip = state.signal[clipKey];
 
+  applyVideoLayoutForClip(clipKey);
   dom.video.dataset.clip = clipKey;
   dom.video.loop = false;
   dom.video.volume = state.settings.audio.video;
@@ -2241,15 +2476,194 @@ function setClip(clipKey) {
   dom.video.load();
   dom.video.play().catch(() => {});
 
-  const glitch = clip.glitch_weight || 0;
-  dom.crtFrame.style.setProperty("--glitch-shift", `${1 + glitch * 5}px`);
-  dom.crtFrame.style.setProperty("--glitch-cycle", `${Math.max(1.8, 8 - glitch * 5.8)}s`);
-
   updateMonitor(clip);
   updateRouteCurrent();
   updateAmbientGain(clip);
   handleGpsLost(clipKey);
+  showNextNarrativeText();
+  updateVideoControls();
   updateFinderWindow();
+}
+
+function applyVideoLayoutForClip(clipKey) {
+  const shell = dom.crtShell;
+  if (!shell) return;
+  clearTimeout(state.ch04DriftTimer);
+  state.ch04DriftTimer = null;
+  shell.tabIndex = 0;
+  shell.style.transition = "none";
+  shell.style.right = "";
+  shell.style.bottom = "";
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const topBand = 36;
+  const bottomBand = 52;
+  const setCentered = (width) => {
+    shell.style.width = `${width}px`;
+    shell.style.left = "50%";
+    shell.style.top = "50%";
+    shell.style.transform = "translate(-50%, -50%)";
+  };
+  const setBox = (width, left, top) => {
+    const height = width * 9 / 16 + 24;
+    shell.style.width = `${Math.round(width)}px`;
+    shell.style.left = `${Math.round(Math.max(8, Math.min(vw - width - 8, left)))}px`;
+    shell.style.top = `${Math.round(Math.max(topBand, Math.min(vh - height - bottomBand, top)))}px`;
+    shell.style.transform = "none";
+  };
+  if (state.chapter === "ch01") {
+    setCentered(420);
+    return;
+  }
+  if (state.chapter === "ch02") {
+    const width = randomInt(360, 480);
+    setBox(width, randomBetween(vw * 0.2, vw * 0.8 - width), randomBetween(vh * 0.2, vh * 0.8 - width * 9 / 16));
+    return;
+  }
+  if (state.chapter === "ch03") {
+    shell.style.width = "500px";
+    shell.style.left = `${Math.max(8, vw - 540)}px`;
+    shell.style.top = "70px";
+    shell.style.transform = "none";
+    return;
+  }
+  if (state.chapter === "ch04") {
+    const width = randomInt(280, 520);
+    setBox(width, randomBetween(vw * 0.08, vw - width - 24), randomBetween(vh * 0.12, vh - width * 9 / 16 - 80));
+    state.ch04DriftTimer = setTimeout(() => driftCh04VideoWindow(), 8000);
+    return;
+  }
+  setCentered(420);
+}
+
+function driftCh04VideoWindow() {
+  if (state.chapter !== "ch04" || !dom.crtShell) return;
+  const rect = dom.crtShell.getBoundingClientRect();
+  const distance = randomInt(20, 40);
+  const angle = Math.random() * Math.PI * 2;
+  const nextLeft = Math.max(8, Math.min(window.innerWidth - rect.width - 8, rect.left + Math.cos(angle) * distance));
+  const nextTop = Math.max(36, Math.min(window.innerHeight - rect.height - 52, rect.top + Math.sin(angle) * distance));
+  dom.crtShell.style.transition = "left 8s linear, top 8s linear";
+  dom.crtShell.style.left = `${Math.round(nextLeft)}px`;
+  dom.crtShell.style.top = `${Math.round(nextTop)}px`;
+}
+
+function randomInt(min, max) {
+  return Math.round(randomBetween(min, max));
+}
+
+function randomBetween(min, max) {
+  return min + Math.random() * Math.max(0, max - min);
+}
+
+function onVideoEnded() {
+  if (state.wasInterrupted) return;
+  startVideoHold();
+}
+
+function startVideoHold() {
+  clearVideoHold();
+  state.isVideoHold = true;
+  dom.crtFrame.classList.add("is-holding");
+  updateVideoControls();
+  state.videoHoldTimer = setTimeout(finishVideoHold, 1500);
+}
+
+function clearVideoHold() {
+  clearTimeout(state.videoHoldTimer);
+  state.videoHoldTimer = null;
+  state.isVideoHold = false;
+  dom.crtFrame?.classList.remove("is-holding");
+}
+
+function finishVideoHold() {
+  if (!state.isVideoHold) return;
+  clearVideoHold();
+  advanceClip();
+}
+
+function toggleMainVideoPlayback() {
+  if (state.isVideoHold) {
+    finishVideoHold();
+    return;
+  }
+  if (dom.video.paused) dom.video.play().catch(() => {});
+  else dom.video.pause();
+  updateVideoControls();
+}
+
+function updateVideoControls() {
+  if (!dom.videoToggle || !dom.videoTime) return;
+  dom.videoToggle.textContent = dom.video.paused || state.isVideoHold ? "[▶]" : "[‖]";
+  dom.videoTime.textContent = `${formatMediaTime(dom.video.currentTime)} / ${formatMediaTime(dom.video.duration)}`;
+}
+
+function formatMediaTime(seconds) {
+  const safe = Number.isFinite(seconds) ? Math.max(0, seconds) : 0;
+  const mins = Math.floor(safe / 60);
+  const secs = Math.floor(safe % 60);
+  return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+}
+
+function showNextNarrativeText() {
+  clearNarrativeTimers();
+  hideNarrativeText();
+  const chapter = state.chapter;
+  const texts = NARRATIVE_TEXTS[chapter] || [];
+  const targets = narrativeTargetsForChapter(chapter);
+  if (!texts.length || !targets.length) return;
+  const next = nextTextIndex(chapter, Math.min(texts.length, targets.length));
+  const target = targets[next % targets.length];
+  const content = target.classList.contains("ch03-box-c") ? texts[2] : texts[next % texts.length];
+  const body = target.querySelector("[data-text-body]") || target.querySelector(":scope > div:last-child") || target;
+  body.textContent = content;
+  target.classList.remove("is-fading");
+  target.classList.add("is-visible");
+  state.textTimer = setTimeout(() => {
+    target.classList.add("is-fading");
+    state.textFadeTimer = setTimeout(() => {
+      target.classList.remove("is-visible", "is-fading");
+      body.textContent = "";
+    }, 2000);
+  }, 15000);
+}
+
+function nextTextIndex(chapter, count) {
+  const last = state.textCycle[chapter] ?? -1;
+  if (count <= 1) {
+    state.textCycle[chapter] = 0;
+    return 0;
+  }
+  let next = (last + 1) % count;
+  if (next === last) next = (next + 1) % count;
+  state.textCycle[chapter] = next;
+  return next;
+}
+
+function narrativeTargetsForChapter(chapter) {
+  if (chapter === "ch01") return [...document.querySelectorAll(".text-slot")];
+  if (chapter === "ch02") return [document.querySelector(".text-slot-top")].filter(Boolean);
+  if (chapter === "ch03") {
+    const selectors = state.currentClip === "IMG_3810" || state.currentClip === "IMG_3773"
+      ? ".ch03-box-c"
+      : ".ch03-box-a, .ch03-box-b";
+    return [...document.querySelectorAll(selectors)];
+  }
+  if (chapter === "ch04") return [...document.querySelectorAll(".ch04-box")];
+  return [];
+}
+
+function clearNarrativeTimers() {
+  clearTimeout(state.textTimer);
+  clearTimeout(state.textFadeTimer);
+  state.textTimer = null;
+  state.textFadeTimer = null;
+}
+
+function hideNarrativeText() {
+  document.querySelectorAll(".text-slot, .boxed-text").forEach((node) => {
+    node.classList.remove("is-visible", "is-fading");
+  });
 }
 
 function advanceClip() {
@@ -2371,7 +2785,7 @@ function whiteFlash() {
 
 function updateMonitor(clip) {
   const rgb = clip.rgb || {};
-  const local = clip.local_time ? clip.local_time.slice(11, 16) : "--:--";
+  const local = clipDisplayTime(clip);
   const place = (clip.location || "----").replace("New York City, US", "NYC");
   const altitude = Number.isFinite(clip.altitude_m) ? `${Math.round(clip.altitude_m).toString().padStart(4, "0")}m` : "----";
   const gps = clip.glitch_weight >= 1 ? "NO GPS" : `SIG ${(1 - clip.glitch_weight).toFixed(2)}`;
