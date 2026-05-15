@@ -50,18 +50,20 @@
   </div>
 
   <header id="system-chrome" aria-label="System chrome">
-    <div class="chrome-line chrome-top-left">■ | IN_PRAISE_OF_TIME |</div>
-    <div class="chrome-line chrome-top-right" id="chapter-label">| CH.00 / LOCATING... |</div>
+    <div class="chrome-line chrome-top-left">■  IN_PRAISE_OF_TIME</div>
+    <div class="chrome-line chrome-top-right" id="chapter-label">CHAPTER 00 / LOCATING...</div>
     <nav class="chapter-nav" aria-label="Chapter navigation">
-      <button data-chapter="ch00">CH.00</button>
-      <button data-chapter="ch01">CH.01</button>
-      <button data-chapter="ch02">CH.02</button>
-      <button data-chapter="ch03">CH.03</button>
-      <button data-chapter="ch04">CH.04</button>
+      <button data-chapter="ch00">CHAPTER 00</button>
+      <button data-chapter="ch01">CHAPTER 01</button>
+      <button data-chapter="ch02">CHAPTER 02</button>
+      <button data-chapter="ch03">CHAPTER 03</button>
+      <button data-chapter="ch04">CHAPTER 04</button>
+      <div class="nav-separator">──────────</div>
+      <button class="nav-monitor-btn" id="monitorToggle" type="button">MONITOR</button>
     </nav>
     <div class="system-readout" id="system-readout" aria-label="System readout"></div>
-    <div class="chrome-line chrome-bottom-left" id="clock">| 00:00:00 |</div>
-    <div class="chrome-line chrome-bottom-right" id="coordinates">| --.----, ---.---- |</div>
+    <div class="chrome-line chrome-bottom-left" id="clock">00:00:00</div>
+    <div class="chrome-line chrome-bottom-right" id="coordinates">--.----, ---.----</div>
   </header>
 
   <main id="app">
@@ -158,10 +160,6 @@
     </section>
 
     <section id="desktop-object-layer" aria-label="Desktop object layer">
-      <button class="desktop-icon desktop-icon-eyu" data-object="eyu" aria-label="Open eyu articles">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 2h11l3 3v17H5z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M16 2v5h5" fill="none" stroke="#000" stroke-width="2"/><path d="M8 10h8M8 14h8M8 18h5" stroke="#000" stroke-width="2"/></svg>
-        <span class="desktop-icon-label">鳄鱼的美食屋.eyu</span>
-      </button>
       <button class="desktop-icon" data-object="nye" aria-label="Open NYE 3 second clip">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M6 5v14M18 5v14M9 9l5 3-5 3z" fill="#000"/><path d="M4 8h2M4 12h2M4 16h2M18 8h2M18 12h2M18 16h2" stroke="#000" stroke-width="1"/></svg>
         <span class="desktop-icon-label">NYE_3SEC.MOV</span>
@@ -178,10 +176,6 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M9 9c0-2 2-3 4-3s4 1 4 3c0 3-4 2-4 6M13 18h1" fill="none" stroke="#000" stroke-width="2"/></svg>
         <span class="desktop-icon-label">NO_GPS</span>
       </button>
-      <button class="desktop-icon" data-object="trash" aria-label="Open trash">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v14H7z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M5 6h14M9 4h6M10 10v8M14 10v8" stroke="#000" stroke-width="2"/></svg>
-        <span class="desktop-icon-label">trash</span>
-      </button>
       <button class="desktop-icon desktop-icon-readme" data-object="readme" aria-label="Open README">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 2h11l3 3v17H5z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M16 2v5h5" fill="none" stroke="#000" stroke-width="2"/><path d="M8 11h8M8 15h8M8 19h6" stroke="#000" stroke-width="2"/></svg>
         <span class="desktop-icon-label">README.txt</span>
@@ -189,15 +183,19 @@
     </section>
 
     <section class="interrupt-stage" id="interrupt-stage" aria-label="Interrupt">
-      <video id="interrupt-video" playsinline preload="metadata"></video>
-      <div class="interrupt-coordinates">| 36.2043, 117.0843 |</div>
-      <div id="interrupt-beishang-text" class="interrupt-beishang-text"></div>
-      <pre class="interrupt-panel">+-------------------+
+      <div class="interrupt-window">
+        <div class="interrupt-titlebar"><span>INT / 泰山 / 2025-12-23</span><button id="interrupt-close" type="button" aria-label="Exit interrupt">×</button></div>
+        <div class="interrupt-video-wrap">
+          <video id="interrupt-video" playsinline preload="metadata"></video>
+          <div id="interrupt-beishang-text" class="interrupt-beishang-text"></div>
+          <pre class="interrupt-panel">+-------------------+
 | ALTITUDE | 196m   |
 | LOCAL    | 22:02  |
 | DATE     | 2025-12-23 |
 | iOS      | 26.0.1 |
 +-------------------+</pre>
+        </div>
+      </div>
     </section>
   </main>
   <button id="hidden-int-button" type="button" aria-label="Trigger interrupt">[INT]</button>
@@ -211,6 +209,7 @@
 
   <script src="news_content.js"></script>
   <script src="eyu_articles.js"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="main.js"></script>
 </body>

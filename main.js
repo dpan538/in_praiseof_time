@@ -2,15 +2,15 @@ const MANIFEST_URL = "signal_data/MANIFEST.json";
 
 const CHAPTERS = {
   ch00: {
-    code: "CH.00",
+    code: "CHAPTER 00",
     label: "LOCATING...",
-    primary: "#F0F0F0",
-    secondary: "#0a0a0a",
+    primary: "#F0EAD8",
+    secondary: "#1A1208",
     coordinates: "40.7194, -73.9896",
     clips: [],
   },
   ch01: {
-    code: "CH.01",
+    code: "CHAPTER 01",
     label: "THE SAME WINDOW",
     primary: "#FF2D55",
     secondary: "#1A1A4E",
@@ -19,27 +19,27 @@ const CHAPTERS = {
     interruptAfter: "IMG_4700",
   },
   ch02: {
-    code: "CH.02",
+    code: "CHAPTER 02",
     label: "NO SIGNAL",
-    primary: "#FFE600",
+    primary: "#B8A000",
     secondary: "#0a0a0a",
     coordinates: "NO GPS / SUSPENDED",
     clips: ["IMG_7948", "IMG_8033", "IMG_8084", "IMG_8191", "IMG_8220", "IMG_8224", "IMG_8284", "IMG_8300", "IMG_8722", "IMG_0196"],
   },
   ch03: {
-    code: "CH.03",
+    code: "CHAPTER 03",
     label: "ASCENT",
     primary: "#7ECECA",
-    secondary: "#C8C800",
+    secondary: "#1C2E26",
     tertiary: "#888888",
     coordinates: "37.3300, 101.4005",
     clips: ["IMG_3484", "IMG_3549", "IMG_3551", "IMG_3567", "IMG_3612", "IMG_3618", "IMG_3682", "IMG_3727", "IMG_3773", "IMG_3798", "IMG_3810", "IMG_3840", "IMG_3940"],
   },
   ch04: {
-    code: "CH.04",
+    code: "CHAPTER 04",
     label: "BRISBANE",
-    primary: "#5A9E9E",
-    secondary: "#555555",
+    primary: "#D4921A",
+    secondary: "#1A1208",
     coordinates: "-27.4431, 153.0639",
     clips: ["IMG_5523", "IMG_5521", "IMG_5671", "IMG_6010", "IMG_3483"],
   },
@@ -47,7 +47,7 @@ const CHAPTERS = {
     code: "INT",
     label: "MT. TAI",
     primary: "#4D4DFF",
-    secondary: "#0a0a0a",
+    secondary: "#FFFFFF",
     coordinates: "36.2043, 117.0843",
     clips: ["IMG_8863"],
   },
@@ -73,20 +73,54 @@ const DATE_OVERRIDES = {
 const NARRATIVE_TEXTS = {
   ch01: [
     "September. 不准开冷气了。\n窗缝里进来的风\n比预期的要少。",
-    "40.7194° N\n−73.9896° W\nfloor 18",
-    "楼下有人在尖叫。\n这不是痛苦。\n或者也是。\n不确定。                    04:23",
+    "40.7194° N\nfloor 18\n楼下有人在尖叫。",
+    "不确定这是痛苦。\n或者也是。\n04:23",
+    "I pull up winter, from bed.\nThe air conditioner walks beyond quilts.",
+    "Dec 31. 22:14.\n同一个窗口。\n什么都没有发生。",
+    "很多事情\n只在夜里\n才真实。",
+    "平安夜。\n我不知道为什么要待在这个城市。\n但我留了下来。",
+    "窗外的灯\n不是给我的。\n但我还是看着。",
+    "IMG_1401\n18th floor, Manhattan\n冷风从窗缝进来。",
+    "一个人过年。\n没有仪式。\n时间照常流动。",
+    "02:44\n街上没有人了。\n只有我还没睡。",
   ],
   ch02: [
+    "大庆。齐齐哈尔。\n阿尔山。\n然后信号消えた。",
     "On a prairie of green and cattle,\nto be left behind might be death.",
-    "GPS lost.\nSignal loss = suspension,\nnot liberation.",
+    "绿色太多。\n没有边界。",
+    "在如此长时间的段落中，\n我写过许多东西，\n但无法与人分享。",
+    "北上。",
+    "草原不欢迎你。\n但也不拒绝。\n这让人更难受。",
+    "距离最近的城市\n230公里。\n信号格数：0。",
+    "牛在路上。\n司机不按喇叭。\n时间在这里\n没有单位。",
+    "内蒙古。\n七月。\n风是黄色的。",
+    "Arxan border.\nThe train goes no further.\n下车的地方，叫做终点。",
+    "45.7° N\n草原的边界\n只存在于地图里。",
   ],
   ch03: [
-    "银行给了我工资。\n我用它买了一张去西边的票。\n这是我第一次\n用自己的钱\n去一个没有人要我去的地方。",
-    "有路线。有地图。\n有人告诉我该往哪里走。\n我就往那里走。\n这不是没有选择。\n这是我选择了有选择。",
-    "空気が薄い。\n但很好呼吸。\n期待は重さがある。\n重さは証明だ。\n被人需要，\n是一种重量。\n我喜欢这种重量。",
+    "银行给了我工资。\n我用它买了一张去西边的票。",
+    "有路线。有地图。\n我就往那里走。\n这不是没有选择。",
+    "空気が薄い。\n但很好呼吸。\n被人需要，是一种重量。",
+    "期待は重さがある。\n重さは証明だ。",
+    "3752m。\n这是我待过的最高的地方。\n空气少了三分之一。",
+    "在高处，\n声音变得很轻。\n自己的声音也是。",
+    "走了八个小时的山路。\n到了之后\n发现没什么可看的。",
+    "门源。张掖。祁连。\n这些名字\n比地方本身更好看。",
+    "翻越一座山\n需要的时间\n比想象中少。",
+    "青海的星星\n不是浪漫。\n是一种压力。",
   ],
   ch04: [
-    "船。\n一个半小时。\n什么都做不了，\n也无法睡觉。\n\n太阳让人感到\n不安。\n不是热。\n是它的存在方式。\n\nDiese Stadt ist nicht schlecht.\n「悪い」でもない。\n这个地方让人\n不放松。\n\n没有更准确的词了。",
+    "船。\n一个半小时。\n什么都做不了。",
+    "太阳让人感到不安。\n不是热。\n是它的存在方式。",
+    "Diese Stadt ist nicht schlecht.\n「悪い」でもない。\n这个地方让人不放松。",
+    "当你终于获得了看清世界的眼睛，\n也许，又开始想念\n那些厚重的镜片。",
+    "没有更准确的词了。",
+    "Brisbane River\n水是棕色的。\n阳光从正上方打下来。",
+    "南半球的夏天\n12月。\n什么季节感都没有。",
+    "渡轮靠岸。\n没有人等我。\n这是我要的。",
+    "City Cat, 07:22.\n乘客们\n不看窗外。",
+    "-27.443° S\n这是我去过最南的地方。\n不知道为什么要记录这件事。",
+    "读了三遍那本书。\n在不同的城市。\n每次读到的都不一样。",
   ],
 };
 
@@ -218,6 +252,7 @@ const state = {
   environmentEntries: null,
   minimizedWindows: new Map(),
   dockApps: new Map(),
+  dockTooltipTimer: null,
   stickyNotes: [],
   stickyZ: 300,
   nextStickyId: 1,
@@ -233,7 +268,7 @@ const state = {
     signalTexture: true,
     subdermalText: true,
     scanLines: false,
-    dataPanel: true,
+    dataPanel: false,
     systemChrome: true,
     coordinates: true,
     clock: true,
@@ -278,7 +313,8 @@ const dom = {
   chapterLabel: document.getElementById("chapter-label"),
   coordinates: document.getElementById("coordinates"),
   clock: document.getElementById("clock"),
-  navButtons: [...document.querySelectorAll(".chapter-nav button")],
+  navButtons: [...document.querySelectorAll(".chapter-nav button[data-chapter]")],
+  monitorToggle: document.getElementById("monitorToggle"),
   latScan: document.getElementById("lat-scan"),
   lonScan: document.getElementById("lon-scan"),
   signalAcquired: document.getElementById("signal-acquired"),
@@ -299,6 +335,7 @@ const dom = {
   interruptStage: document.getElementById("interrupt-stage"),
   interruptVideo: document.getElementById("interrupt-video"),
   interruptBeishangText: document.getElementById("interrupt-beishang-text"),
+  interruptClose: document.getElementById("interrupt-close"),
   hiddenIntButton: document.getElementById("hidden-int-button"),
   dockBar: document.getElementById("dock-bar"),
   systemReadout: document.getElementById("system-readout"),
@@ -322,10 +359,12 @@ async function init() {
   setupVideoObserver();
   setupAudioUnlock();
   setupDesktopObjects();
+  if (sessionStorage.getItem("booted") !== "1") dom.body.classList.add("is-booting");
   setupOperatingSystem();
   restoreStickyNotes();
   resizeTexture();
   if (sessionStorage.getItem("booted") === "1") {
+    dom.body.classList.add("has-booted");
     const chapter = sessionStorage.getItem("last_chapter") || "ch00";
     if (chapter === "int") activateChapter("ch04");
     else {
@@ -376,6 +415,10 @@ function bindEvents() {
       }
     });
   });
+  dom.monitorToggle?.addEventListener("click", () => {
+    state.settings.dataPanel = !state.settings.dataPanel;
+    applySystemSettings();
+  });
 
   dom.video.addEventListener("ended", onVideoEnded);
   dom.video.addEventListener("loadedmetadata", updateVideoControls);
@@ -395,7 +438,39 @@ function bindEvents() {
   });
   dom.videoToggle?.addEventListener("click", toggleMainVideoPlayback);
   dom.interruptVideo.addEventListener("ended", () => exitInterrupt());
+  dom.interruptClose?.addEventListener("click", () => exitInterrupt());
   dom.hiddenIntButton?.addEventListener("click", () => enterInterrupt());
+  makeVideoDraggable();
+}
+
+function makeVideoDraggable() {
+  const shell = dom.crtShell;
+  if (!shell) return;
+  let drag = null;
+  shell.addEventListener("pointerdown", (event) => {
+    if (event.target.closest("button")) return;
+    const rect = shell.getBoundingClientRect();
+    drag = {
+      x: event.clientX,
+      y: event.clientY,
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+    };
+    shell.style.transform = "none";
+    shell.setPointerCapture(event.pointerId);
+  });
+  shell.addEventListener("pointermove", (event) => {
+    if (!drag) return;
+    const nextLeft = Math.max(140, Math.min(window.innerWidth - drag.width, drag.left + event.clientX - drag.x));
+    const nextTop = Math.max(28, Math.min(window.innerHeight - drag.height - 64, drag.top + event.clientY - drag.y));
+    shell.style.left = `${Math.round(nextLeft)}px`;
+    shell.style.top = `${Math.round(nextTop)}px`;
+  });
+  shell.addEventListener("pointerup", () => {
+    drag = null;
+  });
 }
 
 async function playBootSequence() {
@@ -477,6 +552,8 @@ function hideBootScreen() {
   if (!dom.bootScreen) return;
   dom.bootScreen.classList.remove("is-active");
   dom.bootScreen.setAttribute("aria-hidden", "true");
+  dom.body.classList.remove("is-booting");
+  dom.body.classList.add("has-booted");
 }
 
 function wait(ms) {
@@ -488,20 +565,51 @@ function setupDesktopObjects() {
   dom.desktopIcons.forEach((icon) => {
     icon.addEventListener("click", () => selectDesktopIcon(icon));
     icon.addEventListener("dblclick", () => openDesktopObject(icon.dataset.object));
+    makeDesktopIconDraggable(icon);
+  });
+}
+
+function makeDesktopIconDraggable(icon) {
+  let drag = null;
+  icon.addEventListener("pointerdown", (event) => {
+    drag = {
+      x: event.clientX,
+      y: event.clientY,
+      left: icon.getBoundingClientRect().left,
+      top: icon.getBoundingClientRect().top,
+      moved: false,
+    };
+    icon.setPointerCapture(event.pointerId);
+  });
+  icon.addEventListener("pointermove", (event) => {
+    if (!drag) return;
+    const dx = event.clientX - drag.x;
+    const dy = event.clientY - drag.y;
+    if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true;
+    const nextLeft = Math.max(0, Math.min(window.innerWidth - icon.offsetWidth, drag.left + dx));
+    const nextTop = Math.max(24, Math.min(window.innerHeight - 60 - icon.offsetHeight, drag.top + dy));
+    icon.dataset.dragged = "1";
+    icon.style.left = `${Math.round(nextLeft)}px`;
+    icon.style.top = `${Math.round(nextTop)}px`;
+    icon.style.right = "";
+    icon.style.bottom = "";
+  });
+  icon.addEventListener("pointerup", (event) => {
+    if (drag?.moved) event.preventDefault();
+    drag = null;
   });
 }
 
 function positionDesktopIcons() {
   const positions = {
-    nye: { right: 236, top: 70 },
-    nanxiang: { right: 126, top: 70 },
-    brisbane: { right: 16, top: 70 },
-    nogps: { right: 170, top: 190 },
-    readme: { right: 56, top: 202 },
-    eyu: { right: 128, bottom: 84 },
-    trash: { right: 18, bottom: 40 },
+    nye:      { right: 20, top: 48 },
+    nanxiang: { right: 20, top: 142 },
+    brisbane: { right: 20, top: 236 },
+    nogps:    { right: 20, top: 330 },
+    readme:   { right: 20, top: 424 },
   };
   dom.desktopIcons.forEach((icon) => {
+    if (icon.dataset.dragged === "1") return;
     const pos = positions[icon.dataset.object] || { right: 18, top: 70 };
     const width = 92;
     icon.style.left = `${Math.max(8, window.innerWidth - pos.right - width)}px`;
@@ -571,7 +679,7 @@ function createDesktopWindow(title, body) {
   win.tabIndex = 0;
   win.dataset.windowTitle = title;
   win.innerHTML = [
-    `<div class="desktop-titlebar"><button class="desktop-close" type="button" aria-label="Close">×</button><button class="desktop-minimize" type="button" aria-label="Minimize">−</button><span>${title}</span></div>`,
+    `<div class="desktop-titlebar"><span>${title}</span><button class="desktop-minimize" type="button" aria-label="Minimize">−</button><button class="desktop-close" type="button" aria-label="Close">×</button></div>`,
     `<div class="desktop-body"><pre>+------------------------------+</pre>${body}<pre>+------------------------------+</pre></div>`,
   ].join("");
   win.querySelector(".desktop-close").addEventListener("pointerdown", (event) => {
@@ -625,7 +733,7 @@ function setWindowPosition(win, options = {}) {
 
 function createSizedDesktopWindow(title, body, className) {
   const win = typeof body === "string" ? createDesktopWindow(title, body) : createDesktopWindow(title, "");
-  if (className) win.classList.add(className);
+  if (className) win.classList.add(...String(className).split(/\s+/).filter(Boolean));
   if (body && typeof body !== "string") {
     const bodyEl = win.querySelector(".desktop-body");
     bodyEl.insertBefore(body, bodyEl.lastElementChild);
@@ -640,6 +748,7 @@ function closeDesktopWindow(win) {
   if (win.trashTimers) {
     win.trashTimers.forEach((timer) => clearTimeout(timer));
   }
+  if (win.settingsTimer) clearInterval(win.settingsTimer);
   win.querySelectorAll("video").forEach((video) => video.pause());
   win.classList.remove("is-minimized", "is-focused");
   win.classList.add("is-closed");
@@ -768,32 +877,34 @@ function setupDock() {
   dom.dockBar.innerHTML = "";
   const apps = document.createElement("div");
   apps.className = "dock-apps";
-  const divider = document.createElement("div");
-  divider.className = "dock-divider";
+  const dockUtilityDivider = document.createElement("div");
+  dockUtilityDivider.className = "dock-divider dock-utility-divider has-items";
+  const utilityApps = document.createElement("div");
+  utilityApps.className = "dock-apps dock-utility-apps";
+  const minimizedDivider = document.createElement("div");
+  minimizedDivider.className = "dock-divider dock-minimized-divider";
   const minimized = document.createElement("div");
   minimized.className = "dock-minimized";
   minimized.id = "dock-minimized";
-  dom.dockBar.append(apps, divider, minimized);
+  dom.dockBar.append(apps, dockUtilityDivider, utilityApps, minimizedDivider, minimized);
   [
-    ["finder", "FINDER", dockIconFinder()],
-    ["search", "SEARCH", dockIconSearch()],
-    ["control", "SETTINGS", dockIconGear()],
-    ["news", "NEWS", dockIconNews()],
-    ["chess", "CHESS", dockIconChess()],
-    ["note", "NOTE", dockIconNote()],
-    ["calendar", "CALENDAR", dockIconCalendar()],
-    ["profiler", "PROFILER", dockIconProfiler()],
-    ["eyu", ".EYU", dockIconEyu()],
+    ["finder", "FINDER", "ph-folders"],
+    ["search", "SEARCH", "ph-magnifying-glass"],
+    ["control", "SETTINGS", "ph-sliders"],
+    ["news", "NEWS", "ph-newspaper"],
+    ["chess", "CHESS", "ph-game-controller"],
+    ["note", "NOTES", "ph-note"],
+    ["calendar", "CALENDAR", "ph-calendar"],
+    ["profiler", "PROFILER", "ph-activity"],
+    ["eyu", ".EYU", "ph-book-open"],
   ].forEach(([id, label, svg]) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "dock-app-icon";
-    button.dataset.dockApp = id;
-    button.innerHTML = `<span class="dock-svg">${svg}</span><span class="dock-label">${label}</span><span class="dock-dot"></span>`;
-    button.addEventListener("click", () => handleDockApp(id));
+    const button = createDockButton(id, label, svg);
     apps.appendChild(button);
     state.dockApps.set(id, button);
   });
+  const trashButton = createDockButton("trash", "TRASH", "ph-trash");
+  utilityApps.appendChild(trashButton);
+  state.dockApps.set("trash", trashButton);
   updateDockState();
 }
 
@@ -802,8 +913,42 @@ function handleDockApp(id) {
     createStickyNote();
     return;
   }
-  if (id === "eyu" && !canOpenEyuFromDock()) return;
+  if (id === "eyu" && !canOpenEyuFromDock()) {
+    showDockTooltip(state.dockApps.get("eyu"), "available in CHAPTER 01 and CHAPTER 04 only");
+    return;
+  }
+  if (id === "trash") {
+    const existing = findWindowById("trash");
+    if (isWindowVisible(existing)) closeDesktopWindow(existing);
+    else openDesktopObject("trash");
+    updateDockState();
+    return;
+  }
   toggleSystemWindow(id);
+}
+
+function createDockButton(id, label, svg) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "dock-app-icon";
+  button.dataset.dockApp = id;
+  button.innerHTML = `<span class="dock-svg"><i class="ph ${svg}" aria-hidden="true"></i></span><span class="dock-label">${label}</span><span class="dock-dot"></span>`;
+  button.addEventListener("click", () => handleDockApp(id));
+  return button;
+}
+
+function showDockTooltip(button, text) {
+  if (!button) return;
+  clearTimeout(state.dockTooltipTimer);
+  let tooltip = button.querySelector(".dock-tooltip");
+  if (!tooltip) {
+    tooltip = document.createElement("span");
+    tooltip.className = "dock-tooltip";
+    button.appendChild(tooltip);
+  }
+  tooltip.textContent = text;
+  tooltip.classList.add("is-active");
+  state.dockTooltipTimer = setTimeout(() => tooltip.classList.remove("is-active"), 2000);
 }
 
 function toggleSystemWindow(id) {
@@ -817,42 +962,6 @@ function canOpenEyuFromDock() {
   return state.chapter === "ch01" || state.chapter === "ch04";
 }
 
-function dockIconFinder() {
-  return `<svg viewBox="0 0 36 36" aria-hidden="true"><rect x="5" y="5" width="26" height="26" fill="white" stroke="black" stroke-width="2"/><path d="M18 5v26" stroke="black" stroke-width="1"/><circle cx="13" cy="16" r="2" fill="black"/><circle cx="23" cy="16" r="2" fill="black"/><path d="M11 23h14" stroke="black" stroke-width="2"/></svg>`;
-}
-
-function dockIconSearch() {
-  return `<svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="16" cy="16" r="9" fill="white" stroke="black" stroke-width="3"/><path d="M23 23l8 8" stroke="black" stroke-width="3"/></svg>`;
-}
-
-function dockIconGear() {
-  return `<svg viewBox="0 0 36 36" aria-hidden="true"><path d="M18 4l3 5 6-1 1 6 5 4-5 4-1 6-6-1-3 5-3-5-6 1-1-6-5-4 5-4 1-6 6 1z" fill="white" stroke="black" stroke-width="2"/><circle cx="18" cy="18" r="5" fill="white" stroke="black" stroke-width="2"/></svg>`;
-}
-
-function dockIconNews() {
-  return `<svg viewBox="0 0 36 36" aria-hidden="true"><path d="M6 8h22l2 4v16H6z" fill="white" stroke="black" stroke-width="2"/><path d="M10 13h9M10 18h16M10 23h16M22 11h5v5h-5z" stroke="black" stroke-width="2" fill="white"/></svg>`;
-}
-
-function dockIconChess() {
-  return `<svg viewBox="0 0 36 36" aria-hidden="true"><path d="M12 30h14v-4h-3c2-3 4-6 1-10l-5-6 3-3-4-2-5 4 2 4-4 4c-2 3-1 6 2 9h-1z" fill="white" stroke="black" stroke-width="2"/><circle cx="20" cy="12" r="1.5" fill="black"/></svg>`;
-}
-
-function dockIconNote() {
-  return `<svg viewBox="0 0 36 36" aria-hidden="true"><path d="M8 7h20v22H8z" fill="white" stroke="black" stroke-width="2"/><path d="M22 7v7h6" fill="none" stroke="black" stroke-width="2"/><path d="M12 16h10M12 21h10" stroke="black" stroke-width="2"/></svg>`;
-}
-
-function dockIconCalendar() {
-  return `<svg viewBox="0 0 36 36" aria-hidden="true"><rect x="6" y="8" width="24" height="22" fill="white" stroke="black" stroke-width="2"/><path d="M6 14h24M12 8v6M24 8v6M12 19h4M20 19h4M12 24h4M20 24h4" stroke="black" stroke-width="2"/></svg>`;
-}
-
-function dockIconProfiler() {
-  return `<svg viewBox="0 0 36 36" aria-hidden="true"><rect x="5" y="6" width="26" height="24" fill="white" stroke="black" stroke-width="2"/><path d="M8 24l4-6 4 3 4-9 4 12 4-5" fill="none" stroke="black" stroke-width="2"/></svg>`;
-}
-
-function dockIconEyu() {
-  return `<svg viewBox="0 0 36 36" aria-hidden="true"><path d="M9 5h15l4 4v22H9z" fill="white" stroke="black" stroke-width="2"/><path d="M24 5v7h6" fill="none" stroke="black" stroke-width="2"/><text x="18" y="24" text-anchor="middle" font-size="12" font-family="monospace" fill="black">鳄</text></svg>`;
-}
-
 function updateDockState() {
   state.dockApps.forEach((button, id) => {
     const open = id === "note"
@@ -862,7 +971,7 @@ function updateDockState() {
     button.classList.toggle("is-disabled", id === "eyu" && !canOpenEyuFromDock());
   });
   const minimized = dom.dockBar?.querySelector("#dock-minimized");
-  const divider = dom.dockBar?.querySelector(".dock-divider");
+  const divider = dom.dockBar?.querySelector(".dock-minimized-divider");
   if (divider) divider.classList.toggle("has-items", !!state.minimizedWindows.size);
   if (!minimized) return;
   [...minimized.querySelectorAll(".dock-thumb")].forEach((thumb) => {
@@ -964,7 +1073,7 @@ function openSearchWindow(open) {
       return;
     }
     const win = buildSearchWindow();
-    mountDesktopWindow(win, { id: "search", kind: "system", left: 90, top: 90, width: 360, height: 440 });
+    mountDesktopWindow(win, { id: "search", kind: "system", left: 80, top: 70, width: 640, height: 560 });
     updateDockState();
     return;
   }
@@ -977,25 +1086,112 @@ function isSearchWindowOpen() {
 }
 
 function buildSearchWindow() {
-  const shell = document.createElement("div");
-  shell.className = "search-panel os-window-body";
+  const panel = document.createElement("div");
+  panel.className = "search-dict-panel os-window-body";
+
+  // Search input
+  const inputWrap = document.createElement("div");
+  inputWrap.className = "search-dict-input-wrap";
   const input = document.createElement("input");
-  input.className = "search-input";
+  input.className = "search-dict-input";
   input.type = "search";
   input.autocomplete = "off";
   input.spellcheck = false;
-  input.placeholder = "";
-  const results = document.createElement("div");
-  results.className = "search-results";
-  const detail = document.createElement("div");
-  detail.className = "search-detail";
-  shell.append(input, results, detail);
-  const win = createSizedDesktopWindow("search", shell, "desktop-window-search");
-  const render = () => renderSearchWindow(input.value, results, detail);
-  input.addEventListener("input", render);
-  loadEnvironmentEntries().then(render).catch((error) => {
-    detail.textContent = `environment.json unavailable\n${error.message || error}`;
-  });
+  input.placeholder = "search locations…";
+  inputWrap.appendChild(input);
+
+  // Scrollable list
+  const list = document.createElement("div");
+  list.className = "search-dict-list";
+
+  // Footer count
+  const footer = document.createElement("div");
+  footer.className = "search-dict-footer";
+  footer.textContent = "loading…";
+
+  panel.append(inputWrap, list, footer);
+  const win = createSizedDesktopWindow("search", panel, "desktop-window-search");
+
+  let openEntryEl = null;
+
+  function renderEntries(query) {
+    const entries = state.environmentEntries || [];
+    const needle = query.trim().toLowerCase();
+    const matches = needle
+      ? entries.filter((e) => e.search.includes(needle))
+      : entries;
+    list.innerHTML = "";
+    openEntryEl = null;
+    footer.textContent = `${matches.length} entr${matches.length !== 1 ? "ies" : "y"}`;
+
+    matches.forEach((entry) => {
+      const item = document.createElement("div");
+      item.className = "search-dict-entry";
+
+      const header = document.createElement("button");
+      header.type = "button";
+      header.className = "search-dict-header";
+
+      const arrow = Object.assign(document.createElement("span"), { className: "search-dict-arrow", textContent: "▶" });
+      const name = Object.assign(document.createElement("span"), { className: "search-dict-name", textContent: entry.label });
+      header.append(arrow, name);
+
+      const body = document.createElement("div");
+      body.className = "search-dict-body";
+      const raw = entry.raw || {};
+
+      // Metadata rows
+      [
+        ["COORDINATES", extractEnvironmentCoordinates(raw)],
+        ["ALTITUDE",    extractEnvironmentAltitude(raw)],
+        ["TERRAIN",     raw.terrain || raw.terrain_detail],
+        ["CLIMATE",     raw.climate_note || raw.climate],
+        ["LIGHT",       raw.light_note || raw.sensory_atmospheric],
+        ["SIGNAL",      raw.signal_coverage],
+        ["POPULATION",  raw.population_density],
+      ].forEach(([lbl, val]) => {
+        const v = formatSearchValue(val);
+        if (!v || v === "—") return;
+        const row = document.createElement("div");
+        row.className = "search-dict-row";
+        row.append(
+          Object.assign(document.createElement("div"), { className: "search-dict-lbl", textContent: lbl }),
+          Object.assign(document.createElement("div"), { className: "search-dict-val", textContent: v })
+        );
+        body.appendChild(row);
+      });
+
+      if (raw.one_fact) {
+        body.appendChild(Object.assign(document.createElement("div"), {
+          className: "search-dict-fact",
+          textContent: formatSearchValue(raw.one_fact),
+        }));
+      }
+      if (raw.narrative_note) {
+        body.appendChild(Object.assign(document.createElement("div"), {
+          className: "search-dict-note",
+          textContent: formatSearchValue(raw.narrative_note),
+        }));
+      }
+
+      header.addEventListener("click", () => {
+        const isAlreadyOpen = item.classList.contains("is-open");
+        if (openEntryEl && openEntryEl !== item) openEntryEl.classList.remove("is-open");
+        item.classList.toggle("is-open", !isAlreadyOpen);
+        openEntryEl = !isAlreadyOpen ? item : null;
+        if (!isAlreadyOpen) item.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
+
+      item.append(header, body);
+      list.appendChild(item);
+    });
+  }
+
+  input.addEventListener("input", () => renderEntries(input.value));
+  loadEnvironmentEntries()
+    .then(() => renderEntries(""))
+    .catch((err) => { list.textContent = `unavailable: ${err.message || err}`; });
+
   return win;
 }
 
@@ -1043,24 +1239,46 @@ function renderSearchDetail(entry, detail) {
   detail.innerHTML = "";
   const title = document.createElement("div");
   title.className = "search-detail-title";
-  title.textContent = entry.label;
+  title.textContent = String(entry.label || "").toUpperCase();
   detail.appendChild(title);
+  const chineseName = raw.chinese_name || raw.name_zh || raw.zh_name || raw.name_cn || raw.full_name_zh;
+  if (chineseName) {
+    const zh = document.createElement("div");
+    zh.className = "search-detail-chinese";
+    zh.textContent = chineseName;
+    detail.appendChild(zh);
+  }
+  const table = document.createElement("div");
+  table.className = "search-detail-table";
   [
-    ["coordinates", extractEnvironmentCoordinates(raw)],
-    ["altitude", extractEnvironmentAltitude(raw)],
-    ["terrain", raw.terrain || raw.terrain_detail],
-    ["climate", raw.climate_note || raw.climate || raw.seasonal_light],
-    ["light", raw.light_note || raw.sensory_atmospheric],
-    ["population", raw.population_density],
-    ["signal", raw.signal_coverage],
-    ["one_fact", raw.one_fact],
-    ["narrative_note", raw.narrative_note],
+    ["COORDINATES", extractEnvironmentCoordinates(raw)],
+    ["ALTITUDE", extractEnvironmentAltitude(raw)],
+    ["TERRAIN", raw.terrain || raw.terrain_detail],
+    ["CLIMATE", raw.climate_note || raw.climate || raw.seasonal_light],
+    ["LIGHT", raw.light_note || raw.sensory_atmospheric],
+    ["POPULATION", raw.population_density],
+    ["SIGNAL", raw.signal_coverage],
   ].forEach(([label, value]) => {
     const row = document.createElement("div");
     row.className = "search-detail-row";
-    row.textContent = `${label}: ${formatSearchValue(value)}`;
-    detail.appendChild(row);
+    const labelNode = document.createElement("div");
+    labelNode.className = "search-detail-label";
+    labelNode.textContent = label;
+    const valueNode = document.createElement("div");
+    valueNode.className = "search-detail-value";
+    valueNode.textContent = formatSearchValue(value);
+    row.append(labelNode, valueNode);
+    table.appendChild(row);
   });
+  detail.appendChild(table);
+  const fact = document.createElement("div");
+  fact.className = "search-detail-fact";
+  fact.textContent = formatSearchValue(raw.one_fact);
+  detail.appendChild(fact);
+  const note = document.createElement("div");
+  note.className = "search-detail-note";
+  note.textContent = formatSearchValue(raw.narrative_note);
+  detail.appendChild(note);
 }
 
 function extractEnvironmentCoordinates(raw) {
@@ -1189,6 +1407,38 @@ function makeLayerControl(label, checked, onToggle, slider) {
   return group;
 }
 
+function makeSettingsCheckbox(label, checked, onChange) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "settings-checkbox";
+  let current = checked;
+  const render = () => {
+    button.textContent = `${current ? "[■]" : "[□]"} ${label}`;
+  };
+  button.addEventListener("click", () => {
+    current = !current;
+    onChange(current);
+    render();
+  });
+  render();
+  return button;
+}
+
+function makeWindowToggleButton(label, id) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "settings-window-toggle";
+  button.dataset.windowToggle = id;
+  button.textContent = label;
+  const sync = () => button.classList.toggle("is-active", isWindowOpen(id));
+  button.addEventListener("click", () => {
+    setSystemWindowOpen(id, !isWindowOpen(id));
+    sync();
+  });
+  sync();
+  return button;
+}
+
 function sectionBlock(title, children) {
   const block = document.createElement("section");
   block.className = "os-section";
@@ -1200,80 +1450,344 @@ function sectionBlock(title, children) {
   return block;
 }
 
+function settingsPanel(className, children) {
+  const panel = document.createElement("div");
+  panel.className = `settings-ref-panel ${className || ""}`.trim();
+  children.forEach((child) => panel.appendChild(child));
+  return panel;
+}
+
+function settingsLabel(text) {
+  const label = document.createElement("div");
+  label.className = "settings-ref-label";
+  label.textContent = text;
+  return label;
+}
+
+function makeLevelBoxes(count, activeIndex, onSelect, labels = null) {
+  const row = document.createElement("div");
+  row.className = "settings-level-row";
+  for (let index = 0; index < count; index += 1) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "settings-level-box";
+    button.textContent = labels ? labels[index] : String(index);
+    button.classList.toggle("is-active", index === activeIndex);
+    button.addEventListener("click", () => {
+      onSelect(index);
+      [...row.children].forEach((item, idx) => item.classList.toggle("is-active", idx === index));
+    });
+    row.appendChild(button);
+  }
+  return row;
+}
+
+function nearestIndex(values, current) {
+  let best = 0;
+  let distance = Infinity;
+  values.forEach((value, index) => {
+    const nextDistance = Math.abs(value - current);
+    if (nextDistance < distance) {
+      best = index;
+      distance = nextDistance;
+    }
+  });
+  return best;
+}
+
 function buildControlPanelWindow() {
   const shell = document.createElement("div");
-  shell.className = "control-panel os-window-body";
-  const layerControls = [
-    makeLayerControl("signal texture", state.settings.signalTexture, (value) => {
-      state.settings.signalTexture = value;
-      applySystemSettings();
-    }, { value: state.settings.signalOpacity, min: 0, max: 1, step: 0.01, onChange: (value) => {
-      state.settings.signalOpacity = value;
-      applySystemSettings();
-    } }),
-    makeLayerControl("subdermal text", state.settings.subdermalText, (value) => {
-      state.settings.subdermalText = value;
-      applySystemSettings();
-    }, { value: state.settings.subdermalOpacity, min: 0, max: 1, step: 0.01, onChange: (value) => {
-      state.settings.subdermalOpacity = value;
-      applySystemSettings();
-    } }),
-    makeLayerControl("scan lines", state.settings.scanLines, (value) => {
-      state.settings.scanLines = value;
-      applySystemSettings();
-    }),
-    makeLayerControl("data panel", state.settings.dataPanel, (value) => {
-      state.settings.dataPanel = value;
-      applySystemSettings();
-    }),
+  shell.className = "ctrl-panel os-window-body";
+
+  const sidebar = document.createElement("div");
+  sidebar.className = "ctrl-sidebar";
+
+  const content = document.createElement("div");
+  content.className = "ctrl-content";
+
+  let activeSetTime = null;
+
+  const categories = [
+    { key: "audio",   icon: "🔊", label: "AUDIO" },
+    { key: "display", icon: "▦",  label: "DISPLAY" },
+    { key: "layers",  icon: "◫",  label: "LAYERS" },
+    { key: "windows", icon: "⊞",  label: "WINDOWS" },
   ];
-  const audioControls = [
-    makeRangeSlider("video", state.settings.audio.video, 0, 1, 0.01, (value) => {
-      state.settings.audio.video = value;
-      applySystemSettings();
-    }),
-    makeRangeSlider("ambient", state.settings.audio.ambient, 0, 1, 0.01, (value) => {
-      state.settings.audio.ambient = value;
-      applySystemSettings();
-    }),
-    makeRangeSlider("extract", state.settings.audio.extract, 0, 1, 0.01, (value) => {
-      state.settings.audio.extract = value;
-      applySystemSettings();
-    }),
-  ];
-  const windowControls = document.createElement("div");
-  windowControls.className = "checkbox-grid";
-  [
-    ["search", "search"],
-    [".eyu", "eyu"],
-    ["profiler", "profiler"],
-    ["news", "news"],
-    ["chess", "chess"],
-    ["map", "map"],
-  ].forEach(([label, id]) => {
-    windowControls.appendChild(makeAsciiCheckbox(label, isWindowOpen(id), (value) => setSystemWindowOpen(id, value)));
+
+  function selectCat(key) {
+    sidebar.querySelectorAll(".ctrl-cat-btn").forEach((b) => b.classList.toggle("is-active", b.dataset.cat === key));
+    content.innerHTML = "";
+    if (key === "audio")   buildCtrlAudio(content, (fn) => { activeSetTime = fn; });
+    if (key === "display") buildCtrlDisplay(content);
+    if (key === "layers")  buildCtrlLayers(content);
+    if (key === "windows") buildCtrlWindows(content);
+  }
+
+  categories.forEach((cat) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "ctrl-cat-btn";
+    btn.dataset.cat = cat.key;
+    btn.append(
+      Object.assign(document.createElement("div"), { className: "ctrl-cat-icon", textContent: cat.icon }),
+      Object.assign(document.createElement("div"), { className: "ctrl-cat-label", textContent: cat.label })
+    );
+    btn.addEventListener("click", () => selectCat(cat.key));
+    sidebar.appendChild(btn);
   });
-  const displayControls = [
-    makeAsciiCheckbox("system chrome", state.settings.systemChrome, (value) => {
-      state.settings.systemChrome = value;
-      applySystemSettings();
+
+  shell.append(sidebar, content);
+  selectCat("audio");
+
+  const win = createSizedDesktopWindow("SETTINGS", shell, "desktop-window-control desktop-window-settings");
+  win.settingsTimer = setInterval(() => { if (activeSetTime) activeSetTime(); }, 1000);
+  return win;
+}
+
+function buildCtrlAudio(container, onSetTime) {
+  // TIME display
+  const timeDisplay = Object.assign(document.createElement("div"), { className: "ctrl-time-display" });
+  const setTime = () => { timeDisplay.textContent = new Date().toLocaleTimeString("en-AU", { hour12: false }); };
+  setTime();
+  if (onSetTime) onSetTime(setTime);
+  container.appendChild(makeCtrlRow("TIME", [timeDisplay]));
+
+  // VIDEO volume
+  const videoVal = Object.assign(document.createElement("span"), { className: "ctrl-value", textContent: state.settings.audio.video.toFixed(2) });
+  const videoSlider = makeCtrlSlider(state.settings.audio.video, (v) => {
+    state.settings.audio.video = v;
+    videoVal.textContent = v.toFixed(2);
+    applySystemSettings();
+  });
+  container.appendChild(makeCtrlRow("VIDEO VOL", [videoSlider, videoVal]));
+
+  // AMBIENT volume
+  const ambVal = Object.assign(document.createElement("span"), { className: "ctrl-value", textContent: state.settings.audio.ambient.toFixed(2) });
+  const ambSlider = makeCtrlSlider(state.settings.audio.ambient, (v) => {
+    state.settings.audio.ambient = v;
+    ambVal.textContent = v.toFixed(2);
+    applySystemSettings();
+  });
+  container.appendChild(makeCtrlRow("AMB VOL", [ambSlider, ambVal]));
+}
+
+function buildCtrlDisplay(container) {
+  const textureLevels = [0, 0.33, 0.66, 1];
+  container.appendChild(makeCtrlRow("TEXTURE", [
+    makeLevelBoxes(4, nearestIndex(textureLevels, state.settings.signalOpacity), (i) => {
+      state.settings.signalOpacity = textureLevels[i]; applySystemSettings();
     }),
-    makeAsciiCheckbox("coordinates", state.settings.coordinates, (value) => {
-      state.settings.coordinates = value;
-      applySystemSettings();
+  ]));
+
+  const subLevels = [0, 0.01, 0.03, 0.06, 0.1];
+  container.appendChild(makeCtrlRow("SUBDERMAL", [
+    makeLevelBoxes(5, nearestIndex(subLevels, state.settings.subdermalOpacity), (i) => {
+      state.settings.subdermalOpacity = subLevels[i]; applySystemSettings();
     }),
-    makeAsciiCheckbox("clock", state.settings.clock, (value) => {
-      state.settings.clock = value;
+  ]));
+
+  container.appendChild(makeCtrlRow("SCANLINES", [
+    makeLevelBoxes(2, state.settings.scanLines ? 0 : 1, (i) => {
+      state.settings.scanLines = i === 0; applySystemSettings();
+    }, ["ON", "OFF"]),
+  ]));
+}
+
+function buildCtrlLayers(container) {
+  [
+    ["SIGNAL TEXTURE",  "signalTexture"],
+    ["SUBDERMAL TEXT",  "subdermalText"],
+    ["DATA PANEL",      "dataPanel"],
+    ["SYSTEM CHROME",   "systemChrome"],
+    ["COORDINATES",     "coordinates"],
+    ["CLOCK",           "clock"],
+  ].forEach(([label, key]) => {
+    const isOn = !!state.settings[key];
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = `ctrl-toggle-btn${isOn ? " is-active" : ""}`;
+    btn.textContent = isOn ? "ON" : "OFF";
+    btn.addEventListener("click", () => {
+      const next = !btn.classList.contains("is-active");
+      btn.classList.toggle("is-active", next);
+      btn.textContent = next ? "ON" : "OFF";
+      state.settings[key] = next;
       applySystemSettings();
-    }),
-  ];
-  shell.append(
-    sectionBlock("LAYERS", layerControls),
-    sectionBlock("AUDIO", audioControls),
-    sectionBlock("WINDOWS", [windowControls]),
-    sectionBlock("DISPLAY", displayControls)
-  );
-  return createSizedDesktopWindow("▣ CONTROL PANEL", shell, "desktop-window-control");
+    });
+    const row = document.createElement("div");
+    row.className = "ctrl-toggle-row";
+    row.append(Object.assign(document.createElement("span"), { className: "ctrl-toggle-label", textContent: label }), btn);
+    container.appendChild(row);
+  });
+}
+
+function buildCtrlWindows(container) {
+  [
+    ["SEARCH",   "search"],
+    ["NEWS",     "news"],
+    ["FINDER",   "finder"],
+    ["PROFILER", "profiler"],
+    ["CALENDAR", "calendar"],
+  ].forEach(([label, id]) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    const open = isWindowOpen(id);
+    btn.className = `ctrl-win-btn${open ? " is-active" : ""}`;
+    btn.textContent = `${open ? "■" : "□"} ${label}`;
+    btn.addEventListener("click", () => {
+      if (isWindowOpen(id)) {
+        const w = findWindowById(id);
+        if (w) closeDesktopWindow(w);
+      } else {
+        openDesktopObject(id);
+      }
+      const nowOpen = isWindowOpen(id);
+      btn.classList.toggle("is-active", nowOpen);
+      btn.textContent = `${nowOpen ? "■" : "□"} ${label}`;
+    });
+    container.appendChild(btn);
+  });
+}
+
+function makeCtrlRow(label, children) {
+  const row = document.createElement("div");
+  row.className = "ctrl-row";
+  const lbl = Object.assign(document.createElement("div"), { className: "ctrl-row-label", textContent: label });
+  const body = document.createElement("div");
+  body.className = "ctrl-row-body";
+  children.forEach((c) => body.appendChild(c));
+  row.append(lbl, body);
+  return row;
+}
+
+function makeCtrlSlider(value, onInput) {
+  const slider = document.createElement("input");
+  slider.type = "range";
+  slider.min = "0"; slider.max = "1"; slider.step = "0.01";
+  slider.value = String(value);
+  slider.className = "ctrl-slider";
+  slider.addEventListener("input", () => onInput(Number(slider.value)));
+  return slider;
+}
+
+// ── Stale placeholder — delete body only, keep makeControlCell ──
+function buildControlPanelWindow_OLD_PLACEHOLDER() {
+  return null; // superseded by buildControlPanelWindow above
+  // dummy reference to prevent lint warning on controlsRow
+  const controlsRow = null;
+
+  // VIDEO
+  const videoSlider = document.createElement("input");
+  videoSlider.type = "range"; videoSlider.min = "0"; videoSlider.max = "1"; videoSlider.step = "0.01";
+  videoSlider.value = state.settings.audio.video;
+  videoSlider.className = "settings-h-slider";
+  videoSlider.addEventListener("input", () => { state.settings.audio.video = Number(videoSlider.value); applySystemSettings(); });
+  controlsRow.appendChild(makeControlCell("VIDEO", [
+    Object.assign(document.createElement("span"), { textContent: "🔊" }),
+    videoSlider,
+    Object.assign(document.createElement("span"), { textContent: "🔇" }),
+  ]));
+
+  // TIME
+  const timeDisplay = document.createElement("div");
+  timeDisplay.className = "settings-time-display";
+  const setTime = () => { timeDisplay.textContent = new Date().toLocaleTimeString("en-AU", { hour12: false }); };
+  setTime();
+  controlsRow.appendChild(makeControlCell("TIME", [timeDisplay]));
+
+  // TEXTURE
+  const textureLevels = [0, 0.33, 0.66, 1];
+  const texBoxes = makeLevelBoxes(4, nearestIndex(textureLevels, state.settings.signalOpacity), (i) => {
+    state.settings.signalOpacity = textureLevels[i]; applySystemSettings();
+  });
+  controlsRow.appendChild(makeControlCell("TEXTURE", [texBoxes]));
+
+  // SUBDERMAL
+  const subdermalLevels = [0, 0.01, 0.03, 0.06, 0.1];
+  const subBoxes = makeLevelBoxes(5, nearestIndex(subdermalLevels, state.settings.subdermalOpacity), (i) => {
+    state.settings.subdermalOpacity = subdermalLevels[i]; applySystemSettings();
+  });
+  controlsRow.appendChild(makeControlCell("SUBDERMAL", [subBoxes]));
+
+  // SCANLINES
+  const scanBoxes = makeLevelBoxes(2, state.settings.scanLines ? 0 : 1, (i) => {
+    state.settings.scanLines = i === 0; applySystemSettings();
+  }, ["ON", "OFF"]);
+  controlsRow.appendChild(makeControlCell("SCANLINES", [scanBoxes]));
+
+  // AMBIENT
+  const ambientValue = document.createElement("span");
+  ambientValue.textContent = state.settings.audio.ambient.toFixed(2);
+  ambientValue.style.cssText = "font-size:10px;color:var(--text-dim)";
+  const ambientSlider = document.createElement("input");
+  ambientSlider.type = "range"; ambientSlider.min = "0"; ambientSlider.max = "1"; ambientSlider.step = "0.01";
+  ambientSlider.value = state.settings.audio.ambient;
+  ambientSlider.className = "settings-h-slider";
+  ambientSlider.addEventListener("input", () => {
+    state.settings.audio.ambient = Number(ambientSlider.value);
+    ambientValue.textContent = Number(ambientSlider.value).toFixed(2);
+    applySystemSettings();
+  });
+  controlsRow.appendChild(makeControlCell("AMBIENT", [
+    Object.assign(document.createElement("span"), { textContent: "♪" }),
+    ambientSlider,
+    ambientValue,
+  ]));
+
+  // ── VISIBILITY section ────────────────────────────────────────
+  const visHeader = Object.assign(document.createElement("div"), { className: "settings-section-header", textContent: "VISIBILITY" });
+
+  const visRow = document.createElement("div");
+  visRow.className = "settings-toggle-row";
+  [
+    ["TEXTURE",    "signalTexture"],
+    ["SUBDERMAL",  "subdermalText"],
+    ["SCANLINES",  "scanLines"],
+    ["DATA PANEL", "dataPanel"],
+  ].forEach(([label, key]) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "settings-ref-button";
+    btn.textContent = label;
+    btn.classList.toggle("is-active", !!state.settings[key]);
+    btn.addEventListener("click", () => {
+      state.settings[key] = !state.settings[key];
+      btn.classList.toggle("is-active", !!state.settings[key]);
+      applySystemSettings();
+    });
+    visRow.appendChild(btn);
+  });
+
+  // ── WINDOWS section ───────────────────────────────────────────
+  const winHeader = Object.assign(document.createElement("div"), { className: "settings-section-header", textContent: "WINDOWS" });
+
+  const winRow = document.createElement("div");
+  winRow.className = "settings-toggle-row";
+  [
+    ["SEARCH",   "search"],
+    ["NEWS",     "news"],
+    ["FINDER",   "finder"],
+    ["PROFILER", "profiler"],
+    ["CALENDAR", "calendar"],
+  ].forEach(([label, id]) => {
+    const btn = makeWindowToggleButton(label, id);
+    btn.classList.add("settings-ref-button");
+    winRow.appendChild(btn);
+  });
+
+  shell.append(controlsRow, visHeader, visRow, winHeader, winRow);
+  const win = createSizedDesktopWindow("SETTINGS", shell, "desktop-window-control desktop-window-settings");
+  win.settingsTimer = setInterval(setTime, 1000);
+  return win;
+}
+
+function makeControlCell(label, children) {
+  const cell = document.createElement("div");
+  cell.className = "settings-control-cell";
+  children.forEach((child) => cell.appendChild(child));
+  const lbl = Object.assign(document.createElement("div"), { className: "settings-control-label", textContent: label });
+  cell.appendChild(lbl);
+  return cell;
 }
 
 function isWindowOpen(id) {
@@ -1288,6 +1802,9 @@ function updateControlPanelWindow() {
     const map = { search: "search", ".eyu": "eyu", profiler: "profiler", news: "news", chess: "chess", map: "map" };
     if (map[text]) button.textContent = `${isWindowOpen(map[text]) ? "[■]" : "[□]"} ${text}`;
   });
+  win.querySelectorAll(".settings-window-toggle").forEach((button) => {
+    button.classList.toggle("is-active", isWindowOpen(button.dataset.windowToggle));
+  });
 }
 
 function applySystemSettings() {
@@ -1298,6 +1815,7 @@ function applySystemSettings() {
   dom.body.classList.toggle("hide-system-chrome", !state.settings.systemChrome);
   dom.body.classList.toggle("hide-coordinates", !state.settings.coordinates);
   dom.body.classList.toggle("hide-clock", !state.settings.clock);
+  dom.monitorToggle?.classList.toggle("active", !!state.settings.dataPanel);
   dom.root.style.setProperty("--signal-texture-opacity", state.settings.signalOpacity);
   dom.root.style.setProperty("--subdermal-opacity", state.settings.subdermalOpacity);
   dom.video.volume = state.settings.audio.video;
@@ -1308,51 +1826,129 @@ function applySystemSettings() {
 }
 
 function buildFinderWindow() {
-  const shell = document.createElement("div");
-  shell.className = "finder-panel os-window-body";
-  const win = createSizedDesktopWindow("finder", shell, "desktop-window-finder");
-  requestAnimationFrame(() => updateFinderWindow(win));
+  const layout = document.createElement("div");
+  layout.className = "finder-layout";
+
+  const sidebar = document.createElement("div");
+  sidebar.className = "finder-sidebar";
+
+  const main = document.createElement("div");
+  main.className = "finder-main";
+
+  const statusbar = document.createElement("div");
+  statusbar.className = "finder-statusbar";
+  statusbar.textContent = "5 items";
+
+  const sections = [
+    { key: "desktop", icon: "▣", label: "DESKTOP" },
+    { key: "windows", icon: "⊡", label: "WINDOWS" },
+    { key: "system",  icon: "◈", label: "SYSTEM INFO" },
+  ];
+
+  function renderSection(key) {
+    sidebar.querySelectorAll(".finder-nav-btn").forEach((btn) => {
+      btn.classList.toggle("is-active", btn.dataset.section === key);
+    });
+    main.innerHTML = "";
+
+    if (key === "desktop") {
+      const files = [
+        { icon: "▶", name: "NYE_3SEC.MOV",       meta: "video", id: "nye" },
+        { icon: "▶", name: "NANXIANG.MOV",        meta: "video", id: "nanxiang" },
+        { icon: "▶", name: "BRISBANE_WATER.MOV",  meta: "video", id: "brisbane" },
+        { icon: "?", name: "NO_GPS",              meta: "object", id: "nogps" },
+        { icon: "☰", name: "README.txt",          meta: "text",   id: "readme" },
+      ];
+      files.forEach((f) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "finder-item";
+        const iconEl = Object.assign(document.createElement("span"), { className: "finder-item-icon", textContent: f.icon });
+        const nameEl = Object.assign(document.createElement("span"), { className: "finder-item-name", textContent: f.name });
+        const metaEl = Object.assign(document.createElement("span"), { className: "finder-item-meta", textContent: f.meta });
+        btn.append(iconEl, nameEl, metaEl);
+        btn.addEventListener("click", () => openDesktopObject(f.id));
+        main.appendChild(btn);
+      });
+      statusbar.textContent = `${files.length} items`;
+
+    } else if (key === "windows") {
+      const seenWindows = new Set();
+      const openWins = state.desktopWindows.filter(isWindowVisible).reduce((acc, item) => {
+        const id = item.dataset.windowId;
+        if (seenWindows.has(id)) return acc;
+        seenWindows.add(id);
+        acc.push({ name: item.dataset.windowTitle || id, ref: item });
+        return acc;
+      }, []);
+
+      if (!openWins.length) {
+        const empty = Object.assign(document.createElement("div"), { className: "finder-empty", textContent: "NO OPEN WINDOWS" });
+        main.appendChild(empty);
+      } else {
+        openWins.forEach((w) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "finder-item";
+          const iconEl = Object.assign(document.createElement("span"), { className: "finder-item-icon", textContent: "⊡" });
+          const nameEl = Object.assign(document.createElement("span"), { className: "finder-item-name", textContent: w.name.toUpperCase() });
+          const metaEl = Object.assign(document.createElement("span"), { className: "finder-item-meta", textContent: "window" });
+          btn.append(iconEl, nameEl, metaEl);
+          btn.addEventListener("click", () => bringWindowForward(w.ref));
+          main.appendChild(btn);
+        });
+      }
+      statusbar.textContent = `${openWins.length} open window${openWins.length !== 1 ? "s" : ""}`;
+
+    } else if (key === "system") {
+      const pairs = [
+        ["CHAPTER",  (state.chapter || "----").toUpperCase()],
+        ["CLIP",     state.currentClip || "----"],
+        ["UPTIME",   sessionDuration()],
+        ["MEMORY",   "OK"],
+        ["VIEWPORT", `${window.innerWidth} × ${window.innerHeight}`],
+        ["PLATFORM", navigator.platform || "unknown"],
+      ];
+      pairs.forEach(([label, value]) => {
+        const row = document.createElement("div");
+        row.className = "finder-readout-row";
+        const lblEl = Object.assign(document.createElement("span"), { className: "finder-readout-label", textContent: label });
+        const valEl = Object.assign(document.createElement("span"), { className: "finder-readout-value", textContent: value });
+        row.append(lblEl, valEl);
+        main.appendChild(row);
+      });
+      statusbar.textContent = "system information";
+    }
+  }
+
+  // Build sidebar
+  const locHeader = Object.assign(document.createElement("div"), { className: "finder-section-label", textContent: "LOCATIONS" });
+  sidebar.appendChild(locHeader);
+  sections.forEach((section) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "finder-nav-btn";
+    btn.dataset.section = section.key;
+    btn.textContent = `${section.icon}  ${section.label}`;
+    btn.addEventListener("click", () => renderSection(section.key));
+    sidebar.appendChild(btn);
+  });
+
+  renderSection("desktop");
+  layout.append(sidebar, main);
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "finder-wrapper os-window-body";
+  wrapper.append(layout, statusbar);
+
+  const win = createSizedDesktopWindow("finder", wrapper, "desktop-window-finder");
+  win._finderRender = renderSection;
   return win;
 }
 
 function updateFinderWindow(win = findWindowById("finder")) {
   if (!win) return;
-  const shell = win.querySelector(".finder-panel");
-  if (!shell) return;
-  shell.innerHTML = "";
-  const windows = document.createElement("div");
-  const rows = [
-    ...state.desktopWindows.filter(isWindowVisible).map((item) => ({
-      label: item.dataset.windowTitle || item.dataset.windowId,
-      action: () => bringWindowForward(item),
-    })),
-  ];
-  if (isSearchWindowOpen()) {
-    rows.unshift({ label: "search", action: () => openSearchWindow(true) });
-  }
-  windows.appendChild(finderTitle(`WINDOWS (${rows.length} open)`));
-  rows.forEach((row) => windows.appendChild(finderButton(`▶ ${row.label}`, row.action)));
-
-  const objects = document.createElement("div");
-  objects.appendChild(finderTitle("DESKTOP OBJECTS"));
-  [
-    ["📄 NYE_3SEC.MOV", "nye"],
-    ["📄 NANXIANG.MOV", "nanxiang"],
-    ["📄 BRISBANE_WATER.MOV", "brisbane"],
-    ["📄 NO_GPS", "nogps"],
-    [`📄 鳄鱼的美食屋.eyu ${isEyuVisible() ? "" : "(hidden)"}`, "eyu"],
-    ["📄 README.txt", "readme"],
-    ["🗑 trash", "trash"],
-  ].forEach(([label, id]) => objects.appendChild(finderButton(label, () => openDesktopObject(id))));
-
-  const system = document.createElement("div");
-  system.appendChild(finderTitle("SYSTEM"));
-  const clip = state.currentClip || "----";
-  system.appendChild(readoutLine("CHAPTER", state.chapter.toUpperCase()));
-  system.appendChild(readoutLine("CLIP", clip));
-  system.appendChild(readoutLine("UPTIME", sessionDuration()));
-  system.appendChild(readoutLine("MEM", "OK"));
-  shell.append(windows, objects, system);
+  if (win._finderRender) win._finderRender("desktop");
 }
 
 function finderTitle(text) {
@@ -1376,10 +1972,6 @@ function readoutLine(label, value) {
   node.className = "readout-line";
   node.textContent = `${label.padEnd(9, " ")} ${value}`;
   return node;
-}
-
-function isEyuVisible() {
-  return !document.querySelector('[data-object="eyu"]')?.classList.contains("is-hidden");
 }
 
 function buildNoteWindow() {
@@ -1696,6 +2288,7 @@ function newChessState() {
     turn: "white",
     selected: null,
     captured: { white: [], black: [] },
+    aiThinking: false,
   };
 }
 
@@ -1718,11 +2311,12 @@ function renderChess(win) {
     });
   });
   captured.textContent = `captured white: ${cs.captured.white.map(chessGlyph).join(" ")}\ncaptured black: ${cs.captured.black.map(chessGlyph).join(" ")}`;
-  turn.textContent = `${cs.turn.toUpperCase()} / no check detection`;
+  turn.textContent = cs.aiThinking ? "BLACK THINKING..." : `${cs.turn.toUpperCase()}'S TURN / no check detection`;
 }
 
 function handleChessSquare(win, x, y) {
   const cs = win.chessState;
+  if (cs.aiThinking || cs.turn !== "white") return;
   const piece = cs.board[y][x];
   if (!cs.selected) {
     if (piece && chessColor(piece) === cs.turn) cs.selected = { x, y };
@@ -1742,13 +2336,37 @@ function handleChessSquare(win, x, y) {
     return;
   }
   if (isLegalChessMove(cs.board, from.x, from.y, x, y)) {
-    if (piece) cs.captured[chessColor(piece)].push(piece);
-    cs.board[y][x] = moving;
-    cs.board[from.y][from.x] = "";
-    cs.turn = cs.turn === "white" ? "black" : "white";
+    applyChessMoveToState(cs, { sx: from.x, sy: from.y, tx: x, ty: y, captures: !!piece });
+    cs.selected = null;
+    cs.aiThinking = true;
+    renderChess(win);
+    setTimeout(() => {
+      if (!document.body.contains(win) || !win.chessState || win.chessState !== cs) return;
+      const aiMove = getAIMove(cs.board, 2);
+      if (aiMove) applyChessMoveToState(cs, aiMove);
+      cs.aiThinking = false;
+      cs.turn = "white";
+      renderChess(win);
+    }, 500);
+    return;
   }
   cs.selected = null;
   renderChess(win);
+}
+
+function applyChessMoveToState(cs, move) {
+  const moving = cs.board[move.sy][move.sx];
+  const target = cs.board[move.ty][move.tx];
+  if (target) cs.captured[chessColor(target)].push(target);
+  cs.board[move.ty][move.tx] = promoteChessPiece(moving, move.ty);
+  cs.board[move.sy][move.sx] = "";
+  cs.turn = chessColor(moving) === "white" ? "black" : "white";
+}
+
+function promoteChessPiece(piece, y) {
+  if (piece === "P" && y === 0) return "Q";
+  if (piece === "p" && y === 7) return "q";
+  return piece;
 }
 
 function chessGlyph(piece) {
@@ -1798,6 +2416,82 @@ function chessPathClear(board, sx, sy, tx, ty) {
     y += stepY;
   }
   return true;
+}
+
+function getAIMove(board, depth = 2) {
+  const moves = getAllLegalMoves(board, "black");
+  if (!moves.length) return null;
+  let bestMove = moves[0];
+  let bestScore = -Infinity;
+  let alpha = -Infinity;
+  const beta = Infinity;
+  moves.forEach((move) => {
+    const nextBoard = applyChessMoveToBoard(board, move);
+    const score = minimaxChess(nextBoard, depth - 1, false, alpha, beta);
+    if (score > bestScore) {
+      bestScore = score;
+      bestMove = move;
+    }
+    alpha = Math.max(alpha, bestScore);
+  });
+  return bestMove;
+}
+
+function minimaxChess(board, depth, maximizingBlack, alpha, beta) {
+  if (depth <= 0) return evaluateChessBoard(board);
+  const color = maximizingBlack ? "black" : "white";
+  const moves = getAllLegalMoves(board, color);
+  if (!moves.length) return evaluateChessBoard(board);
+  if (maximizingBlack) {
+    let best = -Infinity;
+    for (const move of moves) {
+      best = Math.max(best, minimaxChess(applyChessMoveToBoard(board, move), depth - 1, false, alpha, beta));
+      alpha = Math.max(alpha, best);
+      if (beta <= alpha) break;
+    }
+    return best;
+  }
+  let best = Infinity;
+  for (const move of moves) {
+    best = Math.min(best, minimaxChess(applyChessMoveToBoard(board, move), depth - 1, true, alpha, beta));
+    beta = Math.min(beta, best);
+    if (beta <= alpha) break;
+  }
+  return best;
+}
+
+function getAllLegalMoves(board, color) {
+  const moves = [];
+  for (let sy = 0; sy < 8; sy += 1) {
+    for (let sx = 0; sx < 8; sx += 1) {
+      const piece = board[sy][sx];
+      if (!piece || chessColor(piece) !== color) continue;
+      for (let ty = 0; ty < 8; ty += 1) {
+        for (let tx = 0; tx < 8; tx += 1) {
+          if (!isLegalChessMove(board, sx, sy, tx, ty)) continue;
+          moves.push({ sx, sy, tx, ty, captures: !!board[ty][tx] });
+        }
+      }
+    }
+  }
+  return moves.sort((a, b) => Number(b.captures) - Number(a.captures));
+}
+
+function applyChessMoveToBoard(board, move) {
+  const next = board.map((row) => [...row]);
+  const moving = next[move.sy][move.sx];
+  next[move.ty][move.tx] = promoteChessPiece(moving, move.ty);
+  next[move.sy][move.sx] = "";
+  return next;
+}
+
+function evaluateChessBoard(board) {
+  const values = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+  return board.flat().reduce((score, piece) => {
+    if (!piece) return score;
+    const value = values[piece.toLowerCase()] || 0;
+    return score + (chessColor(piece) === "black" ? value : -value);
+  }, 0);
 }
 
 function buildPuzzleWindow() {
@@ -2195,7 +2889,10 @@ function renderNewsWindow(win = findWindowById("news")) {
   prev.addEventListener("click", () => turnNewsPage(win, -1));
   next.addEventListener("click", () => turnNewsPage(win, 1));
   footer.append(prev, next, Object.assign(document.createElement("span"), { textContent: `page ${win.newsPage} / ${total}` }));
-  shell.append(header, subtitle, hrNode(), bodyWrap, footer);
+  const scrollArea = document.createElement("div");
+  scrollArea.className = "news-scroll";
+  scrollArea.append(hrNode(), bodyWrap);
+  shell.append(header, subtitle, scrollArea, footer);
 }
 
 function turnNewsPage(win = findWindowById("news"), direction = 1) {
@@ -2755,7 +3452,7 @@ function onWheel(event) {
 function startClock() {
   const tick = () => {
     const now = new Date();
-    dom.clock.textContent = `| ${now.toLocaleTimeString("en-AU", { hour12: false })} |`;
+    dom.clock.textContent = now.toLocaleTimeString("en-AU", { hour12: false });
     updateSystemReadout();
   };
   tick();
@@ -2927,9 +3624,6 @@ function showSystemDialog(title, lines, onOk) {
 }
 
 function updateDesktopObjectVisibility(chapter) {
-  const eyuIcon = dom.objectLayer?.querySelector('[data-object="eyu"]');
-  if (!eyuIcon) return;
-  eyuIcon.classList.remove("is-hidden");
   updateDockState();
 }
 
@@ -2940,8 +3634,8 @@ function setPalette(spec) {
 }
 
 function updateChrome(spec) {
-  dom.chapterLabel.textContent = `| ${spec.code} / ${spec.label} |`;
-  dom.coordinates.textContent = `| ${spec.coordinates} |`;
+  dom.chapterLabel.textContent = `${spec.code} / ${spec.label}`;
+  dom.coordinates.textContent = spec.coordinates;
 }
 
 function updateNav(chapter) {
@@ -2987,13 +3681,7 @@ function applyVideoLayoutForClip(clipKey) {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
   const topBand = 36;
-  const bottomBand = 52;
-  const setCentered = (width) => {
-    shell.style.width = `${width}px`;
-    shell.style.left = "50%";
-    shell.style.top = "50%";
-    shell.style.transform = "translate(-50%, -50%)";
-  };
+  const bottomBand = 68;
   const setBox = (width, left, top) => {
     const height = width * 9 / 16 + 24;
     shell.style.width = `${Math.round(width)}px`;
@@ -3002,38 +3690,44 @@ function applyVideoLayoutForClip(clipKey) {
     shell.style.transform = "none";
   };
   if (state.chapter === "ch01") {
-    setCentered(420);
+    setBox(480, 300, 160);
     return;
   }
   if (state.chapter === "ch02") {
-    const width = randomInt(360, 480);
-    setBox(width, randomBetween(vw * 0.2, vw * 0.8 - width), randomBetween(vh * 0.2, vh * 0.8 - width * 9 / 16));
+    if (state.clipIndex === 0) {
+      setBox(520, 200, 180);
+    } else {
+      const width = randomInt(480, 600);
+      setBox(width, randomBetween(vw * 0.25, vw * 0.75 - width), randomBetween(vh * 0.25, vh * 0.75 - width * 9 / 16));
+    }
     return;
   }
   if (state.chapter === "ch03") {
-    shell.style.width = "500px";
-    shell.style.left = `${Math.max(8, vw - 540)}px`;
-    shell.style.top = "70px";
-    shell.style.transform = "none";
+    const usableWidth = Math.max(600, vw - 110);
+    setBox(440, 90 + usableWidth * 0.35 + 20, 80);
     return;
   }
   if (state.chapter === "ch04") {
-    const width = randomInt(280, 520);
-    setBox(width, randomBetween(vw * 0.08, vw - width - 24), randomBetween(vh * 0.12, vh - width * 9 / 16 - 80));
-    state.ch04DriftTimer = setTimeout(() => driftCh04VideoWindow(), 8000);
+    if (state.clipIndex === 0) {
+      setBox(460, 250, 200);
+    } else {
+      const width = randomInt(280, 540);
+      setBox(width, randomBetween(vw * 0.3, vw * 0.8 - width), randomBetween(vh * 0.18, vh * 0.8 - width * 9 / 16));
+    }
+    state.ch04DriftTimer = setTimeout(() => driftCh04VideoWindow(), 10000);
     return;
   }
-  setCentered(420);
+  setBox(420, 300, 160);
 }
 
 function driftCh04VideoWindow() {
   if (state.chapter !== "ch04" || !dom.crtShell) return;
   const rect = dom.crtShell.getBoundingClientRect();
-  const distance = randomInt(20, 40);
+  const distance = 30;
   const angle = Math.random() * Math.PI * 2;
   const nextLeft = Math.max(8, Math.min(window.innerWidth - rect.width - 8, rect.left + Math.cos(angle) * distance));
-  const nextTop = Math.max(36, Math.min(window.innerHeight - rect.height - 52, rect.top + Math.sin(angle) * distance));
-  dom.crtShell.style.transition = "left 8s linear, top 8s linear";
+  const nextTop = Math.max(36, Math.min(window.innerHeight - rect.height - 60, rect.top + Math.sin(angle) * distance));
+  dom.crtShell.style.transition = "left 12s linear, top 12s linear";
   dom.crtShell.style.left = `${Math.round(nextLeft)}px`;
   dom.crtShell.style.top = `${Math.round(nextTop)}px`;
 }
@@ -3100,22 +3794,25 @@ function showNextNarrativeText() {
   hideNarrativeText();
   const chapter = state.chapter;
   const texts = NARRATIVE_TEXTS[chapter] || [];
-  const targets = narrativeTargetsForChapter(chapter);
-  if (!texts.length || !targets.length) return;
-  const next = nextTextIndex(chapter, Math.min(texts.length, targets.length));
-  const target = targets[next % targets.length];
-  const content = target.classList.contains("ch03-box-c") ? texts[2] : texts[next % texts.length];
+  if (!texts.length) return;
+  const next = nextTextIndex(chapter, texts.length);
+  const target = narrativeTargetForText(chapter, next);
+  if (!target) return;
+  const content = texts[next % texts.length];
   const body = target.querySelector("[data-text-body]") || target.querySelector(":scope > div:last-child") || target;
   body.textContent = content;
+  positionNarrativeTarget(target, chapter, next);
   target.classList.remove("is-fading");
-  target.classList.add("is-visible");
+  target.classList.add("is-visible", "is-entering");
+  requestAnimationFrame(() => target.classList.remove("is-entering"));
   state.textTimer = setTimeout(() => {
     target.classList.add("is-fading");
     state.textFadeTimer = setTimeout(() => {
       target.classList.remove("is-visible", "is-fading");
       body.textContent = "";
-    }, 2000);
-  }, 15000);
+      if (state.chapter === chapter) showNextNarrativeText();
+    }, 800);
+  }, 7000);
 }
 
 function nextTextIndex(chapter, count) {
@@ -3141,6 +3838,53 @@ function narrativeTargetsForChapter(chapter) {
   }
   if (chapter === "ch04") return [...document.querySelectorAll(".ch04-box")];
   return [];
+}
+
+function narrativeTargetForText(chapter, index) {
+  if (chapter === "ch01") return document.querySelector(".text-slot-top");
+  if (chapter === "ch02") return document.querySelector(".text-slot-top");
+  if (chapter === "ch03") {
+    if (index === 0) return document.querySelector(".ch03-box-a");
+    if (index === 1) return document.querySelector(".ch03-box-b");
+    return document.querySelector(".ch03-box-c");
+  }
+  if (chapter === "ch04") return document.querySelector(".ch04-box");
+  return null;
+}
+
+function positionNarrativeTarget(target, chapter, index) {
+  if (chapter === "ch01") {
+    Object.assign(target.style, { left: "112px", top: "78px", right: "", bottom: "", maxWidth: "420px" });
+    return;
+  }
+  if (chapter === "ch02") {
+    const videoRect = dom.crtShell?.getBoundingClientRect();
+    let left = 120;
+    let top = 80;
+    for (let attempt = 0; attempt < 12; attempt += 1) {
+      left = randomInt(120, Math.max(140, window.innerWidth - 540));
+      top = randomInt(80, Math.max(100, window.innerHeight - 280));
+      if (!videoRect || left + 460 < videoRect.left || left > videoRect.right || top + 150 < videoRect.top || top > videoRect.bottom) break;
+    }
+    Object.assign(target.style, { left: `${left}px`, top: `${top}px`, right: "", bottom: "", maxWidth: "460px" });
+    return;
+  }
+  if (chapter === "ch04") {
+    Object.assign(target.style, { left: "50%", right: "", bottom: "86px", top: "", transform: "translateX(-50%)", maxWidth: "760px" });
+    return;
+  }
+  if (chapter === "ch03") {
+    const altitudes = [1723, 3000, 3752, 3500];
+    const y = altitudeToViewportY(altitudes[index] || altitudes[0]);
+    Object.assign(target.style, { left: "100px", top: `${Math.round(y)}px`, right: "", bottom: "", transform: "", maxWidth: "200px" });
+  }
+}
+
+function altitudeToViewportY(altitude) {
+  const top = 24;
+  const height = Math.max(420, window.innerHeight - 84);
+  const ratio = Math.max(0, Math.min(1, (Number(altitude) - 1400) / (4000 - 1400)));
+  return top + height - 40 - ratio * (height - 80);
 }
 
 function clearNarrativeTimers() {
@@ -3185,17 +3929,18 @@ function triggerNyeInterrupt() {
 
 function enterInterrupt() {
   if (state.chapter === "int") return;
-  const ch04Spec = CHAPTERS.ch04;
-  const fromCh04 = state.chapter === "ch04" && ch04Spec.clips.includes(state.currentClip);
+  const returnChapter = CHAPTERS[state.chapter] && state.chapter !== "ch00" ? state.chapter : "ch04";
+  const returnSpec = CHAPTERS[returnChapter];
+  const hasCurrentClip = returnSpec?.clips.includes(state.currentClip);
   state.interruptReturn = {
-    chapter: "ch04",
-    clip: fromCh04 ? state.currentClip : ch04Spec.clips[0],
-    clipIndex: fromCh04 ? state.clipIndex : 0,
-    time: fromCh04 ? dom.video.currentTime || 0 : 0,
+    chapter: returnChapter,
+    clip: hasCurrentClip ? state.currentClip : returnSpec?.clips[0],
+    clipIndex: hasCurrentClip ? state.clipIndex : 0,
+    time: hasCurrentClip ? dom.video.currentTime || 0 : 0,
   };
   state.previousChapter = state.interruptReturn.chapter;
   state.chapter = "int";
-  sessionStorage.setItem("last_chapter", "ch04");
+  sessionStorage.setItem("last_chapter", returnChapter);
   const clip = state.signal.IMG_8863;
   setPalette(CHAPTERS.int);
   updateMapWindow();
@@ -3545,46 +4290,126 @@ function renderAltitudeRoute() {
   dom.scale.innerHTML = "";
   if (state.chapter !== "ch03") return;
 
-  const clips = CHAPTERS.ch03.clips.map((key) => state.signal[key]).filter(Boolean);
-  const points = clips.map((clip, index) => {
-    const x = 42 + (index / Math.max(1, clips.length - 1)) * 236;
-    const y = 640 - (clip.altitude_normalized || 0) * 580;
-    return { clip, x, y };
+  // Sequential altitude profile: X = clip index (0…N-1), Y = altitude
+  const clips = CHAPTERS.ch03.clips
+    .map((key) => state.signal[key])
+    .filter(Boolean);
+
+  const SVG_W = 320;
+  const SVG_H = Math.max(500, window.innerHeight - 100);
+  const PAD_L = 52;
+  const PAD_R = 16;
+  const PAD_T = 36;
+  const PAD_B = 44;
+  const chartW = SVG_W - PAD_L - PAD_R;
+  const chartH = SVG_H - PAD_T - PAD_B;
+
+  dom.route.setAttribute("viewBox", `0 0 ${SVG_W} ${SVG_H}`);
+
+  const ns = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs = {}) => {
+    const node = document.createElementNS(ns, tag);
+    Object.entries(attrs).forEach(([k, v]) => node.setAttribute(k, v));
+    return node;
+  };
+
+  const MIN_ALT = 1400;
+  const MAX_ALT = 4100;
+  const mapX = (i) => PAD_L + (clips.length < 2 ? chartW / 2 : (i / (clips.length - 1)) * chartW);
+  const mapY = (alt) => PAD_T + chartH - ((alt - MIN_ALT) / (MAX_ALT - MIN_ALT)) * chartH;
+
+  // Chart title
+  const title = el("text", { x: PAD_L, y: 18, class: "route-title" });
+  title.textContent = "ALTITUDE PROFILE / CH03";
+  dom.route.appendChild(title);
+
+  // Horizontal grid lines + Y-axis labels
+  [1500, 2000, 2500, 3000, 3500, 4000].forEach((alt) => {
+    const y = mapY(alt);
+    dom.route.appendChild(el("line", {
+      x1: PAD_L, y1: y, x2: PAD_L + chartW, y2: y,
+      class: "route-grid-line"
+    }));
+    const lbl = el("text", { x: PAD_L - 6, y: y + 4, class: "route-axis-label", "text-anchor": "end" });
+    lbl.textContent = `${alt}`;
+    dom.route.appendChild(lbl);
   });
 
-  const polyline = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
-  polyline.setAttribute("class", "route-line");
-  polyline.setAttribute("points", points.map((point) => `${point.x},${point.y}`).join(" "));
-  dom.route.appendChild(polyline);
+  // Y-axis unit label
+  const unitLbl = el("text", {
+    x: 10, y: PAD_T + chartH / 2, class: "route-axis-label",
+    "text-anchor": "middle",
+    transform: `rotate(-90, 10, ${PAD_T + chartH / 2})`
+  });
+  unitLbl.textContent = "ALT (m)";
+  dom.route.appendChild(unitLbl);
 
-  points.forEach((point) => {
-    const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    dot.setAttribute("class", `route-dot ${point.clip.clip === state.currentClip ? "is-current" : ""}`);
-    dot.setAttribute("data-clip", point.clip.clip);
-    dot.setAttribute("cx", point.x);
-    dot.setAttribute("cy", point.y);
-    dot.setAttribute("r", "4");
+  // Y axis line
+  dom.route.appendChild(el("line", {
+    x1: PAD_L, y1: PAD_T, x2: PAD_L, y2: PAD_T + chartH,
+    class: "route-axis-line"
+  }));
+
+  // X axis line
+  dom.route.appendChild(el("line", {
+    x1: PAD_L, y1: PAD_T + chartH, x2: PAD_L + chartW, y2: PAD_T + chartH,
+    class: "route-axis-line"
+  }));
+
+  if (clips.length === 0) return;
+
+  const pts = clips.map((clip, i) => ({
+    clip,
+    x: mapX(i),
+    y: mapY(Number(clip.altitude_m || clip.altitude || MIN_ALT)),
+    i,
+  }));
+
+  // Filled area under curve
+  const areaPoints =
+    `${PAD_L},${PAD_T + chartH} ` +
+    pts.map((p) => `${p.x},${p.y}`).join(" ") +
+    ` ${PAD_L + chartW},${PAD_T + chartH}`;
+  dom.route.appendChild(el("polygon", { points: areaPoints, class: "route-area" }));
+
+  // Polyline
+  dom.route.appendChild(el("polyline", {
+    points: pts.map((p) => `${p.x},${p.y}`).join(" "),
+    class: "route-line"
+  }));
+
+  // Dots + time labels (alternating above/below)
+  pts.forEach((p, i) => {
+    const isCurrent = p.clip.clip === state.currentClip;
+    const dot = el("circle", {
+      cx: p.x, cy: p.y,
+      r: isCurrent ? "7" : "4",
+      class: `route-dot${isCurrent ? " is-current" : ""}`,
+      "data-clip": p.clip.clip,
+    });
     dom.route.appendChild(dot);
 
-    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    label.setAttribute("class", "route-label");
-    label.setAttribute("x", point.x + 7);
-    label.setAttribute("y", point.y + 3);
-    label.textContent = `${point.clip.clip} / ${point.clip.local_time.slice(11, 16)}`;
-    dom.route.appendChild(label);
-  });
-
-  ["3752m", "3000m", "2200m", "1723m"].forEach((label) => {
-    const div = document.createElement("div");
-    div.textContent = `| ${label}`;
-    dom.scale.appendChild(div);
+    // Show time label every other point to avoid clutter
+    if (i % 2 === 0 || isCurrent || clips.length <= 6) {
+      const timeStr = clipDisplayLocalTime(p.clip)?.slice(11, 16) || "--:--";
+      const above = i % 2 === 0;
+      const lbl = el("text", {
+        x: p.x, y: p.y + (above ? -10 : 16),
+        class: `route-label${isCurrent ? " route-label-current" : ""}`,
+        "text-anchor": "middle",
+      });
+      lbl.textContent = timeStr;
+      dom.route.appendChild(lbl);
+    }
   });
 }
 
 function updateRouteCurrent() {
   if (state.chapter !== "ch03") return;
   [...dom.route.querySelectorAll(".route-dot")].forEach((dot) => {
-    dot.classList.toggle("is-current", dot.dataset.clip === state.currentClip);
+    const current = dot.dataset.clip === state.currentClip;
+    dot.classList.toggle("is-current", current);
+    dot.setAttribute("r", current ? "6" : "5");
   });
 }
 
