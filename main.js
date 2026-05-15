@@ -130,6 +130,21 @@ const CH00_LOCATION_SCAN = [
   { label: "Melbourne / after road", lat: -37.8123, lon: 144.9734, note: "extension" },
 ];
 
+const CH00_TERMS = [
+  "shadow",
+  "window",
+  "coordinate",
+  "winter",
+  "no signal",
+  "hometown",
+  "low altitude",
+  "salary / ticket",
+  "ascent",
+  "river",
+  "afterimage",
+  "everything will be alright",
+];
+
 const SHUTDOWN_TEXT = "in_praise_of_time  —  session ended";
 const SHUTDOWN_SUBTEXT = "2024 – 2026";
 const SHUTDOWN_FINAL = "daipan.art  /  daipan.ink";
@@ -765,6 +780,11 @@ const dom = {
   ch00BootLog: document.getElementById("ch00-boot-log"),
   ch00Monologue: document.getElementById("ch00-monologue"),
   ch00LocationPanel: document.getElementById("ch00-location-panel"),
+  ch00InstrumentPanel: document.getElementById("ch00-instrument-panel"),
+  ch00LoadFill: document.getElementById("ch00-load-fill"),
+  ch00LoadPercent: document.getElementById("ch00-load-percent"),
+  ch00Axis: document.getElementById("ch00-axis"),
+  ch00Term: document.getElementById("ch00-term"),
   shutdownScreen: document.getElementById("shutdown-screen"),
   shutdownText: document.getElementById("shutdown-text"),
   shutdownSubtext: document.getElementById("shutdown-subtext"),
@@ -5943,6 +5963,7 @@ function runLocating() {
   dom.latScan.textContent = "00.0000";
   dom.lonScan.textContent = "000.0000";
   dom.signalAcquired?.classList.remove("is-active");
+  startCh00Instruments();
   startCh00Monologue(token);
   startCh00LocationTicker(token);
   state.ch00Timers.push(setTimeout(() => {
@@ -5952,6 +5973,7 @@ function runLocating() {
   function step(now) {
     if (state.chapter !== "ch00" || state.ch00RunToken !== token) return;
     const t = Math.max(0, Math.min(1, (now - started) / duration));
+    updateCh00Instruments(t);
     if (t < coordinateStart) {
       requestAnimationFrame(step);
       return;
@@ -5978,6 +6000,22 @@ function runLocating() {
   }
 
   requestAnimationFrame(step);
+}
+
+function startCh00Instruments() {
+  dom.chapter00?.classList.add("is-instrument-active");
+  updateCh00Instruments(0);
+}
+
+function updateCh00Instruments(progress) {
+  const pct = Math.max(0, Math.min(100, Math.round(progress * 100)));
+  if (dom.ch00LoadFill) dom.ch00LoadFill.style.width = `${pct}%`;
+  if (dom.ch00LoadPercent) dom.ch00LoadPercent.textContent = `${String(pct).padStart(2, "0")}%`;
+  if (dom.ch00Axis) dom.ch00Axis.style.setProperty("--axis-shift", `${-Math.round(progress * 120)}px`);
+  if (dom.ch00Term) {
+    const index = Math.min(CH00_TERMS.length - 1, Math.floor(progress * CH00_TERMS.length));
+    dom.ch00Term.textContent = CH00_TERMS[index];
+  }
 }
 
 function startCh00Monologue(token) {
@@ -6052,7 +6090,8 @@ function stopCh00VisualSequence() {
   clearInterval(state.ch00LocationTimer);
   state.ch00LocationTimer = null;
   stopCh00BootLog();
-  dom.chapter00?.classList.remove("is-scanning", "is-coordinate-active");
+  dom.chapter00?.classList.remove("is-scanning", "is-coordinate-active", "is-instrument-active");
+  updateCh00Instruments(0);
   dom.ch00Monologue?.classList.remove("is-visible");
   if (dom.ch00Monologue) dom.ch00Monologue.textContent = "";
   if (dom.ch00LocationPanel) {
