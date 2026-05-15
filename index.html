@@ -50,20 +50,24 @@
   </div>
 
   <header id="system-chrome" aria-label="System chrome">
-    <div class="chrome-line chrome-top-left">■  IN_PRAISE_OF_TIME</div>
-    <div class="chrome-line chrome-top-right" id="chapter-label">CHAPTER 00 / LOCATING...</div>
+    <div class="mac-menubar" aria-label="System menu bar">
+      <div class="mac-menu-left">
+        <div class="chrome-line chrome-top-left">■  IN_PRAISE_OF_TIME</div>
+      </div>
+      <div class="chrome-line chrome-top-right" id="chapter-label">CHAPTER 00 / LOCATING...</div>
+      <div class="mac-menu-right">
+        <div class="chrome-line chrome-bottom-right" id="coordinates">--.----, ---.----</div>
+        <div class="chrome-line chrome-bottom-left" id="clock">Fri May 15 00:00</div>
+      </div>
+    </div>
     <nav class="chapter-nav" aria-label="Chapter navigation">
       <button data-chapter="ch00">CHAPTER 00</button>
       <button data-chapter="ch01">CHAPTER 01</button>
       <button data-chapter="ch02">CHAPTER 02</button>
       <button data-chapter="ch03">CHAPTER 03</button>
       <button data-chapter="ch04">CHAPTER 04</button>
-      <div class="nav-separator">──────────</div>
-      <button class="nav-monitor-btn" id="monitorToggle" type="button">MONITOR</button>
     </nav>
     <div class="system-readout" id="system-readout" aria-label="System readout"></div>
-    <div class="chrome-line chrome-bottom-left" id="clock">00:00:00</div>
-    <div class="chrome-line chrome-bottom-right" id="coordinates">--.----, ---.----</div>
   </header>
 
   <main id="app">
@@ -148,7 +152,7 @@
       </div>
 
       <div id="chapter-03-grid" class="chapter-03-grid" aria-hidden="true"></div>
-      <svg id="altitude-route" class="altitude-route" viewBox="0 0 320 680" preserveAspectRatio="none" aria-label="Altitude route"></svg>
+      <svg id="altitude-route" class="altitude-route" viewBox="0 0 320 680" preserveAspectRatio="xMidYMid meet" aria-label="Altitude route"></svg>
       <div id="altitude-scale" class="altitude-scale" aria-hidden="true"></div>
 
       <div id="brisbane-sun" aria-hidden="true"></div>
