@@ -234,9 +234,9 @@ body.show-subdermal-text #subdermal-text { opacity: var(--subdermal-opacity); }
   place-items: center;
   padding: 0;
   background: #000;
-  color: #F5E8C8;
-  font: 600 clamp(18px, 2.4vw, 34px) / 1.2 var(--mono);
-  letter-spacing: 0.18em;
+  color: #7ABCA0;
+  font: var(--fs-ui) / 1.6 var(--mono);
+  letter-spacing: 0;
   text-transform: lowercase;
   opacity: 0;
 }

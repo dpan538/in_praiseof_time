@@ -1,5 +1,19 @@
 const MANIFEST_URL = "signal_data/MANIFEST.json";
 const MEDIA_ARCHIVE_URL = "signal_data/media_archive_index.json";
+const GITHUB_MEDIA_BASE_URL = "https://media.githubusercontent.com/media/dpan538/in_praiseof_time/main/";
+const ROOT_ARCHIVE_MEDIA_RE = /\.(mov|mp4|m4v|webm|jpg|jpeg|png|gif|webp|heic)$/i;
+
+function isProductionArchiveHost() {
+  return /(^|\.)inpraiseoftime\.site$/.test(location.hostname) || /(^|\.)vercel\.app$/.test(location.hostname);
+}
+
+function archiveMediaSrc(file) {
+  if (!file || typeof file !== "string") return file;
+  if (/^(https?:|data:|blob:)/i.test(file)) return file;
+  if (!isProductionArchiveHost()) return file;
+  if (file.includes("/") || !ROOT_ARCHIVE_MEDIA_RE.test(file)) return file;
+  return `${GITHUB_MEDIA_BASE_URL}${encodeURIComponent(file)}`;
+}
 
 function safeSessionArray(key) {
   try {
@@ -5917,13 +5931,14 @@ function buildVideoObjectWindow(title, clipKey, extraHtml, autoCloseMs = null) {
     return createDesktopWindow(title, fallback);
   }
   const body = [
-    `<div class="desktop-crt"><video playsinline webkit-playsinline preload="metadata" src="${clip.filename}"></video></div>`,
+    `<div class="desktop-crt"><video playsinline webkit-playsinline preload="metadata"></video></div>`,
     `<div class="desktop-signal">${extraHtml}</div>`,
   ].join("");
   const win = createDesktopWindow(title, body);
   const video = win.querySelector("video");
   video.volume = state.settings.audio.video;
   video.loop = false;
+  video.src = archiveMediaSrc(clip.filename);
   setTimeout(() => video.play().catch(() => {}), 0);
   if (autoCloseMs) {
     setTimeout(() => {
@@ -6930,7 +6945,7 @@ function setPhotoMedia(item) {
     state.photoPositionIndex += 1;
     applyPhotoLayout(item);
     dom.photo.alt = item.label || item.file || "archive photo";
-    dom.photo.src = item.file;
+    dom.photo.src = archiveMediaSrc(item.file);
     requestAnimationFrame(() => dom.crtFrame.classList.remove("is-photo-loading"));
     updateMonitorForPhoto(item);
     updateRouteCurrent();
@@ -6948,7 +6963,7 @@ function setPhotoMedia(item) {
     state.photoPositionIndex += 1;
     applyPhotoLayout(item);
     dom.photo.alt = item.label || item.file || "archive photo";
-    dom.photo.src = item.file;
+    dom.photo.src = archiveMediaSrc(item.file);
     dom.crtFrame.classList.remove("is-photo-loading");
     updateMonitorForPhoto(item);
     updateRouteCurrent();
@@ -6958,7 +6973,7 @@ function setPhotoMedia(item) {
     updateSystemReadout();
     state.photoTimer = setTimeout(() => advanceClip(), photoDurationForChapter(state.chapter));
   };
-  loader.src = item.file;
+  loader.src = archiveMediaSrc(item.file);
 }
 
 function clearPhotoMedia() {
@@ -7102,7 +7117,7 @@ function setClip(clipKey) {
   dom.video.loop = false;
   dom.video.muted = state.mutedForAutoplay;
   dom.video.volume = state.settings.audio.video;
-  dom.video.src = clip.filename;
+  dom.video.src = archiveMediaSrc(clip.filename);
   dom.video.load();
   dom.video.play().catch(() => {});
 
@@ -7716,7 +7731,7 @@ function enterInterrupt() {
   dom.interruptStage.classList.add("is-active");
   dom.video.pause();
   dom.interruptVideo.volume = state.settings.audio.video;
-  dom.interruptVideo.src = clip.filename;
+  dom.interruptVideo.src = archiveMediaSrc(clip.filename);
   dom.interruptVideo.load();
   hardCut(() => dom.interruptVideo.play().catch(() => {}));
   startInterruptText();
