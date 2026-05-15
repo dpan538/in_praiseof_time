@@ -90,6 +90,7 @@ const BOOT_SEQUENCE_BASE = [
 ];
 
 const CH00_LOCATING_DURATION = 28000;
+const CH00_COORDINATE_WINDOW = 6200;
 const CH00_MONOLOGUE_LINES = [
   "这已经是我第四次开始回顾这些照片。",
   "我不确定是在整理文件，还是在确认时间真的经过了。",
@@ -5935,9 +5936,12 @@ function runLocating() {
   const token = ++state.ch00RunToken;
   const started = performance.now();
   const duration = CH00_LOCATING_DURATION;
+  const coordinateStart = 1 - CH00_COORDINATE_WINDOW / duration;
   const targetLat = 40.7194;
   const targetLon = -73.9896;
-  dom.chapter00?.classList.add("is-scanning");
+  dom.chapter00?.classList.remove("is-scanning", "is-coordinate-active");
+  dom.latScan.textContent = "00.0000";
+  dom.lonScan.textContent = "000.0000";
   dom.signalAcquired?.classList.remove("is-active");
   startCh00Monologue(token);
   startCh00LocationTicker(token);
@@ -5947,13 +5951,20 @@ function runLocating() {
 
   function step(now) {
     if (state.chapter !== "ch00" || state.ch00RunToken !== token) return;
-    const t = Math.min(1, (now - started) / duration);
-    const activePoint = CH00_LOCATION_SCAN[Math.min(CH00_LOCATION_SCAN.length - 1, Math.floor(t * CH00_LOCATION_SCAN.length))];
-    const jitter = (1 - t) * (t < 0.36 ? 70 : 18);
-    const anchorLat = t < 0.78 ? activePoint.lat : targetLat;
-    const anchorLon = t < 0.78 ? activePoint.lon : targetLon;
-    const lat = t < 0.94 ? anchorLat + (Math.random() - 0.5) * jitter : targetLat;
-    const lon = t < 0.94 ? anchorLon + (Math.random() - 0.5) * jitter : targetLon;
+    const t = Math.max(0, Math.min(1, (now - started) / duration));
+    if (t < coordinateStart) {
+      requestAnimationFrame(step);
+      return;
+    }
+    dom.chapter00?.classList.add("is-coordinate-active", "is-scanning");
+    const coordT = Math.max(0, Math.min(1, (t - coordinateStart) / (1 - coordinateStart)));
+    const activeIndex = Math.max(0, Math.min(CH00_LOCATION_SCAN.length - 1, Math.floor(t * CH00_LOCATION_SCAN.length)));
+    const activePoint = CH00_LOCATION_SCAN[activeIndex] || { lat: targetLat, lon: targetLon };
+    const jitter = (1 - coordT) * 8;
+    const anchorLat = coordT < 0.72 ? activePoint.lat : targetLat;
+    const anchorLon = coordT < 0.72 ? activePoint.lon : targetLon;
+    const lat = coordT < 0.94 ? anchorLat + (Math.random() - 0.5) * jitter : targetLat;
+    const lon = coordT < 0.94 ? anchorLon + (Math.random() - 0.5) * jitter : targetLon;
     dom.latScan.textContent = lat.toFixed(4);
     dom.lonScan.textContent = lon.toFixed(4);
 
@@ -6041,7 +6052,7 @@ function stopCh00VisualSequence() {
   clearInterval(state.ch00LocationTimer);
   state.ch00LocationTimer = null;
   stopCh00BootLog();
-  dom.chapter00?.classList.remove("is-scanning");
+  dom.chapter00?.classList.remove("is-scanning", "is-coordinate-active");
   dom.ch00Monologue?.classList.remove("is-visible");
   if (dom.ch00Monologue) dom.ch00Monologue.textContent = "";
   if (dom.ch00LocationPanel) {
