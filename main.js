@@ -1,18 +1,17 @@
 const MANIFEST_URL = "signal_data/MANIFEST.json";
 const MEDIA_ARCHIVE_URL = "signal_data/media_archive_index.json";
-const GITHUB_MEDIA_BASE_URL = "https://media.githubusercontent.com/media/dpan538/in_praiseof_time/main/";
-const ROOT_ARCHIVE_MEDIA_RE = /\.(mov|mp4|m4v|webm|jpg|jpeg|png|gif|webp|heic)$/i;
-
-function isProductionArchiveHost() {
-  return /(^|\.)inpraiseoftime\.site$/.test(location.hostname) || /(^|\.)vercel\.app$/.test(location.hostname);
-}
+const ARCHIVE_VIDEO_RE = /\.(mov|mp4|m4v|webm)$/i;
 
 function archiveMediaSrc(file) {
   if (!file || typeof file !== "string") return file;
   if (/^(https?:|data:|blob:)/i.test(file)) return file;
-  if (!isProductionArchiveHost()) return file;
-  if (file.includes("/") || !ROOT_ARCHIVE_MEDIA_RE.test(file)) return file;
-  return `${GITHUB_MEDIA_BASE_URL}${encodeURIComponent(file)}`;
+  if (!file.includes("/") && ARCHIVE_VIDEO_RE.test(file)) return webMediaProxySrc(file);
+  return file;
+}
+
+function webMediaProxySrc(file) {
+  const basename = String(file).split("/").pop() || file;
+  return `web-media/${basename.replace(/\.[^.]+$/, ".mp4")}`;
 }
 
 function safeSessionArray(key) {
@@ -1254,6 +1253,10 @@ function buildBootFileIndex() {
     seen.add(normalized);
     entries.push({ file: normalized, group, detail });
   };
+  const addMedia = (file, detail = "") => {
+    add(file, "media", detail);
+    if (file && ARCHIVE_VIDEO_RE.test(file)) add(webMediaProxySrc(file), "media", `${detail || "video"} / web proxy`);
+  };
 
   [
     "index.html",
@@ -1275,21 +1278,21 @@ function buildBootFileIndex() {
   ].forEach((file) => add(file, "data"));
 
   Object.values(state.signal || {}).forEach((clip) => {
-    add(clip?.filename, "media", clip?.clip || "");
+    addMedia(clip?.filename, clip?.clip || "");
   });
 
   Object.values(EXTRA_SIGNAL_ENTRIES || {}).forEach((clip) => {
-    add(clip?.filename, "media", clip?.clip || "");
+    addMedia(clip?.filename, clip?.clip || "");
   });
 
   Object.values(CHAPTER_MEDIA_ARCHIVES || {}).flat().forEach((item) => {
-    add(item.file || item.filename, "media", item.label || item.key || "");
+    addMedia(item.file || item.filename, item.label || item.key || "");
   });
 
   Object.values(CHAPTER_MEDIA_SEQUENCES || {}).flat().forEach((item) => {
-    if (item.file) add(item.file, "media", item.label || item.key || "");
+    if (item.file) addMedia(item.file, item.label || item.key || "");
     if (item.key && state.signal?.[item.key]?.filename) {
-      add(state.signal[item.key].filename, "media", item.key);
+      addMedia(state.signal[item.key].filename, item.key);
     }
   });
 
@@ -1297,7 +1300,7 @@ function buildBootFileIndex() {
     ...QINGHAI_ALTITUDE_POINTS,
     ...TAI_ALTITUDE_POINTS,
   ].forEach((point) => {
-    if (point.clip && state.signal?.[point.clip]?.filename) add(state.signal[point.clip].filename, "media", point.place);
+    if (point.clip && state.signal?.[point.clip]?.filename) addMedia(state.signal[point.clip].filename, point.place);
   });
 
   Object.values(CH01_DOCUMENTS || {}).forEach((doc) => add(doc.filename, "documents", doc.title || doc.type));
