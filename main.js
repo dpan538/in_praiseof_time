@@ -686,6 +686,7 @@ const state = {
   monologueToken: 0,
   ch00BootLogTimer: null,
   ch00LocationTimer: null,
+  ch00CenterVizTimer: null,
   ch00Timers: [],
   ch00RunToken: 0,
   ch00TextFileStats: new Map(),
@@ -780,6 +781,9 @@ const dom = {
   ch00BootLog: document.getElementById("ch00-boot-log"),
   ch00Monologue: document.getElementById("ch00-monologue"),
   ch00LocationPanel: document.getElementById("ch00-location-panel"),
+  ch00CenterViz: document.getElementById("ch00-center-viz"),
+  ch00VizTitle: document.getElementById("ch00-viz-title"),
+  ch00VizPie: document.getElementById("ch00-viz-pie"),
   ch00InstrumentPanel: document.getElementById("ch00-instrument-panel"),
   ch00LoadFill: document.getElementById("ch00-load-fill"),
   ch00LoadPercent: document.getElementById("ch00-load-percent"),
@@ -5964,6 +5968,7 @@ function runLocating() {
   dom.lonScan.textContent = "000.0000";
   dom.signalAcquired?.classList.remove("is-active");
   startCh00Instruments();
+  startCh00CenterViz(token);
   startCh00Monologue(token);
   startCh00LocationTicker(token);
   state.ch00Timers.push(setTimeout(() => {
@@ -6005,6 +6010,44 @@ function runLocating() {
 function startCh00Instruments() {
   dom.chapter00?.classList.add("is-instrument-active");
   updateCh00Instruments(0);
+}
+
+function startCh00CenterViz(token) {
+  if (!dom.ch00CenterViz) return;
+  const modes = [
+    { mode: "bars", title: "FILE DENSITY" },
+    { mode: "pie", title: "SIGNAL SHARE" },
+    { mode: "knot", title: "ROUTE ENTANGLEMENT" },
+    { mode: "bars", title: "TEXT WEIGHT" },
+    { mode: "pie", title: "TIME ALLOCATION" },
+    { mode: "knot", title: "MEMORY CROSSING" },
+  ];
+  let index = 0;
+  const render = () => {
+    if (state.chapter !== "ch00" || state.ch00RunToken !== token) return;
+    const spec = modes[index % modes.length];
+    dom.ch00CenterViz.dataset.mode = spec.mode;
+    if (dom.ch00VizTitle) dom.ch00VizTitle.textContent = spec.title;
+    updateCh00CenterVizValues(index);
+    dom.chapter00?.classList.add("is-center-viz-active");
+    index += 1;
+  };
+  render();
+  state.ch00CenterVizTimer = setInterval(render, 3300);
+}
+
+function updateCh00CenterVizValues(index) {
+  if (dom.ch00VizPie) {
+    const a = 70 + ((index * 37) % 110);
+    const b = a + 80 + ((index * 23) % 90);
+    dom.ch00VizPie.style.setProperty("--pie-a", `${a}deg`);
+    dom.ch00VizPie.style.setProperty("--pie-b", `${Math.min(310, b)}deg`);
+  }
+  if (!dom.ch00CenterViz) return;
+  dom.ch00CenterViz.querySelectorAll(".ch00-viz-bars span").forEach((bar, barIndex) => {
+    const height = 28 + ((index * 17 + barIndex * 19) % 62);
+    bar.style.setProperty("--h", `${height}%`);
+  });
 }
 
 function updateCh00Instruments(progress) {
@@ -6089,8 +6132,10 @@ function stopCh00VisualSequence() {
   state.ch00Timers = [];
   clearInterval(state.ch00LocationTimer);
   state.ch00LocationTimer = null;
+  clearInterval(state.ch00CenterVizTimer);
+  state.ch00CenterVizTimer = null;
   stopCh00BootLog();
-  dom.chapter00?.classList.remove("is-scanning", "is-coordinate-active", "is-instrument-active");
+  dom.chapter00?.classList.remove("is-scanning", "is-coordinate-active", "is-instrument-active", "is-center-viz-active");
   updateCh00Instruments(0);
   dom.ch00Monologue?.classList.remove("is-visible");
   if (dom.ch00Monologue) dom.ch00Monologue.textContent = "";

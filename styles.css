@@ -601,6 +601,158 @@ body.show-subdermal-text #subdermal-text { opacity: var(--subdermal-opacity); }
   letter-spacing: 0.12em;
 }
 
+.ch00-center-viz {
+  position: absolute;
+  left: 43%;
+  top: 41%;
+  z-index: 22;
+  width: min(390px, 28vw);
+  height: 240px;
+  color: rgba(240,232,212,0.42);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.98);
+  transition: opacity 0.55s linear, transform 0.55s linear;
+}
+
+.chapter-00.is-center-viz-active .ch00-center-viz {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.ch00-viz-title {
+  margin-bottom: 12px;
+  color: rgba(255,230,109,0.58);
+  font: 700 var(--fs-small) / 1.2 var(--mono);
+  letter-spacing: 0.18em;
+}
+
+.ch00-viz-bars,
+.ch00-viz-pie,
+.ch00-viz-knot {
+  display: none;
+}
+
+.ch00-center-viz[data-mode="bars"] .ch00-viz-bars,
+.ch00-center-viz[data-mode="pie"] .ch00-viz-pie,
+.ch00-center-viz[data-mode="knot"] .ch00-viz-knot {
+  display: block;
+}
+
+.ch00-viz-bars {
+  height: 168px;
+  align-items: end;
+  gap: 11px;
+  padding: 14px 12px 0;
+  border-left: 1px solid rgba(240,232,212,0.18);
+  border-bottom: 1px solid rgba(240,232,212,0.22);
+  background:
+    linear-gradient(rgba(240,232,212,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240,232,212,0.055) 1px, transparent 1px);
+  background-size: 100% 32px, 32px 100%;
+}
+
+.ch00-center-viz[data-mode="bars"] .ch00-viz-bars {
+  display: flex;
+}
+
+.ch00-viz-bars span {
+  flex: 1;
+  height: var(--h);
+  min-height: 18px;
+  background:
+    repeating-linear-gradient(0deg, rgba(10,10,10,0.22) 0 5px, transparent 5px 9px),
+    rgba(255,230,109,0.44);
+  transform-origin: bottom;
+  animation: ch00-bar-pulse 2.6s steps(5, end) infinite;
+}
+
+.ch00-viz-bars span:nth-child(2n) { background-color: rgba(240,232,212,0.32); animation-delay: 0.25s; }
+.ch00-viz-bars span:nth-child(3n) { background-color: rgba(255,45,141,0.22); animation-delay: 0.5s; }
+
+@keyframes ch00-bar-pulse {
+  0%, 100% { transform: scaleY(0.84); opacity: 0.46; }
+  45% { transform: scaleY(1); opacity: 0.78; }
+}
+
+.ch00-viz-pie {
+  position: relative;
+  width: 178px;
+  height: 178px;
+  margin: 12px auto 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    rgba(255,230,109,0.60) var(--pie-a, 0deg),
+    rgba(240,232,212,0.28) var(--pie-a, 0deg) var(--pie-b, 180deg),
+    rgba(255,45,141,0.24) var(--pie-b, 180deg) 276deg,
+    rgba(240,232,212,0.12) 276deg 360deg
+  );
+  box-shadow: inset 0 0 0 1px rgba(240,232,212,0.18);
+  animation: ch00-pie-turn 5.4s linear infinite;
+}
+
+.ch00-viz-pie::before {
+  content: "";
+  position: absolute;
+  inset: 34px;
+  border-radius: 50%;
+  background: var(--desk-bg);
+  box-shadow: inset 0 0 0 1px rgba(240,232,212,0.20);
+}
+
+.ch00-viz-pie span {
+  position: absolute;
+  left: 50%;
+  top: -10px;
+  width: 1px;
+  height: 198px;
+  background: rgba(240,232,212,0.24);
+  transform-origin: 50% 50%;
+  animation: ch00-pie-hand 3.1s steps(10, end) infinite;
+}
+
+@keyframes ch00-pie-turn {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ch00-pie-hand {
+  to { transform: rotate(-360deg); }
+}
+
+.ch00-viz-knot {
+  width: 100%;
+  height: 190px;
+  margin-top: 4px;
+  overflow: visible;
+}
+
+.ch00-viz-knot path {
+  fill: none;
+  stroke-width: 1.6;
+  stroke: rgba(255,230,109,0.42);
+  stroke-dasharray: 220 80;
+  animation: ch00-knot-flow 4.4s linear infinite;
+}
+
+.ch00-viz-knot path:nth-child(2) {
+  stroke: rgba(240,232,212,0.30);
+  animation-delay: 0.4s;
+}
+
+.ch00-viz-knot path:nth-child(3) {
+  stroke: rgba(255,45,141,0.22);
+  animation-delay: 0.8s;
+}
+
+.ch00-viz-knot path:nth-child(4) {
+  stroke: rgba(240,232,212,0.18);
+  animation-delay: 1.2s;
+}
+
+@keyframes ch00-knot-flow {
+  to { stroke-dashoffset: -300; }
+}
+
 .ch00-instrument-panel {
   position: absolute;
   right: 5vw;
@@ -4519,6 +4671,18 @@ button {
     bottom: 26vh;
     width: calc(100vw - 40px);
   }
+
+  .ch00-center-viz {
+    left: 50%;
+    top: 47%;
+    width: min(330px, calc(100vw - 48px));
+    height: 190px;
+  }
+
+  .ch00-viz-bars { height: 128px; }
+  .ch00-viz-pie { width: 132px; height: 132px; }
+  .ch00-viz-pie span { height: 148px; }
+  .ch00-viz-knot { height: 142px; }
 
   .ch00-instrument-panel {
     right: 20px;
