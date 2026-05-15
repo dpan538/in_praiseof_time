@@ -503,6 +503,21 @@ body.show-subdermal-text #subdermal-text { opacity: var(--subdermal-opacity); }
   transition: color 0.4s ease;
 }
 
+.chapter-00.is-scanning .scan-value {
+  animation: ch00-coordinate-flicker 0.42s steps(2, end) infinite;
+}
+
+@keyframes ch00-coordinate-flicker {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 0 transparent;
+  }
+  50% {
+    opacity: 0.38;
+    text-shadow: 2px 0 0 rgba(255,230,109,0.18), -2px 0 0 rgba(255,45,141,0.12);
+  }
+}
+
 .ios-scroll {
   position: absolute;
   left: 50%;
@@ -524,8 +539,8 @@ body.show-subdermal-text #subdermal-text { opacity: var(--subdermal-opacity); }
   left: 14px;
   top: 14px;
   z-index: 22;
-  width: min(340px, 38vw);
-  max-height: 50vh;
+  width: min(460px, 42vw);
+  max-height: 62vh;
   margin: 0;
   overflow: hidden;
   white-space: pre;
@@ -535,10 +550,52 @@ body.show-subdermal-text #subdermal-text { opacity: var(--subdermal-opacity); }
   pointer-events: none;
 }
 
+.ch00-monologue {
+  position: absolute;
+  left: calc(var(--nav-w) + 4vw);
+  top: 12vh;
+  z-index: 24;
+  width: min(720px, 66vw);
+  min-height: 1.4em;
+  color: rgba(240, 232, 212, 0.46);
+  font: clamp(20px, 2.4vw, 36px) / 1.4 var(--mono);
+  letter-spacing: 0.02em;
+  white-space: pre-wrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.45s linear, transform 0.45s linear;
+}
+
+.ch00-monologue.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ch00-location-panel {
+  position: absolute;
+  right: 5vw;
+  top: 23vh;
+  z-index: 23;
+  width: min(340px, 30vw);
+  color: rgba(240, 232, 212, 0.42);
+  font: var(--fs-small) / 1.65 var(--mono);
+  white-space: pre-wrap;
+  pointer-events: none;
+}
+
+.ch00-location-panel.is-active::before {
+  content: "LOCATION CACHE";
+  display: block;
+  margin-bottom: 10px;
+  color: rgba(255,230,109,0.62);
+  letter-spacing: 0.12em;
+}
+
 .ch00-shadow-note {
   position: absolute;
   left: calc(var(--nav-w) + 4vw);
-  top: 58vh;
+  top: 66vh;
   z-index: 20;
   width: min(520px, 48vw);
   color: rgba(240, 232, 212, 0.38);
@@ -4266,6 +4323,32 @@ button {
   .text-slot,
   .boxed-text { max-width: 72vw; width: 72vw; }
   .text-slot-left { display: none; }
+
+  .ch00-boot-log {
+    width: calc(100vw - 28px);
+    max-height: 44vh;
+  }
+
+  .ch00-monologue {
+    left: 20px;
+    top: 15vh;
+    width: calc(100vw - 40px);
+    font-size: 22px;
+  }
+
+  .ch00-location-panel {
+    right: 20px;
+    top: auto;
+    bottom: 16vh;
+    width: calc(100vw - 40px);
+  }
+
+  .ch00-shadow-note {
+    left: 20px;
+    top: auto;
+    bottom: 24vh;
+    width: calc(100vw - 40px);
+  }
 
   .chapter-stage[data-mode="after"] .chapter-after-page {
     grid-template-columns: 1fr;

@@ -89,6 +89,46 @@ const BOOT_SEQUENCE_BASE = [
   { text: "environment.json     OK", delay: 200 },
 ];
 
+const CH00_LOCATING_DURATION = 28000;
+const CH00_MONOLOGUE_LINES = [
+  "这已经是我第四次开始回顾这些照片。",
+  "我不确定是在整理文件，还是在确认时间真的经过了。",
+  "屏幕先找到坐标。\n人慢一点，才找到自己。",
+];
+
+const CH00_PROJECT_TEXT_FILES = [
+  { path: "index.html", label: "desktop shell" },
+  { path: "styles.css", label: "visual skin" },
+  { path: "main.js", label: "runtime script" },
+  { path: "news_content.js", label: "news archive" },
+  { path: "eyu_articles.js", label: "EYU articles" },
+  { path: "beishang.txt", label: "source text" },
+  { path: "README.md", label: "project note" },
+  { path: "README.txt", label: "desktop readme" },
+  { path: "PROJECT_CONTEXT.md", label: "context note" },
+  { path: "一切都会好起来的.txt", label: "chapter after" },
+  { path: "signal_data/MANIFEST.json", label: "media manifest" },
+  { path: "signal_data/media_archive_index.json", label: "archive index" },
+  { path: "signal_data/environment.json", label: "environment index" },
+  { path: "signal_data/glitch_weights.json", label: "glitch data" },
+  { path: "signal_data/ios_timeline.json", label: "ios timeline" },
+  { path: "footage_report/index.json", label: "footage report" },
+  { path: "footage_report/location_index.json", label: "location report" },
+  { path: "footage_report/REPORT.md", label: "report markdown" },
+  { path: "footage_report/REPORT_locations.md", label: "location markdown" },
+];
+
+const CH00_LOCATION_SCAN = [
+  { label: "Manhattan / same window", lat: 40.7194, lon: -73.9896, note: "room, glass, winter" },
+  { label: "Daqing / oil plain", lat: 46.5893, lon: 125.1038, note: "north route" },
+  { label: "Arxan / border end", lat: 47.1770, lon: 119.9436, note: "signal loss" },
+  { label: "Nantong / hometown", lat: 31.9839, lon: 120.9318, note: "low water" },
+  { label: "Qilian corridor", lat: 37.8752, lon: 101.9346, note: "ascent file" },
+  { label: "Mt. Tai / night climb", lat: 36.2043, lon: 117.0843, note: "stone steps" },
+  { label: "Brisbane River", lat: -27.4431, lon: 153.0639, note: "south light" },
+  { label: "Melbourne / after road", lat: -37.8123, lon: 144.9734, note: "extension" },
+];
+
 const SHUTDOWN_TEXT = "in_praise_of_time  —  session ended";
 const SHUTDOWN_SUBTEXT = "2024 – 2026";
 const SHUTDOWN_FINAL = "daipan.art  /  daipan.ink";
@@ -629,6 +669,10 @@ const state = {
   monologueFadeTimer: null,
   monologueToken: 0,
   ch00BootLogTimer: null,
+  ch00LocationTimer: null,
+  ch00Timers: [],
+  ch00RunToken: 0,
+  ch00TextFileStats: new Map(),
   ch04DriftTimer: null,
   textCycle: {
     ch01: -1,
@@ -718,6 +762,8 @@ const dom = {
   bootScreen: document.getElementById("boot-screen"),
   bootLines: document.getElementById("boot-lines"),
   ch00BootLog: document.getElementById("ch00-boot-log"),
+  ch00Monologue: document.getElementById("ch00-monologue"),
+  ch00LocationPanel: document.getElementById("ch00-location-panel"),
   shutdownScreen: document.getElementById("shutdown-screen"),
   shutdownText: document.getElementById("shutdown-text"),
   shutdownSubtext: document.getElementById("shutdown-subtext"),
@@ -826,6 +872,7 @@ async function init() {
   dom.video.muted = true;
   dom.interruptVideo.muted = true;
   loadSubdermalText();
+  preloadCh00TextFileStats();
 
   bindEvents();
   startClock();
@@ -842,7 +889,6 @@ async function init() {
     if (chapter === "int") activateChapter("ch04");
     else {
       activateChapter(CHAPTERS[chapter] ? chapter : "ch00");
-      if ((CHAPTERS[chapter] ? chapter : "ch00") === "ch00") runLocating();
     }
   } else {
     await playBootSequence();
@@ -850,7 +896,6 @@ async function init() {
     hardCut(() => {
       hideBootScreen();
       activateChapter("ch00");
-      runLocating();
     });
   }
 }
@@ -859,6 +904,25 @@ async function loadSubdermalText() {
   const response = await fetch("beishang.txt");
   const text = await response.text();
   dom.subdermalText.textContent = Array.from({ length: 10 }, () => text).join("\n\n");
+}
+
+function preloadCh00TextFileStats() {
+  CH00_PROJECT_TEXT_FILES.forEach((file) => {
+    fetch(file.path)
+      .then((response) => response.ok ? response.text() : Promise.reject(new Error(String(response.status))))
+      .then((text) => {
+        state.ch00TextFileStats.set(file.path, {
+          chars: text.length,
+          lines: text.split(/\r?\n/).length,
+        });
+      })
+      .catch(() => {
+        state.ch00TextFileStats.set(file.path, {
+          chars: null,
+          lines: null,
+        });
+      });
+  });
 }
 
 function bindEvents() {
@@ -998,6 +1062,64 @@ function buildBootSequence() {
     { text: "system ready.", delay: 600 },
     { text: "locating...", delay: 600 },
   ];
+}
+
+function buildCh00ReadSequence() {
+  const clips = Object.keys(state.signal || {})
+    .filter((key) => key.startsWith("IMG_"))
+    .map((key) => state.signal[key])
+    .filter(Boolean)
+    .sort((a, b) => String(a.filename || "").localeCompare(String(b.filename || "")));
+  const mediaFiles = new Set(clips.map((clip) => clip.filename).filter(Boolean));
+  const archiveFiles = (state.mediaArchiveEntries || [])
+    .flatMap((entry) => Array.isArray(entry.files) ? entry.files : [])
+    .filter((file) => file && !mediaFiles.has(file));
+  const uniqueArchiveFiles = [...new Set(archiveFiles)].sort((a, b) => a.localeCompare(b));
+
+  return [
+    { text: "monologue buffer          ✓" },
+    { text: "refreshing file table..." },
+    { text: `root files                ${CH00_PROJECT_TEXT_FILES.length}` },
+    { text: `media files               ${clips.length + uniqueArchiveFiles.length}` },
+    { text: `location points           ${CH00_LOCATION_SCAN.length}` },
+    { text: "" },
+    ...CH00_PROJECT_TEXT_FILES.map(formatCh00ProjectFileLine),
+    { text: "" },
+    { text: "reading manifest media..." },
+    ...clips.map(formatCh00MediaFileLine),
+    { text: "" },
+    { text: "reading archive stills..." },
+    ...uniqueArchiveFiles.map((file) => ({ text: `READ archive/${file.padEnd(24, " ")}  still ✓` })),
+    { text: "" },
+    { text: "rebuilding coordinate cache..." },
+    ...CH00_LOCATION_SCAN.map((point) => ({
+      text: `PIN  ${point.label.padEnd(26, " ")} ${point.lat.toFixed(4)}, ${point.lon.toFixed(4)}`,
+    })),
+    { text: "" },
+    { text: "all files passed once     ✓" },
+    { text: "signal nearly acquired..." },
+  ];
+}
+
+function formatCh00ProjectFileLine(file) {
+  const stats = state.ch00TextFileStats.get(file.path);
+  const size = stats
+    ? `${String(stats.lines ?? "?").padStart(4, " ")} lines / ${String(stats.chars ?? "?").padStart(6, " ")} chars`
+    : "reading...";
+  return { text: `READ ${file.path.padEnd(34, " ")} ${size} / ${file.label}` };
+}
+
+function formatCh00MediaFileLine(clip) {
+  const name = String(clip.filename || clip.clip || "unknown").padEnd(22, " ");
+  const time = clipDisplayTime(clip);
+  const location = String(clip.location || "unknown").replace(",", "").padEnd(18, " ");
+  return { text: `READ ${name} ${time}  ${location} ${formatAltitudeCompact(clip.altitude_m)}` };
+}
+
+function formatAltitudeCompact(value) {
+  const altitude = Number(value);
+  if (!Number.isFinite(altitude)) return "----m";
+  return `${Math.round(altitude)}m`.padStart(5, " ");
 }
 
 function formatBootClipLine(clip) {
@@ -5809,24 +5931,36 @@ function updateSystemReadout() {
 }
 
 function runLocating() {
-  startCh00BootLog();
+  stopCh00VisualSequence();
+  const token = ++state.ch00RunToken;
   const started = performance.now();
-  const duration = 4800;
+  const duration = CH00_LOCATING_DURATION;
   const targetLat = 40.7194;
   const targetLon = -73.9896;
+  dom.chapter00?.classList.add("is-scanning");
+  dom.signalAcquired?.classList.remove("is-active");
+  startCh00Monologue(token);
+  startCh00LocationTicker(token);
+  state.ch00Timers.push(setTimeout(() => {
+    if (state.chapter === "ch00" && state.ch00RunToken === token) startCh00BootLog(token);
+  }, CH00_MONOLOGUE_LINES.length * 3000 + 350));
 
   function step(now) {
-    if (state.chapter !== "ch00") return;
+    if (state.chapter !== "ch00" || state.ch00RunToken !== token) return;
     const t = Math.min(1, (now - started) / duration);
-    const jitter = (1 - t) * 40;
-    const lat = t < 0.92 ? targetLat + (Math.random() - 0.5) * jitter : targetLat;
-    const lon = t < 0.92 ? targetLon + (Math.random() - 0.5) * jitter : targetLon;
+    const activePoint = CH00_LOCATION_SCAN[Math.min(CH00_LOCATION_SCAN.length - 1, Math.floor(t * CH00_LOCATION_SCAN.length))];
+    const jitter = (1 - t) * (t < 0.36 ? 70 : 18);
+    const anchorLat = t < 0.78 ? activePoint.lat : targetLat;
+    const anchorLon = t < 0.78 ? activePoint.lon : targetLon;
+    const lat = t < 0.94 ? anchorLat + (Math.random() - 0.5) * jitter : targetLat;
+    const lon = t < 0.94 ? anchorLon + (Math.random() - 0.5) * jitter : targetLon;
     dom.latScan.textContent = lat.toFixed(4);
     dom.lonScan.textContent = lon.toFixed(4);
 
     if (t < 1) {
       requestAnimationFrame(step);
     } else {
+      dom.chapter00?.classList.remove("is-scanning");
       dom.signalAcquired.classList.add("is-active");
       showCh00OnboardingDialog();
     }
@@ -5835,19 +5969,65 @@ function runLocating() {
   requestAnimationFrame(step);
 }
 
-function startCh00BootLog() {
+function startCh00Monologue(token) {
+  if (!dom.ch00Monologue) return;
+  dom.ch00Monologue.textContent = "";
+  dom.ch00Monologue.classList.remove("is-visible");
+  CH00_MONOLOGUE_LINES.forEach((line, index) => {
+    state.ch00Timers.push(setTimeout(() => {
+      if (state.chapter !== "ch00" || state.ch00RunToken !== token) return;
+      dom.ch00Monologue.textContent = line;
+      dom.ch00Monologue.classList.add("is-visible");
+    }, index * 3000));
+  });
+  state.ch00Timers.push(setTimeout(() => {
+    if (state.ch00RunToken !== token) return;
+    dom.ch00Monologue?.classList.remove("is-visible");
+  }, CH00_MONOLOGUE_LINES.length * 3000));
+}
+
+function startCh00LocationTicker(token) {
+  if (!dom.ch00LocationPanel) return;
+  let index = 0;
+  dom.ch00LocationPanel.classList.add("is-active");
+  const render = () => {
+    if (state.chapter !== "ch00" || state.ch00RunToken !== token) return;
+    const rows = Array.from({ length: 4 }, (_, offset) => {
+      const point = CH00_LOCATION_SCAN[(index + offset) % CH00_LOCATION_SCAN.length];
+      return [
+        point.label,
+        `${point.lat.toFixed(4)}, ${point.lon.toFixed(4)}`,
+        point.note,
+      ].join("\n");
+    });
+    dom.ch00LocationPanel.textContent = rows.join("\n\n");
+    index = (index + 1) % CH00_LOCATION_SCAN.length;
+  };
+  render();
+  state.ch00LocationTimer = setInterval(render, 1150);
+}
+
+function startCh00BootLog(token = state.ch00RunToken) {
   if (!dom.ch00BootLog) return;
   clearInterval(state.ch00BootLogTimer);
-  const entries = buildBootSequence().filter((entry) => entry.text !== "");
+  const entries = buildCh00ReadSequence().filter((entry) => entry.text !== "");
   const lines = [];
   let index = 0;
   dom.ch00BootLog.textContent = "";
   state.ch00BootLogTimer = setInterval(() => {
-    lines.push(entries[index % entries.length].text);
-    dom.ch00BootLog.textContent = lines.slice(-24).join("\n");
+    if (state.chapter !== "ch00" || state.ch00RunToken !== token) {
+      stopCh00BootLog();
+      return;
+    }
+    if (index >= entries.length) {
+      stopCh00BootLog();
+      return;
+    }
+    lines.push(entries[index].text);
+    dom.ch00BootLog.textContent = lines.slice(-34).join("\n");
     dom.ch00BootLog.scrollTop = dom.ch00BootLog.scrollHeight;
     index += 1;
-  }, 70);
+  }, 58);
 }
 
 function stopCh00BootLog() {
@@ -5855,8 +6035,23 @@ function stopCh00BootLog() {
   state.ch00BootLogTimer = null;
 }
 
-function showCh00OnboardingDialog() {
+function stopCh00VisualSequence() {
+  state.ch00Timers.forEach((timer) => clearTimeout(timer));
+  state.ch00Timers = [];
+  clearInterval(state.ch00LocationTimer);
+  state.ch00LocationTimer = null;
   stopCh00BootLog();
+  dom.chapter00?.classList.remove("is-scanning");
+  dom.ch00Monologue?.classList.remove("is-visible");
+  if (dom.ch00Monologue) dom.ch00Monologue.textContent = "";
+  if (dom.ch00LocationPanel) {
+    dom.ch00LocationPanel.textContent = "";
+    dom.ch00LocationPanel.classList.remove("is-active");
+  }
+}
+
+function showCh00OnboardingDialog() {
+  stopCh00VisualSequence();
   showSystemDialog("■ in_praise_of_time", [
     "This is an archive.",
     "46 clips. 47 locations.",
@@ -5903,7 +6098,7 @@ function activateChapter(chapter) {
   dom.stage.classList.toggle("is-active", chapter !== "ch00");
   dom.stage.dataset.mode = chapter;
   dom.video.pause();
-  if (chapter !== "ch00") stopCh00BootLog();
+  if (chapter !== "ch00") stopCh00VisualSequence();
 
   if (chapter === "ch00") {
     dom.signalAcquired.classList.remove("is-active");
@@ -5918,6 +6113,7 @@ function activateChapter(chapter) {
     clearMonologueTimers();
     hideMonologueText();
     setTextureChapter("ch00");
+    runLocating();
     return;
   }
 
