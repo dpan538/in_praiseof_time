@@ -99,35 +99,14 @@ const BOOT_SEQUENCE_BASE = [
   { text: "environment.json     OK", delay: 200 },
 ];
 
-const CH00_LOCATING_DURATION = 28000;
-const CH00_COORDINATE_WINDOW = 6200;
+const CH00_LOCATING_DURATION = 10000;
+const CH00_COORDINATE_WINDOW = 2400;
+const CH00_MONOLOGUE_INTERVAL = 2300;
 const CH00_MONOLOGUE_LINES = [
-  "这已经是我第四次开始回顾这些照片。",
-  "我不确定是在整理文件，还是在确认时间真的经过了。",
-  "In praise of time。\n不是怀旧，是把没有被照亮的部分也留下。",
-  "屏幕先找到坐标。\n人慢一点，才找到自己。",
-];
-
-const CH00_PROJECT_TEXT_FILES = [
-  { path: "index.html", label: "desktop shell" },
-  { path: "styles.css", label: "visual skin" },
-  { path: "main.js", label: "runtime script" },
-  { path: "news_content.js", label: "news archive" },
-  { path: "eyu_articles.js", label: "EYU articles" },
-  { path: "beishang.txt", label: "source text" },
-  { path: "README.md", label: "project note" },
-  { path: "README.txt", label: "desktop readme" },
-  { path: "PROJECT_CONTEXT.md", label: "context note" },
-  { path: "一切都会好起来的.txt", label: "chapter after" },
-  { path: "signal_data/MANIFEST.json", label: "media manifest" },
-  { path: "signal_data/media_archive_index.json", label: "archive index" },
-  { path: "signal_data/environment.json", label: "environment index" },
-  { path: "signal_data/glitch_weights.json", label: "glitch data" },
-  { path: "signal_data/ios_timeline.json", label: "ios timeline" },
-  { path: "footage_report/index.json", label: "footage report" },
-  { path: "footage_report/location_index.json", label: "location report" },
-  { path: "footage_report/REPORT.md", label: "report markdown" },
-  { path: "footage_report/REPORT_locations.md", label: "location markdown" },
+  "重新确定位置。",
+  "房间还暗着。\n坐标先醒。",
+  "窗外有河，有雪，有一条没有说完的路。",
+  "我把黑影放回墙上。\n把时间放回地图里。",
 ];
 
 const CH00_LOCATION_SCAN = [
@@ -142,21 +121,21 @@ const CH00_LOCATION_SCAN = [
 ];
 
 const CH00_TERMS = [
-  "in praise of time",
-  "shadow",
-  "delay",
-  "window",
-  "coordinate",
-  "winter",
-  "no signal",
-  "things left open",
-  "hometown",
-  "low altitude",
-  "salary / ticket",
-  "ascent",
+  "datum",
+  "projection",
+  "latitude",
+  "longitude",
+  "altitude",
+  "meridian",
+  "plain",
+  "border",
   "river",
-  "afterimage",
-  "everything will be alright",
+  "home",
+  "route",
+  "ascent",
+  "south light",
+  "after road",
+  "in praise of time",
 ];
 
 const SHUTDOWN_TEXT = "in_praise_of_time  —  session ended";
@@ -512,38 +491,113 @@ function videoEntry(key) {
 }
 
 const MAP_CENTERS = {
-  CH00: { lat: 40.7194, lon: -73.9896, zoom: 15, city: "New York" },
-  CH01: { lat: 40.7194, lon: -73.9896, zoom: 15, city: "New York" },
-  CH02: { lat: 48.9213, lon: 117.1130, zoom: 9, city: "Arxan" },
-  CH03: { lat: 31.984, lon: 120.932, zoom: 10, city: "Hometown" },
-  CH04: { lat: 37.3784, lon: 101.4117, zoom: 10, city: "Qilian" },
-  CH05: { lat: -27.443, lon: 153.064, zoom: 8, city: "Brisbane / Victoria" },
-  CH06: { lat: 0, lon: 0, zoom: 2, city: "Afterimage" },
+  CH00: { lat: 40.7194, lon: -73.9896, zoom: 14, city: "Manhattan / Lower East Side" },
+  CH01: { lat: 40.7194, lon: -73.9896, zoom: 14, city: "Manhattan / Lower East Side" },
+  CH02: { lat: 48.9213, lon: 117.1130, zoom: 8, city: "Arxan / Greater Khingan Range" },
+  CH03: { lat: 31.984, lon: 120.932, zoom: 9, city: "Nantong / Jiangsu hometown line" },
+  CH04: { lat: 37.3784, lon: 101.4117, zoom: 8, city: "Qilian corridor / Qinghai-Gansu" },
+  CH05: { lat: -27.443, lon: 153.064, zoom: 8, city: "Brisbane River / Queensland" },
+  CH06: {
+    lat: 32.3840,
+    lon: 119.4409,
+    zoom: 7,
+    city: "Nantong / Hefei / Yancheng",
+    places: [
+      { label: "Nantong", lat: 31.9839, lon: 120.9318 },
+      { label: "Hefei", lat: 31.8206, lon: 117.2272 },
+      { label: "Yancheng", lat: 33.3474, lon: 120.1636 },
+    ],
+  },
   AFTER: { lat: -27.443, lon: 153.064, zoom: 2, city: "after" },
-  INT: { lat: 36.2043, lon: 117.0843, zoom: 12, city: "Tai'an" },
+  INT: { lat: 36.2043, lon: 117.0843, zoom: 11, city: "Mount Tai / Tai'an" },
 };
 
 const SABINE_ANALYSIS_TEXT = `Analysis of "The Abduction of the Sabine Women"
 
 The painting "The Abduction of the Sabine Women" illustrates a fictional historical scene based on a Roman legend story. They invited their neighbors, the Sabines, to Rome only to forcibly take their young women as their wives.
 
-The work adopts a diagonally focused composition, with Romulus held aloft as a conducting figure on the left side, drawing the viewer's attention to the principal action. The diagonal structure establishes the fundamental tension between stability and chaos that characterizes the entire work.
+The work adopts a diagonally focused composition, with Romulus held aloft as a conducting figure on the left side, drawing the viewer's attention to the principal action. The diagonal structure establishes the fundamental tension between stability and chaos that characterizes the entire work. This tension is shown through the interrelation of space, gesture, color and contrast throughout the painting.
 
-The painting's composition is organized along two direct diagonals that create dynamic visual collides. A powerful diagonal forms from the upper left to the lower right through women in blue and green and a warrior in yellow leather armor with a knife in his hand.
+The painting's composition is organized along two direct diagonals that create dynamic visual collides. A powerful diagonal forms from the upper left to the lower right through women in blue and green and a warrior in yellow leather armor with a knife in his hand. The elderly people kneeling in orange and gray robes takes place in the lower right corner. The child in white on the ground and the old woman in red with a white turban create a spatial opening which leads the vision to another diagonal. This relationship extends from the lower corner on the left to the black doorways of the buildings on the upper right side.
 
-The visual center is not prominently centric in the painting, but rather distributed across these diagonal axes, creating multiple focal points that draw the viewer's eye across different spatial planes.
+The visual center is not prominently centric in the painting, but rather distributed across these diagonal axes, creating multiple focal points that draw the viewer's eye across different spatial planes. The foreground presents immediate dramatic resistance between weak women and strong warriors, while the middle ground extends this narrative with other struggling figures. Looking at the distant fighting people in the background, particularly toward the right side of the painting, you can find their twisted limbs expressing a sense of chaos and movement to compare with the frozen moment of fear and potential injury in the foreground. These indistinguishable spatial layers create depth that enforces the sense of an impactive event rather than a single moment.
 
-Poussin's use of rhythmic lines is evident in the fluid, but also systematically controlled gestures of the figures, similar to our impression of classical sculptures. Columns and masonry in the background provide stability in the middle ground in contrast to the chaos among the figures.
+Poussin's use of rhythmic lines is evident in the fluid, but also systematically controlled gestures of the figures, similar to our impression of classical sculptures. The poses of the characters are artistically processed to evoke an elaborate moving tension. It aims to create multiple lines that guide the viewer's eyes through the composition. These lines create several oval patterns that move your tension along the figures into the background of the dark door, reinforcing the visual impact through limbs and fluttering clothes. The twisted and stacked bodies make people devote more interest to the details of the muscle and emotions behind. Columns and masonry in the background provide stability in the middle ground in contrast to the chaos among the figures.
 
-Pure, bright colors are utilized throughout the main characters' clothes in the painting. The color palette is composed of bold primary colors - red, blue, and yellow, carefully arranged and concentrated in the foreground.
+Pure, bright colors are utilized throughout the main characters' clothes in the painting. The color palette is composed of bold primary colors - red, blue, and yellow, carefully arranged and concentrated in the foreground. The women are dressed in blue, creating a visual distinction between them and warriors in yellow armor. In the middle and far foreground, though less pure, the colors remain bright enough to differentiate figures from the crowd, creating variations so our eyes move across, into space. This also adds complexity, makes a bit of chaos among the order. These solid colors form a triangular framework with three points – Romulus in red, warriors in yellow, and women in blue. The woman on the left struggles in a warrior's arms, her clothes's brightness separates her from the middle ground. This emphasizes the Sabine women's vulnerability and their distinction from the warriors.
 
-These solid colors form a triangular framework with three points: Romulus in red, warriors in yellow, and women in blue.
+In this painting, Poussin skillfully uses dull gray tones to emphasize the chaotic nature of the scene. Particularly notable is the dark architectural structure in the upper right part, which occupies nearly one-fourth of the entire painting. This predominantly dark-toned architecture with completely black interior spaces creates an impressive contrast against the bright sky and the vivid colors of the figures' clothing. Such pure darkness evokes a sense of mystery and oppression, indicating an unknown, ominous presence. The serious geometric forms of the architecture further demonstrate similar visual opinion, establishing a powerful contrast with the chaotic movement of the human figures below. The dark architectural order against the bright, dynamic disorder of the abduction heightens the emotional tension throughout the composition.
 
-In this painting, Poussin skillfully uses dull gray tones to emphasize the chaotic nature of the scene. Particularly notable is the dark architectural structure in the upper right part, which occupies nearly one-fourth of the entire painting.
+Additionally, the use of pure colors in the costumes unavoidably conveys a romantic beauty and uncontrolled disengagement. The free viewing angle gives the classical visual art a newer combination of elements to meet the comprehend perspectives of people from various backgrounds and contexts. The architectural precision represents Roman civilization and order, while the gestures and colors embody inestimable desires and violence. The painting invites viewers to consider how societies interplay chaos and stability, encourages contemplation of narrative and personal interpretation to remind us of the extreme power, gender, love and fear.`;
 
-This predominantly dark-toned architecture with completely black interior spaces creates an impressive contrast against the bright sky and the vivid colors of the figures' clothing.
+const CH01_DOCUMENTS = {
+  "doc-absurd": {
+    filename: "The Absurd.pdf",
+    type: "pdf",
+    meta: "PDF / extracted preview / March 2025",
+    title: "The Absurd",
+    preview: `The  Absurd
 
-The architectural precision represents Roman civilization and order, while the gestures and colors embody inestimable desires and violence. The painting invites viewers to consider how societies interplay chaos and stability, encourages contemplation of narrative and personal interpretation to remind us of the extreme power, gender, love and fear.`;
+Dancing,  she  dances,  is  the  absurd,  the  absurd  and  more,
+Like clouds your polished mind changes shape forevermore.
+
+People shift names and faces as days unfold,
+When I ask who they were, they turn away cold,
+How impossible to guess!
+What do they ask anymore?`,
+  },
+  "doc-film-review": {
+    filename: "Film Review 1_Dai Pan.docx",
+    type: "docx",
+    meta: "DOCX / extracted preview / April 2025",
+    title: "Film Review 1",
+    preview: `Eternal sunshine of the spotless mind is always considered as a romantic science fiction movie about amnestics, human memories and social relationships. It reveals that impulsive behaviors of men and women in emotional relationships may have irreparable consequences, and remembers that the effects of social relationships are not one-way but complementary.
+
+Set in an ordinary version of New York City, Eternal Sunshine of the Spotless Mind begins just before Valentine's Day. Joel, a quiet and introspective man, decides to reconcile with his ex-girlfriend Clementine. However, he discovered she no longer remembers him.`,
+  },
+  "doc-aiweiwei": {
+    filename: "Ai Weiwei's _Child's Play_ Exhibition_Dai Pan_2_3.pdf",
+    type: "pdf",
+    meta: "PDF / extracted preview / April 2025",
+    title: "Child's Play",
+    preview: `Ai Weiwei's "Child's Play" Exhibition
+
+Ai Weiwei remains one of the most forward-thinking global artists today and the individual who undertakes the greatest humanity art legacy from the Asian context. Considering his large exhibition in 2014, where he created portraits of political prisoners using toy bricks, garnered significant attention.
+
+He continues using this impressive stylistic medium approach in Child's Play.`,
+  },
+  "doc-edit": {
+    filename: "My edit of Dai Pan.docx",
+    type: "docx",
+    meta: "DOCX / extracted preview / April 2025",
+    title: "My edit of Dai Pan",
+    preview: `Dai Pan,
+
+I started to simply rewrite a version of the review using fragments from your text but decided you would learn more if you did more yourself. So I used my readings to begin to establish themes derived from your draft, then using them as a structural elements as well as the basis for content; more suggestive than directive.
+
+Once you have written something, like a draft - and you already have - the simplest way to create structure is to go back through your draft to identify your themes or points of interpretation you wish to make, whether they originate from  you or from another source.`,
+  },
+  "doc-pirouette": {
+    filename: "Dai Pan_Pirouette_ Turning Points in Design.docx",
+    type: "docx",
+    meta: "DOCX / extracted preview / April 2025",
+    title: "Pirouette",
+    preview: `Pirouette: Turning Points in Design is an exhibition located on the north side of the museum that divides a large exhibition hall into sections. The concrete idea of 'Pirouette: Turning Points in Design' is to illustrate how design has evolved from functional objects into a complex reflection of cultural, political, and aesthetic turning points throughout modern history.
+
+The exhibition as a whole chooses a neat partition, and most of the physical products are concentrated in the main area of the exhibition hall.`,
+  },
+  "doc-becoming": {
+    filename: "Becoming Animal_Dai Pan.pdf",
+    type: "pdf",
+    meta: "PDF / extracted preview / March 2025",
+    title: "Becoming Animal",
+    preview: `Becoming  Animal
+
+Lyne  Lapointe  combines  artificial  materials  with  artificially  collected  natural  materials  in the exhibition "Becoming Animal" to form an expression between painting and installation art.
+
+Her works aim to explore the conceptuality and functionality of individuals and spaces in the social sense.`,
+  },
+};
 
 const TRASH_ITEMS = [
   {
@@ -700,10 +754,9 @@ const state = {
   monologueToken: 0,
   ch00BootLogTimer: null,
   ch00LocationTimer: null,
-  ch00CenterVizTimer: null,
   ch00Timers: [],
   ch00RunToken: 0,
-  ch00TextFileStats: new Map(),
+  afterTimers: [],
   ch04DriftTimer: null,
   textCycle: {
     ch01: -1,
@@ -792,12 +845,11 @@ const dom = {
   flash: document.getElementById("white-flash"),
   bootScreen: document.getElementById("boot-screen"),
   bootLines: document.getElementById("boot-lines"),
+  bootTitleCard: document.getElementById("boot-title-card"),
+  mobileArchiveGate: document.getElementById("mobile-archive-gate"),
   ch00BootLog: document.getElementById("ch00-boot-log"),
   ch00Monologue: document.getElementById("ch00-monologue"),
   ch00LocationPanel: document.getElementById("ch00-location-panel"),
-  ch00CenterViz: document.getElementById("ch00-center-viz"),
-  ch00VizTitle: document.getElementById("ch00-viz-title"),
-  ch00VizPie: document.getElementById("ch00-viz-pie"),
   ch00InstrumentPanel: document.getElementById("ch00-instrument-panel"),
   ch00LoadFill: document.getElementById("ch00-load-fill"),
   ch00LoadPercent: document.getElementById("ch00-load-percent"),
@@ -909,33 +961,73 @@ async function init() {
   window.SIGNAL = state.signal;
   dom.video.muted = true;
   dom.interruptVideo.muted = true;
+  prepareVideoElement(dom.video);
+  prepareVideoElement(dom.interruptVideo);
   loadSubdermalText();
-  preloadCh00TextFileStats();
 
   bindEvents();
   startClock();
   setupVideoObserver();
   setupAudioUnlock();
   setupDesktopObjects();
-  if (sessionStorage.getItem("booted") !== "1") dom.body.classList.add("is-booting");
+  const bootSignature = bootSessionSignature();
+  if (sessionStorage.getItem("booted") !== bootSignature) dom.body.classList.add("is-booting");
   setupOperatingSystem();
   restoreStickyNotes();
   resizeTexture();
-  if (sessionStorage.getItem("booted") === "1") {
+  if (sessionStorage.getItem("booted") === bootSignature) {
     dom.body.classList.add("has-booted");
-    const chapter = sessionStorage.getItem("last_chapter") || "ch00";
-    if (chapter === "int") activateChapter("ch04");
+    const chapter = initialChapterFromLocation() || "ch01";
+    if (chapter === "ch01") sessionStorage.setItem("onboarding_ch01", "1");
+    if (shouldUseMobileArchiveGate()) showMobileArchiveGate();
+    else if (chapter === "int") activateChapter("ch04");
     else {
-      activateChapter(CHAPTERS[chapter] ? chapter : "ch00");
+      activateChapter(CHAPTERS[chapter] ? chapter : "ch01");
     }
   } else {
     await playBootSequence();
-    sessionStorage.setItem("booted", "1");
-    hardCut(() => {
-      hideBootScreen();
-      activateChapter("ch00");
-    });
+    await playBootTitleCard();
+    sessionStorage.setItem("booted", bootSignature);
+    hideBootScreen();
+    sessionStorage.setItem("onboarding_ch01", "1");
+    if (shouldUseMobileArchiveGate()) showMobileArchiveGate();
+    else activateChapter(initialChapterFromLocation() || "ch01");
   }
+}
+
+function shouldUseMobileArchiveGate() {
+  return window.matchMedia("(max-width: 860px)").matches;
+}
+
+function showMobileArchiveGate() {
+  dom.body.classList.add("mobile-archive-gate-active");
+  dom.mobileArchiveGate?.setAttribute("aria-hidden", "false");
+  dom.video.pause();
+  dom.interruptVideo.pause();
+}
+
+function hideMobileArchiveGate() {
+  dom.body.classList.remove("mobile-archive-gate-active");
+  dom.mobileArchiveGate?.setAttribute("aria-hidden", "true");
+}
+
+function syncMobileArchiveGate() {
+  if (shouldUseMobileArchiveGate()) {
+    showMobileArchiveGate();
+    return;
+  }
+  if (!dom.body.classList.contains("mobile-archive-gate-active")) return;
+  hideMobileArchiveGate();
+  const chapter = initialChapterFromLocation() || sessionStorage.getItem("last_chapter") || "ch01";
+  activateChapter(CHAPTERS[chapter] && chapter !== "int" ? chapter : "ch01");
+}
+
+function initialChapterFromLocation() {
+  const params = new URLSearchParams(window.location.search);
+  const queryChapter = params.get("chapter") || params.get("ch");
+  const hashChapter = window.location.hash.replace(/^#\/?/, "");
+  const candidate = String(queryChapter || hashChapter || "").toLowerCase();
+  return CHAPTERS[candidate] ? candidate : null;
 }
 
 async function loadSubdermalText() {
@@ -962,31 +1054,13 @@ async function loadSignalManifest() {
   }
 }
 
-function preloadCh00TextFileStats() {
-  CH00_PROJECT_TEXT_FILES.forEach((file) => {
-    fetch(file.path)
-      .then((response) => response.ok ? response.text() : Promise.reject(new Error(String(response.status))))
-      .then((text) => {
-        state.ch00TextFileStats.set(file.path, {
-          chars: text.length,
-          lines: text.split(/\r?\n/).length,
-        });
-      })
-      .catch(() => {
-        state.ch00TextFileStats.set(file.path, {
-          chars: null,
-          lines: null,
-        });
-      });
-  });
-}
-
 function bindEvents() {
   window.addEventListener("resize", () => {
     resizeTexture();
     positionDesktopIcons();
     state.desktopWindows.forEach(constrainDesktopWindow);
     if (state.currentClip) applyVideoLayoutForClip(state.currentClip);
+    if (dom.body.classList.contains("has-booted")) syncMobileArchiveGate();
   });
   document.addEventListener("keydown", onKeyDown);
   document.addEventListener("pointerdown", handleFirstUserInteraction, { once: true });
@@ -1026,6 +1100,8 @@ function bindEvents() {
   });
   dom.video.addEventListener("play", updateVideoControls);
   dom.video.addEventListener("pause", updateVideoControls);
+  dom.video.addEventListener("error", () => showVideoCompatMessage(dom.video, state.currentClip));
+  dom.interruptVideo.addEventListener("error", () => showVideoCompatMessage(dom.interruptVideo, "INTERRUPT"));
   dom.photo?.addEventListener("load", () => {
     dom.crtFrame?.classList.remove("is-photo-loading");
   });
@@ -1042,6 +1118,22 @@ function bindEvents() {
   dom.interruptClose?.addEventListener("click", () => exitInterrupt());
   dom.hiddenIntButton?.addEventListener("click", () => enterInterrupt());
   makeVideoDraggable();
+}
+
+function prepareVideoElement(video) {
+  if (!video) return;
+  video.setAttribute("playsinline", "");
+  video.setAttribute("webkit-playsinline", "");
+  video.preload = "metadata";
+}
+
+function showVideoCompatMessage(video, clipKey) {
+  const shell = video?.closest?.(".crt-shell, .interrupt-window");
+  if (!shell || shell.querySelector(".video-compat-note")) return;
+  const note = document.createElement("div");
+  note.className = "video-compat-note";
+  note.textContent = `This browser cannot decode ${clipKey || "this"} media. Safari usually handles the archive MOV files best; Edge may need MP4 transcodes.`;
+  shell.appendChild(note);
 }
 
 function makeVideoDraggable() {
@@ -1088,17 +1180,34 @@ async function playBootSequence() {
   await wait(800);
 }
 
+async function playBootTitleCard() {
+  if (!dom.bootTitleCard) return;
+  dom.bootScreen?.classList.remove("is-active");
+  dom.bootScreen?.setAttribute("aria-hidden", "true");
+  dom.bootTitleCard.classList.add("is-active");
+  dom.bootTitleCard.setAttribute("aria-hidden", "false");
+  await wait(1500);
+  dom.bootTitleCard.classList.add("is-leaving");
+  await wait(760);
+  dom.bootTitleCard.classList.remove("is-active", "is-leaving");
+  dom.bootTitleCard.setAttribute("aria-hidden", "true");
+}
+
 function buildBootSequence() {
-  const clips = Object.keys(state.signal || {})
-    .filter((key) => key.startsWith("IMG_"))
-    .map((key) => state.signal[key]);
+  const bootFiles = buildBootFileIndex();
+  const groups = groupBootFiles(bootFiles);
   return [
     ...BOOT_SEQUENCE_BASE,
     { text: "", delay: 200 },
-    { text: "indexing clips...", delay: 300 },
-    ...clips.map((clip) => ({ text: formatBootClipLine(clip), delay: 60 })),
+    { text: "scanning project files...", delay: 260 },
+    ...formatBootFileGroup("core interface", groups.core),
+    ...formatBootFileGroup("signal data", groups.data),
+    ...formatBootFileGroup("chapter media", groups.media),
+    ...formatBootFileGroup("desktop documents", groups.documents),
+    ...formatBootFileGroup("search / rights", groups.meta),
+    ...formatBootFileGroup("external libraries", groups.external),
     { text: "", delay: 80 },
-    { text: `all ${clips.length} clips indexed   ✓`, delay: 300 },
+    { text: `all ${bootFiles.length} referenced files indexed   ✓`, delay: 300 },
     { text: "", delay: 120 },
     { text: "loading signal data...", delay: 300 },
     { text: "glitch weights         ✓", delay: 70 },
@@ -1114,62 +1223,180 @@ function buildBootSequence() {
     { text: "beishang.txt           ✓  (3847 chars)", delay: 70 },
     { text: "eyu_articles.js        ✓  (7 articles)", delay: 70 },
     { text: "news_content.js        ✓  (6 chapters)", delay: 70 },
+    { text: "document_texts.js      ✓  (desktop docs)", delay: 70 },
     { text: "", delay: 120 },
     { text: "system ready.", delay: 600 },
     { text: "locating...", delay: 600 },
   ];
 }
 
-function buildCh00ReadSequence() {
-  const clips = Object.keys(state.signal || {})
-    .filter((key) => key.startsWith("IMG_"))
-    .map((key) => state.signal[key])
-    .filter(Boolean)
-    .sort((a, b) => String(a.filename || "").localeCompare(String(b.filename || "")));
-  const mediaFiles = new Set(clips.map((clip) => clip.filename).filter(Boolean));
-  const archiveFiles = (state.mediaArchiveEntries || [])
-    .flatMap((entry) => Array.isArray(entry.files) ? entry.files : [])
-    .filter((file) => file && !mediaFiles.has(file));
-  const uniqueArchiveFiles = [...new Set(archiveFiles)].sort((a, b) => a.localeCompare(b));
+function buildBootFileIndex() {
+  const entries = [];
+  const seen = new Set();
+  const add = (file, group = "core", detail = "") => {
+    if (!file || typeof file !== "string") return;
+    const normalized = file.trim();
+    if (!normalized || seen.has(normalized)) return;
+    seen.add(normalized);
+    entries.push({ file: normalized, group, detail });
+  };
 
+  [
+    "index.html",
+    "styles.css",
+    "main.js",
+    "browser_compat.js",
+    "news_content.js",
+    "eyu_articles.js",
+    "document_texts.js",
+  ].forEach((file) => add(file, "core"));
+
+  [
+    MANIFEST_URL,
+    MEDIA_ARCHIVE_URL,
+    "signal_data/environment.json",
+    "beishang.txt",
+    "README.txt",
+    "一切都会好起来的.txt",
+  ].forEach((file) => add(file, "data"));
+
+  Object.values(state.signal || {}).forEach((clip) => {
+    add(clip?.filename, "media", clip?.clip || "");
+  });
+
+  Object.values(EXTRA_SIGNAL_ENTRIES || {}).forEach((clip) => {
+    add(clip?.filename, "media", clip?.clip || "");
+  });
+
+  Object.values(CHAPTER_MEDIA_ARCHIVES || {}).flat().forEach((item) => {
+    add(item.file || item.filename, "media", item.label || item.key || "");
+  });
+
+  Object.values(CHAPTER_MEDIA_SEQUENCES || {}).flat().forEach((item) => {
+    if (item.file) add(item.file, "media", item.label || item.key || "");
+    if (item.key && state.signal?.[item.key]?.filename) {
+      add(state.signal[item.key].filename, "media", item.key);
+    }
+  });
+
+  [
+    ...QINGHAI_ALTITUDE_POINTS,
+    ...TAI_ALTITUDE_POINTS,
+  ].forEach((point) => {
+    if (point.clip && state.signal?.[point.clip]?.filename) add(state.signal[point.clip].filename, "media", point.place);
+  });
+
+  Object.values(CH01_DOCUMENTS || {}).forEach((doc) => add(doc.filename, "documents", doc.title || doc.type));
+  TRASH_ITEMS.forEach((item) => add(item.filename, "documents", item.type));
+
+  [
+    "OBJECTS_INDEX.txt",
+    "FREE_SPACE_NOTE.txt",
+    "ROUTE_CACHE.txt",
+  ].forEach((file) => add(file, "documents"));
+
+  [
+    "robots.txt",
+    "sitemap.xml",
+    "llms.txt",
+    "index.html.md",
+    "LICENSE.md",
+    "COPYRIGHT.md",
+    "NOTICE.md",
+    "SECURITY.md",
+    "vercel.json",
+    ".github/CODEOWNERS",
+  ].forEach((file) => add(file, "meta"));
+
+  [
+    "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono",
+    "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
+    "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
+    "https://unpkg.com/@phosphor-icons/web",
+    "https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js",
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  ].forEach((file) => add(file, "external"));
+
+  return entries;
+}
+
+function groupBootFiles(files) {
+  return files.reduce((map, entry) => {
+    if (!map[entry.group]) map[entry.group] = [];
+    map[entry.group].push(entry);
+    return map;
+  }, { core: [], data: [], media: [], documents: [], meta: [], external: [] });
+}
+
+function formatBootFileGroup(title, files = []) {
+  if (!files.length) return [];
   return [
-    { text: "monologue buffer          ✓" },
-    { text: "refreshing file table..." },
-    { text: `root files                ${CH00_PROJECT_TEXT_FILES.length}` },
-    { text: `media files               ${clips.length + uniqueArchiveFiles.length}` },
-    { text: `location points           ${CH00_LOCATION_SCAN.length}` },
-    { text: "" },
-    ...CH00_PROJECT_TEXT_FILES.map(formatCh00ProjectFileLine),
-    { text: "" },
-    { text: "reading manifest media..." },
-    ...clips.map(formatCh00MediaFileLine),
-    { text: "" },
-    { text: "reading archive stills..." },
-    ...uniqueArchiveFiles.map((file) => ({ text: `READ archive/${file.padEnd(24, " ")}  still ✓` })),
-    { text: "" },
-    { text: "rebuilding coordinate cache..." },
-    ...CH00_LOCATION_SCAN.map((point) => ({
-      text: `PIN  ${point.label.padEnd(26, " ")} ${point.lat.toFixed(4)}, ${point.lon.toFixed(4)}`,
+    { text: "", delay: 70 },
+    { text: `${title}...`, delay: 180 },
+    ...files.map((entry, index) => ({
+      text: formatBootFileLine(entry, index + 1, files.length),
+      delay: bootFileDelay(entry),
     })),
-    { text: "" },
-    { text: "all files passed once     ✓" },
-    { text: "signal nearly acquired..." },
   ];
 }
 
-function formatCh00ProjectFileLine(file) {
-  const stats = state.ch00TextFileStats.get(file.path);
-  const size = stats
-    ? `${String(stats.lines ?? "?").padStart(4, " ")} lines / ${String(stats.chars ?? "?").padStart(6, " ")} chars`
-    : "reading...";
-  return { text: `READ ${file.path.padEnd(34, " ")} ${size} / ${file.label}` };
+function formatBootFileLine(entry, index, total) {
+  const ordinal = `${String(index).padStart(3, "0")}/${String(total).padStart(3, "0")}`;
+  const file = compactBootPath(entry.file).padEnd(44, " ").slice(0, 44);
+  const detail = entry.detail ? `  ${String(entry.detail).slice(0, 28)}` : "";
+  return `${ordinal}  ${file} ✓${detail}`;
 }
 
-function formatCh00MediaFileLine(clip) {
-  const name = String(clip.filename || clip.clip || "unknown").padEnd(22, " ");
-  const time = clipDisplayTime(clip);
-  const location = String(clip.location || "unknown").replace(",", "").padEnd(18, " ");
-  return { text: `READ ${name} ${time}  ${location} ${formatAltitudeCompact(clip.altitude_m)}` };
+function compactBootPath(file) {
+  return file
+    .replace(/^https:\/\/fonts\.googleapis\.com\/css2\?family=/, "google-fonts:")
+    .replace(/^https:\/\/unpkg\.com\//, "unpkg:")
+    .replace(/^https:\/\/cdn\.jsdelivr\.net\/npm\//, "jsdelivr:")
+    .replace(/^https:\/\/\{s\}\.tile\.openstreetmap\.org\//, "osm-tiles:");
+}
+
+function bootFileDelay(entry) {
+  if (entry.group === "media") return 34;
+  if (entry.group === "external") return 42;
+  return 46;
+}
+
+function bootSessionSignature() {
+  const files = buildBootFileIndex().map((entry) => entry.file).sort();
+  return `file-index-v3:${files.length}:${files.join("|").length}`;
+}
+
+function buildCh00GeoSequence() {
+  const lats = CH00_LOCATION_SCAN.map((point) => point.lat);
+  const lons = CH00_LOCATION_SCAN.map((point) => point.lon);
+  const latBand = `${Math.min(...lats).toFixed(4)} -> ${Math.max(...lats).toFixed(4)}`;
+  const lonBand = `${Math.min(...lons).toFixed(4)} -> ${Math.max(...lons).toFixed(4)}`;
+
+  return [
+    { text: "position routine          manual" },
+    { text: "datum                     WGS84" },
+    { text: "projection                equirectangular / loose" },
+    { text: `latitude band             ${latBand}` },
+    { text: `longitude band            ${lonBand}` },
+    { text: `route points              ${CH00_LOCATION_SCAN.length}` },
+    { text: "" },
+    ...CH00_LOCATION_SCAN.map(formatCh00GeoLine),
+    { text: "" },
+    { text: "anchor                    40.7194N 073.9896W" },
+    { text: "altitude memory           sea level / highland / river" },
+    { text: "map status                not exact, still useful" },
+    { text: "location nearly confirmed..." },
+  ];
+}
+
+function formatCh00GeoLine(point) {
+  const latSuffix = point.lat >= 0 ? "N" : "S";
+  const lonSuffix = point.lon >= 0 ? "E" : "W";
+  const lat = `${Math.abs(point.lat).toFixed(4)}${latSuffix}`;
+  const lon = `${Math.abs(point.lon).toFixed(4)}${lonSuffix}`;
+  return {
+    text: `PIN  ${point.label.padEnd(26, " ")} ${lat.padStart(9, " ")} ${lon.padStart(10, " ")}  ${point.note}`,
+  };
 }
 
 function formatAltitudeCompact(value) {
@@ -1266,11 +1493,17 @@ function positionDesktopIcons() {
     nogps:    { right: 20, top: 330 },
     readme:   { right: 20, top: 424 },
     sabine:   { right: 20, top: 518 },
+    "doc-absurd":      { right: 360, top: 48 },
+    "doc-film-review": { right: 180, top: 48 },
+    "doc-aiweiwei":    { right: 360, top: 190 },
+    "doc-edit":        { right: 180, top: 190 },
+    "doc-pirouette":   { right: 360, top: 350 },
+    "doc-becoming":    { right: 180, top: 350 },
   };
   dom.desktopIcons.forEach((icon) => {
     if (icon.dataset.dragged === "1") return;
     const pos = positions[icon.dataset.object] || { right: 18, top: 70 };
-    const width = 92;
+    const width = icon.classList.contains("desktop-icon-ch01-doc") ? 166 : 92;
     icon.style.left = `${Math.max(8, window.innerWidth - pos.right - width)}px`;
     icon.style.top = Number.isFinite(pos.bottom) ? "" : `${pos.top}px`;
     icon.style.bottom = Number.isFinite(pos.bottom) ? `${pos.bottom}px` : "";
@@ -1299,7 +1532,7 @@ function openDesktopObject(type) {
     readme: buildReadmeWindow,
     sabine: buildSabineWindow,
   };
-  const builder = builders[type];
+  const builder = builders[type] || (CH01_DOCUMENTS[type] ? () => buildCh01DocumentWindow(type) : null);
   if (!builder) return;
 
   closeOldestWindowsForNewOne();
@@ -1563,7 +1796,7 @@ function setupDock() {
     ["cards", "CARDS", "cards-icon"],
     ["note", "NOTES", "ph-note"],
     ["calendar", "CALENDAR", "ph-calendar"],
-    ["monitor", "MONITOR", "monitor-icon"],
+    ["map", "MAP", "ph-map-trifold"],
     ["profiler", "PROFILER", "ph-activity"],
     ["eyu", ".EYU", "ph-book-open"],
   ].forEach(([id, label, svg]) => {
@@ -1733,7 +1966,7 @@ function systemWindowPosition(id) {
     monitor: placeInSafeArea(620, 500, 0.62, 0.18, safe),
     profiler: placeInSafeArea(620, 460, 0.58, 0.26, safe),
     maze: placeInSafeArea(520, 440, 0.64, 0.36, safe),
-    map: placeInSafeArea(500, 430, 0.70, 0.10, safe),
+    map: placeInSafeArea(720, 650, 0.52, 0.08, safe),
   };
   return positions[id] || {};
 }
@@ -3445,7 +3678,7 @@ function buildFinderWindow() {
         },
         {
           icon: "□",
-          name: "SABINE_ANALYSIS.pdf",
+          name: "The Abduction of the Sabine Women_Dai Pan_1_3.pdf",
           kind: "PDF Document",
           kindShort: "PDF",
           id: "sabine",
@@ -5382,8 +5615,18 @@ function turnNewsPage(win = findWindowById("news"), direction = 1) {
 function buildMapWindow() {
   const shell = document.createElement("div");
   shell.className = "map-panel os-window-body";
+  const localWrap = document.createElement("section");
+  localWrap.className = "map-view map-view-local";
+  const localLabel = Object.assign(document.createElement("div"), { className: "map-view-label", textContent: "LOCAL CHAPTER MAP" });
   const canvas = document.createElement("div");
-  canvas.className = "map-canvas";
+  canvas.className = "map-canvas map-canvas-local";
+  localWrap.append(localLabel, canvas);
+  const worldWrap = document.createElement("section");
+  worldWrap.className = "map-view map-view-world";
+  const worldLabel = Object.assign(document.createElement("div"), { className: "map-view-label", textContent: "WORLD ROUTE / ALL VISITED POINTS" });
+  const worldCanvas = document.createElement("div");
+  worldCanvas.className = "map-canvas map-canvas-world";
+  worldWrap.append(worldLabel, worldCanvas);
   const footer = document.createElement("div");
   footer.className = "map-footer";
   const zoomOut = document.createElement("button");
@@ -5395,12 +5638,21 @@ function buildMapWindow() {
   const coords = document.createElement("span");
   coords.className = "map-coordinates";
   footer.append(zoomOut, zoomIn, coords);
-  shell.append(canvas, footer);
+  shell.append(localWrap, worldWrap, footer);
   const win = createSizedDesktopWindow("map", shell, "desktop-window-map");
   win.mapCanvas = canvas;
+  win.mapWorldCanvas = worldCanvas;
   win.mapCoords = coords;
-  zoomOut.addEventListener("click", () => win.leafletMap?.zoomOut());
-  zoomIn.addEventListener("click", () => win.leafletMap?.zoomIn());
+  win.localMapLabel = localLabel;
+  win.worldMapLabel = worldLabel;
+  zoomOut.addEventListener("click", () => {
+    win.leafletMap?.zoomOut();
+    win.worldMap?.zoomOut();
+  });
+  zoomIn.addEventListener("click", () => {
+    win.leafletMap?.zoomIn();
+    win.worldMap?.zoomIn();
+  });
   requestAnimationFrame(() => initializeMapWindow(win));
   return win;
 }
@@ -5410,14 +5662,23 @@ function initializeMapWindow(win) {
   const center = currentMapCenter();
   if (!window.L) {
     win.mapCanvas.textContent = "Leaflet.js unavailable";
+    if (win.mapWorldCanvas) win.mapWorldCanvas.textContent = "Leaflet.js unavailable";
     if (win.mapCoords) win.mapCoords.textContent = formatMapCoords(center);
     return;
   }
-  const map = L.map(win.mapCanvas, { zoomControl: false }).setView([center.lat, center.lon], center.zoom);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  const mapOptions = {
+    zoomControl: false,
+    attributionControl: false,
+    worldCopyJump: true,
+  };
+  const map = L.map(win.mapCanvas, mapOptions).setView([center.lat, center.lon], center.zoom);
+  const worldMap = L.map(win.mapWorldCanvas, mapOptions).setView([20, 35], 1);
+  const addTiles = (target) => L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution: "&copy; OpenStreetMap",
-  }).addTo(map);
+  }).addTo(target);
+  addTiles(map);
+  addTiles(worldMap);
   const applyTileFilter = () => {
     win.querySelectorAll(".leaflet-tile").forEach((tile) => {
       tile.style.filter = "grayscale(100%) brightness(0.6) contrast(1.2) invert(0)";
@@ -5425,53 +5686,124 @@ function initializeMapWindow(win) {
   };
   map.on("load", applyTileFilter);
   map.on("tileload", applyTileFilter);
-  const marker = L.circleMarker([center.lat, center.lon], {
-    radius: 4,
+  worldMap.on("load", applyTileFilter);
+  worldMap.on("tileload", applyTileFilter);
+  const points = projectMapPoints();
+  const pointLatLngs = points.map((point) => [point.lat, point.lon]);
+  const route = L.polyline(pointLatLngs, {
+    color: currentChapterColor(),
+    weight: 1.5,
+    opacity: 0.78,
+  }).addTo(worldMap);
+  const worldMarkers = points.map((point) => L.circleMarker([point.lat, point.lon], {
+    radius: 3,
     weight: 1,
     color: "#000000",
-    fillColor: "#000000",
+    fillColor: currentChapterColor(),
+    fillOpacity: 0.86,
+  }).bindTooltip(point.label || point.key || "", {
+    direction: "top",
+    opacity: 0.9,
+    sticky: true,
+  }).addTo(worldMap));
+  const worldCurrent = L.circleMarker([center.lat, center.lon], {
+    radius: 8,
+    weight: 2,
+    color: "#000000",
+    fillColor: currentChapterColor(),
     fillOpacity: 1,
-  }).addTo(map);
-  const label = L.marker([center.lat, center.lon], {
-    interactive: false,
-    icon: L.divIcon({
-      className: "map-city-label",
-      html: center.city || "",
-      iconSize: [90, 16],
-      iconAnchor: [-8, 8],
-    }),
-  }).addTo(map);
+  }).addTo(worldMap);
+  if (pointLatLngs.length) {
+    worldMap.fitBounds(pointLatLngs, { padding: [26, 26], maxZoom: 3 });
+  }
   win.leafletMap = map;
-  win.mapMarker = marker;
-  win.mapLabel = label;
+  win.worldMap = worldMap;
+  win.localLayer = null;
+  win.worldRoute = route;
+  win.worldMarkers = worldMarkers;
+  win.worldCurrent = worldCurrent;
   win.mapResizeObserver = new ResizeObserver(() => {
-    setTimeout(() => map.invalidateSize(), 0);
+    setTimeout(() => {
+      map.invalidateSize();
+      worldMap.invalidateSize();
+    }, 0);
   });
   win.mapResizeObserver.observe(win);
   state.map.instance = map;
-  state.map.marker = marker;
+  state.map.marker = null;
   state.map.ready = true;
   updateMapWindow(win, false);
-  setTimeout(() => map.invalidateSize(), 80);
+  [80, 300, 800].forEach((delay) => {
+    setTimeout(() => {
+      map.invalidateSize();
+      worldMap.invalidateSize();
+      fitLocalMap(win, currentMapCenter(), false);
+      if (pointLatLngs.length) worldMap.fitBounds(pointLatLngs, { padding: [26, 26], maxZoom: 3 });
+    }, delay);
+  });
 }
 
 function updateMapWindow(win = findWindowById("map"), fly = true) {
   if (!win) return;
   const center = currentMapCenter();
-  if (win.mapCoords) win.mapCoords.textContent = formatMapCoords(center);
-  if (!win.leafletMap || !win.mapMarker) return;
+  const places = currentMapPlaces(center);
+  if (win.mapCoords) win.mapCoords.textContent = formatMapPlaceSummary(center);
+  if (win.localMapLabel) win.localMapLabel.textContent = `LOCAL / ${center.city}`;
+  if (!win.leafletMap) return;
   const latLng = [center.lat, center.lon];
-  win.mapMarker.setLatLng(latLng);
-  win.mapMarker.setStyle({ color: "#000000", fillColor: "#000000" });
-  if (win.mapLabel) {
-    win.mapLabel.setLatLng(latLng);
-    win.mapLabel.setIcon(L.divIcon({
-      className: "map-city-label",
-      html: center.city || "",
-      iconSize: [90, 16],
-      iconAnchor: [-8, 8],
-    }));
+  renderLocalMapPlaces(win, center, places);
+  if (win.worldCurrent) {
+    win.worldCurrent.setLatLng(latLng);
+    win.worldCurrent.setStyle({ fillColor: currentChapterColor() });
   }
+  if (win.worldRoute) win.worldRoute.setStyle({ color: currentChapterColor() });
+  fitLocalMap(win, center, fly);
+}
+
+function currentMapPlaces(center = currentMapCenter()) {
+  const places = Array.isArray(center.places) && center.places.length ? center.places : [center];
+  return places
+    .map((place) => ({
+      label: place.label || center.city || "point",
+      lat: Number(place.lat),
+      lon: Number(place.lon),
+    }))
+    .filter((place) => Number.isFinite(place.lat) && Number.isFinite(place.lon));
+}
+
+function renderLocalMapPlaces(win, center, places = currentMapPlaces(center)) {
+  if (!window.L || !win?.leafletMap) return;
+  win.localLayer?.remove();
+  const layer = L.layerGroup();
+  if (places.length > 1) {
+    L.polyline(places.map((place) => [place.lat, place.lon]), {
+      color: currentChapterColor(),
+      weight: 1.2,
+      opacity: 0.55,
+    }).addTo(layer);
+  }
+  places.forEach((place) => {
+    L.circleMarker([place.lat, place.lon], {
+      radius: places.length > 1 ? 6 : 7,
+      weight: 2,
+      color: "#000000",
+      fillColor: currentChapterColor(),
+      fillOpacity: 1,
+    }).addTo(layer);
+  });
+  layer.addTo(win.leafletMap);
+  win.localLayer = layer;
+}
+
+function fitLocalMap(win, center, fly = true) {
+  if (!window.L || !win?.leafletMap) return;
+  const places = currentMapPlaces(center);
+  if (places.length > 1) {
+    const bounds = L.latLngBounds(places.map((place) => [place.lat, place.lon]));
+    win.leafletMap.fitBounds(bounds, { padding: [38, 38], maxZoom: center.zoom });
+    return;
+  }
+  const latLng = [center.lat, center.lon];
   if (fly) win.leafletMap.flyTo(latLng, center.zoom, { duration: 1.5 });
   else win.leafletMap.setView(latLng, center.zoom);
 }
@@ -5479,6 +5811,7 @@ function updateMapWindow(win = findWindowById("map"), fly = true) {
 function teardownMapWindow(win) {
   win?.mapResizeObserver?.disconnect();
   if (win?.leafletMap) win.leafletMap.remove();
+  if (win?.worldMap) win.worldMap.remove();
   if (state.map.instance === win?.leafletMap) {
     state.map.instance = null;
     state.map.marker = null;
@@ -5491,12 +5824,58 @@ function currentMapCenter() {
   return MAP_CENTERS[key] || MAP_CENTERS.CH00;
 }
 
+function projectMapPoints() {
+  const seen = new Set();
+  const points = [];
+  const add = (point) => {
+    const lat = Number(point.lat);
+    const lon = Number(point.lon);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+    const key = `${lat.toFixed(3)},${lon.toFixed(3)},${point.label || point.location || ""}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    points.push({
+      lat,
+      lon,
+      label: point.label || point.location || point.clip || "point",
+      time: point.time || point.local_time || "",
+    });
+  };
+  Object.values(state.signal || {})
+    .filter((clip) => Number.isFinite(Number(clip.lat)) && Number.isFinite(Number(clip.lon)))
+    .sort((a, b) => String(a.local_time || "").localeCompare(String(b.local_time || "")))
+    .forEach((clip) => add({
+      lat: clip.lat,
+      lon: clip.lon,
+      label: clip.location || clip.clip,
+      time: clip.local_time,
+    }));
+  Object.values(MAP_CENTERS).forEach((center) => {
+    currentMapPlaces(center).forEach((place) => add({
+      lat: place.lat,
+      lon: place.lon,
+      label: place.label,
+    }));
+  });
+  CH00_LOCATION_SCAN.forEach(add);
+  return points;
+}
+
 function currentChapterColor() {
   return getComputedStyle(dom.root).getPropertyValue("--chapter-primary").trim() || "#f0f0f0";
 }
 
 function formatMapCoords(center) {
   return `${center.lat.toFixed(5)}, ${center.lon.toFixed(5)}`;
+}
+
+function formatMapPlaceSummary(center) {
+  const places = currentMapPlaces(center);
+  if (places.length <= 1) return `${center.city}  ${formatMapCoords(center)}`;
+  const coords = places
+    .map((place) => `${place.label} ${place.lat.toFixed(4)}, ${place.lon.toFixed(4)}`)
+    .join(" / ");
+  return `${center.city}  ${coords}`;
 }
 
 function currentNewsKey() {
@@ -5538,7 +5917,7 @@ function buildVideoObjectWindow(title, clipKey, extraHtml, autoCloseMs = null) {
     return createDesktopWindow(title, fallback);
   }
   const body = [
-    `<div class="desktop-crt"><video playsinline preload="metadata" src="${clip.filename}"></video></div>`,
+    `<div class="desktop-crt"><video playsinline webkit-playsinline preload="metadata" src="${clip.filename}"></video></div>`,
     `<div class="desktop-signal">${extraHtml}</div>`,
   ].join("");
   const win = createDesktopWindow(title, body);
@@ -5596,8 +5975,41 @@ MOTION: 0.136</pre>`,
 function buildSabineWindow() {
   const shell = document.createElement("pre");
   shell.className = "trash-doc trash-doc-pdf sabine-doc";
-  shell.textContent = SABINE_ANALYSIS_TEXT;
-  return createSizedDesktopWindow("The Abduction of the Sabine Women_Dai Pan_1_3.pdf", shell, "desktop-window-pdf desktop-window-sabine");
+  shell.textContent = window.CH01_DOCUMENT_TEXTS?.sabine?.content || SABINE_ANALYSIS_TEXT;
+  return createSizedDesktopWindow("The Abduction of the Sabine Women_Dai Pan_1_3.pdf", shell, "desktop-window-document desktop-window-sabine");
+}
+
+function buildCh01DocumentWindow(id) {
+  const doc = CH01_DOCUMENTS[id];
+  if (!doc) return null;
+  const shell = document.createElement("section");
+  shell.className = `document-preview document-preview-${doc.type}`;
+
+  const header = document.createElement("header");
+  header.className = "document-preview-header";
+  const title = Object.assign(document.createElement("div"), { className: "document-preview-title", textContent: doc.title });
+  const meta = Object.assign(document.createElement("div"), { className: "document-preview-meta", textContent: doc.meta });
+  header.append(title, meta);
+
+  const body = document.createElement("div");
+  body.className = "document-preview-body";
+  const text = document.createElement("pre");
+  text.className = "document-preview-text";
+  const sourceText = window.CH01_DOCUMENT_TEXTS?.[id]?.content;
+  text.textContent = sourceText || doc.preview;
+  body.appendChild(text);
+
+  const footer = document.createElement("footer");
+  footer.className = "document-preview-footer";
+  footer.append(
+    Object.assign(document.createElement("span"), { textContent: doc.filename }),
+    Object.assign(document.createElement("span"), { textContent: doc.type.toUpperCase() }),
+    Object.assign(document.createElement("span"), {
+      textContent: sourceText ? `${sourceText.length} chars` : "preview text",
+    })
+  );
+  shell.append(header, body, footer);
+  return createSizedDesktopWindow(doc.filename, shell, "desktop-window-document");
 }
 
 function buildTrashWindow() {
@@ -6005,12 +6417,11 @@ function runLocating() {
   dom.lonScan.textContent = "000.0000";
   dom.signalAcquired?.classList.remove("is-active");
   startCh00Instruments();
-  startCh00CenterViz(token);
   startCh00Monologue(token);
   startCh00LocationTicker(token);
   state.ch00Timers.push(setTimeout(() => {
     if (state.chapter === "ch00" && state.ch00RunToken === token) startCh00BootLog(token);
-  }, CH00_MONOLOGUE_LINES.length * 3000 + 350));
+  }, 900));
 
   function step(now) {
     if (state.chapter !== "ch00" || state.ch00RunToken !== token) return;
@@ -6037,7 +6448,7 @@ function runLocating() {
     } else {
       dom.chapter00?.classList.remove("is-scanning");
       dom.signalAcquired.classList.add("is-active");
-      showCh00OnboardingDialog();
+      startCh00DialogSequence(token);
     }
   }
 
@@ -6047,44 +6458,6 @@ function runLocating() {
 function startCh00Instruments() {
   dom.chapter00?.classList.add("is-instrument-active");
   updateCh00Instruments(0);
-}
-
-function startCh00CenterViz(token) {
-  if (!dom.ch00CenterViz) return;
-  const modes = [
-    { mode: "bars", title: "FILE DENSITY" },
-    { mode: "pie", title: "SIGNAL SHARE" },
-    { mode: "knot", title: "ROUTE ENTANGLEMENT" },
-    { mode: "bars", title: "TEXT WEIGHT" },
-    { mode: "pie", title: "TIME ALLOCATION" },
-    { mode: "knot", title: "MEMORY CROSSING" },
-  ];
-  let index = 0;
-  const render = () => {
-    if (state.chapter !== "ch00" || state.ch00RunToken !== token) return;
-    const spec = modes[index % modes.length];
-    dom.ch00CenterViz.dataset.mode = spec.mode;
-    if (dom.ch00VizTitle) dom.ch00VizTitle.textContent = spec.title;
-    updateCh00CenterVizValues(index);
-    dom.chapter00?.classList.add("is-center-viz-active");
-    index += 1;
-  };
-  render();
-  state.ch00CenterVizTimer = setInterval(render, 3300);
-}
-
-function updateCh00CenterVizValues(index) {
-  if (dom.ch00VizPie) {
-    const a = 70 + ((index * 37) % 110);
-    const b = a + 80 + ((index * 23) % 90);
-    dom.ch00VizPie.style.setProperty("--pie-a", `${a}deg`);
-    dom.ch00VizPie.style.setProperty("--pie-b", `${Math.min(310, b)}deg`);
-  }
-  if (!dom.ch00CenterViz) return;
-  dom.ch00CenterViz.querySelectorAll(".ch00-viz-bars span").forEach((bar, barIndex) => {
-    const height = 28 + ((index * 17 + barIndex * 19) % 62);
-    bar.style.setProperty("--h", `${height}%`);
-  });
 }
 
 function updateCh00Instruments(progress) {
@@ -6107,12 +6480,12 @@ function startCh00Monologue(token) {
       if (state.chapter !== "ch00" || state.ch00RunToken !== token) return;
       dom.ch00Monologue.textContent = line;
       dom.ch00Monologue.classList.add("is-visible");
-    }, index * 3000));
+    }, index * CH00_MONOLOGUE_INTERVAL));
   });
   state.ch00Timers.push(setTimeout(() => {
     if (state.ch00RunToken !== token) return;
     dom.ch00Monologue?.classList.remove("is-visible");
-  }, CH00_MONOLOGUE_LINES.length * 3000));
+  }, CH00_MONOLOGUE_LINES.length * CH00_MONOLOGUE_INTERVAL));
 }
 
 function startCh00LocationTicker(token) {
@@ -6139,7 +6512,7 @@ function startCh00LocationTicker(token) {
 function startCh00BootLog(token = state.ch00RunToken) {
   if (!dom.ch00BootLog) return;
   clearInterval(state.ch00BootLogTimer);
-  const entries = buildCh00ReadSequence().filter((entry) => entry.text !== "");
+  const entries = buildCh00GeoSequence().filter((entry) => entry.text !== "");
   const lines = [];
   let index = 0;
   dom.ch00BootLog.textContent = "";
@@ -6169,10 +6542,8 @@ function stopCh00VisualSequence() {
   state.ch00Timers = [];
   clearInterval(state.ch00LocationTimer);
   state.ch00LocationTimer = null;
-  clearInterval(state.ch00CenterVizTimer);
-  state.ch00CenterVizTimer = null;
   stopCh00BootLog();
-  dom.chapter00?.classList.remove("is-scanning", "is-coordinate-active", "is-instrument-active", "is-center-viz-active");
+  dom.chapter00?.classList.remove("is-scanning", "is-coordinate-active", "is-instrument-active");
   updateCh00Instruments(0);
   dom.ch00Monologue?.classList.remove("is-visible");
   if (dom.ch00Monologue) dom.ch00Monologue.textContent = "";
@@ -6182,20 +6553,32 @@ function stopCh00VisualSequence() {
   }
 }
 
-function showCh00OnboardingDialog() {
-  stopCh00VisualSequence();
-  showSystemDialog("■ in_praise_of_time", [
-    "This is an archive.",
-    "46 clips. 47 locations.",
-    "2024 – 2026.",
-    "",
-    "Double-click desktop objects to open.",
-    "Windows can be moved and resized.",
-    "Type \"shutdown\" to end.",
-  ], () => {
-    sessionStorage.setItem("onboarding_ch01", "1");
-    hardCut(() => activateChapter("ch01"));
-  });
+function startCh00DialogSequence(token) {
+  state.ch00Timers.push(setTimeout(() => {
+    if (state.chapter !== "ch00" || state.ch00RunToken !== token) return;
+    showSystemDialog("■ location", ["Where you think they are?"], () => {
+      if (state.chapter === "ch00" && state.ch00RunToken === token) showCh00ContinueDialog(token);
+    }, { autoOkMs: 1350 });
+  }, 520));
+}
+
+function showCh00ContinueDialog(token) {
+  if (state.chapter !== "ch00" || state.ch00RunToken !== token) return;
+  showSystemChoiceDialog("■ location", ["You are still with me, right?"], [
+    {
+      label: "[ YES ]",
+      action: () => {
+        const target = state.previousChapter && state.previousChapter !== "ch00" && CHAPTERS[state.previousChapter]
+          ? state.previousChapter
+          : "ch01";
+        hardCut(() => activateChapter(target === "int" ? "ch04" : target));
+      },
+    },
+    {
+      label: "[ NO ]",
+      action: () => hardCut(() => activateChapter("ch01")),
+    },
+  ]);
 }
 
 function activateChapter(chapter) {
@@ -6216,6 +6599,7 @@ function activateChapter(chapter) {
     state.monologueCycle[chapter] = -1;
   }
   state.wasInterrupted = false;
+  clearAfterAnimation();
 
   const spec = CHAPTERS[chapter];
   setPalette(spec);
@@ -6282,7 +6666,7 @@ function activateChapter(chapter) {
     updateSystemReadout();
     maybeStartP5(chapter);
     maybeStartCh04InterruptTimer(chapter);
-    renderAfterPage();
+    if (chapter === "after") renderAfterPage();
     return;
   }
   setClip(spec.clips[0]);
@@ -6296,15 +6680,92 @@ function activateChapter(chapter) {
 
 function renderAfterPage() {
   if (!dom.afterFileText) return;
+  clearAfterAnimation();
+  dom.afterFileText.className = "";
   dom.afterFileText.textContent = "loading...";
   fetch("一切都会好起来的.txt")
     .then((response) => response.ok ? response.text() : Promise.reject(new Error(`txt ${response.status}`)))
     .then((text) => {
       dom.afterFileText.textContent = text.trim();
+      scheduleAfterAnimation(text.trim());
     })
     .catch(() => {
-      dom.afterFileText.textContent = "一切都会好起来的。\n\nThis file is still open.";
+      const fallback = "一切都会好起来的。\n\nThis file is still open.";
+      dom.afterFileText.textContent = fallback;
+      scheduleAfterAnimation(fallback);
     });
+}
+
+function clearAfterAnimation() {
+  state.afterTimers.forEach((timer) => clearTimeout(timer));
+  state.afterTimers = [];
+  if (dom.afterFileText) dom.afterFileText.className = "";
+}
+
+function scheduleAfterAnimation(text) {
+  const original = String(text || "").trim();
+  state.afterTimers.push(setTimeout(() => {
+    if (state.chapter !== "after" || !dom.afterFileText) return;
+    renderAfterFlyingText(original);
+  }, 5000));
+  state.afterTimers.push(setTimeout(() => {
+    if (state.chapter !== "after" || !dom.afterFileText) return;
+    setAfterFinalLine("一切都会好起来的。");
+  }, 7200));
+  state.afterTimers.push(setTimeout(() => {
+    if (state.chapter !== "after" || !dom.afterFileText) return;
+    animateAfterRewrite("一切都会好起来的。", "这就够了。");
+  }, 12200));
+}
+
+function renderAfterFlyingText(text) {
+  const lines = String(text || "")
+    .split("\n")
+    .map((line) => line || " ");
+  dom.afterFileText.textContent = "";
+  dom.afterFileText.className = "is-flying";
+  lines.forEach((line, index) => {
+    const span = document.createElement("span");
+    span.textContent = line;
+    const x = ((index % 3) - 1) * 12;
+    const y = (index % 2 === 0 ? -1 : 1) * (6 + index);
+    const r = ((index % 5) - 2) * 0.6;
+    span.style.setProperty("--x", `${x}px`);
+    span.style.setProperty("--y", `${y}px`);
+    span.style.setProperty("--r", `${r}deg`);
+    span.style.setProperty("--d", `${index * 0.045}s`);
+    dom.afterFileText.appendChild(span);
+  });
+}
+
+function setAfterFinalLine(line) {
+  dom.afterFileText.className = "is-final";
+  dom.afterFileText.textContent = line;
+}
+
+function animateAfterRewrite(from, to) {
+  dom.afterFileText.className = "is-final is-typing";
+  let current = String(from);
+  const target = String(to);
+  const deleteStep = () => {
+    if (state.chapter !== "after" || !dom.afterFileText) return;
+    if (current.length > 0) {
+      current = current.slice(0, -1);
+      dom.afterFileText.textContent = current;
+      state.afterTimers.push(setTimeout(deleteStep, 90));
+      return;
+    }
+    let index = 0;
+    const typeStep = () => {
+      if (state.chapter !== "after" || !dom.afterFileText) return;
+      index += 1;
+      dom.afterFileText.textContent = target.slice(0, index);
+      if (index < target.length) state.afterTimers.push(setTimeout(typeStep, 130));
+      else dom.afterFileText.className = "is-final";
+    };
+    state.afterTimers.push(setTimeout(typeStep, 240));
+  };
+  deleteStep();
 }
 
 function maybeShowOnboardingDialog(chapter) {
@@ -6330,7 +6791,7 @@ function maybeShowTrashDialog() {
   ]);
 }
 
-function showSystemDialog(title, lines, onOk) {
+function showSystemDialog(title, lines, onOk, options = {}) {
   const existing = document.querySelector(".system-dialog");
   if (existing) existing.remove();
   const dialog = document.createElement("section");
@@ -6342,12 +6803,56 @@ function showSystemDialog(title, lines, onOk) {
     `<div class="system-dialog-body"><pre></pre><button type="button">[ OK ]</button></div>`,
   ].join("");
   dialog.querySelector("pre").textContent = `\n${lines.join("\n")}\n`;
-  dialog.querySelector("button").addEventListener("click", () => {
+  let done = false;
+  const handleOk = () => {
+    if (done) return;
+    done = true;
     dialog.remove();
     if (onOk) onOk();
-  });
+  };
+  dialog.querySelector("button").addEventListener("click", handleOk);
   document.body.appendChild(dialog);
   dialog.querySelector("button").focus();
+  if (Number.isFinite(options.autoOkMs)) {
+    setTimeout(() => {
+      if (!document.body.contains(dialog)) return;
+      dialog.classList.add("is-auto-clicking");
+      setTimeout(handleOk, 650);
+    }, options.autoOkMs);
+  }
+}
+
+function showSystemChoiceDialog(title, lines, choices) {
+  const existing = document.querySelector(".system-dialog");
+  if (existing) existing.remove();
+  const dialog = document.createElement("section");
+  dialog.className = "system-dialog";
+  dialog.setAttribute("role", "dialog");
+  dialog.setAttribute("aria-modal", "true");
+  const body = document.createElement("div");
+  body.className = "system-dialog-body";
+  const pre = document.createElement("pre");
+  pre.textContent = `\n${lines.join("\n")}\n`;
+  const actions = document.createElement("div");
+  actions.className = "system-dialog-actions";
+  choices.forEach((choice) => {
+    const button = Object.assign(document.createElement("button"), {
+      type: "button",
+      textContent: choice.label,
+    });
+    button.addEventListener("click", () => {
+      dialog.remove();
+      choice.action?.();
+    });
+    actions.appendChild(button);
+  });
+  body.append(pre, actions);
+  dialog.append(
+    Object.assign(document.createElement("div"), { className: "system-dialog-title", textContent: title }),
+    body
+  );
+  document.body.appendChild(dialog);
+  actions.querySelector("button")?.focus();
 }
 
 function updateDesktopObjectVisibility(chapter) {
