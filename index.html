@@ -66,6 +66,9 @@
       <button data-chapter="ch02">CHAPTER 02</button>
       <button data-chapter="ch03">CHAPTER 03</button>
       <button data-chapter="ch04">CHAPTER 04</button>
+      <button data-chapter="ch05">CHAPTER 05</button>
+      <button data-chapter="ch06">CHAPTER 06</button>
+      <button data-chapter="after">CHAPTER AFTER</button>
     </nav>
     <div class="system-readout" id="system-readout" aria-label="System readout"></div>
   </header>
@@ -84,6 +87,10 @@
       </div>
       <div class="ios-scroll" id="ios-scroll">iOS 16.6 -> 17.2 -> 17.3 -> 17.5 -> 17.6 -> 18.0 -> 18.1 -> 26.0</div>
       <pre class="ch00-boot-log" id="ch00-boot-log" aria-label="Boot log"></pre>
+      <div class="ch00-shadow-note">
+        The first shadow came from <i>In Praise of Shadows</i>.<br>
+        不是为了照亮什么。只是想让时间留在暗处一会儿。
+      </div>
       <div class="beishang-fragment fragment-ch00">这已经是我第四次开始回顾这些照片。</div>
       <div class="signal-acquired" id="signal-acquired">SIGNAL ACQUIRED</div>
     </section>
@@ -94,6 +101,7 @@
           <pre class="ascii-top" aria-hidden="true">+--------------------------------------+</pre>
           <div class="crt-frame" id="crt-frame">
             <video id="chapter-video" playsinline preload="metadata"></video>
+            <img id="chapter-photo" class="chapter-photo" alt="">
           </div>
           <div class="video-control-bar" id="video-control-bar">
             <button id="video-toggle" type="button">[‖]</button>
@@ -140,7 +148,10 @@
           <div class="box-label">| CH04_TEXT_01 |</div>
           <div><!-- CH04_TEXT_01 --></div>
         </div>
+        <div class="monologue-text" id="monologue-text" aria-hidden="true"></div>
       </div>
+
+      <section id="chapter-media-archive" class="chapter-media-archive" aria-label="Chapter media archive"></section>
 
       <div id="p5-layer" class="p5-layer" aria-hidden="true">
         <div id="ch02-text-source"><!-- CH02_TEXT --></div>
@@ -152,7 +163,7 @@
       </div>
 
       <div id="chapter-03-grid" class="chapter-03-grid" aria-hidden="true"></div>
-      <svg id="altitude-route" class="altitude-route" viewBox="0 0 320 680" preserveAspectRatio="xMidYMid meet" aria-label="Altitude route"></svg>
+      <svg id="altitude-route" class="altitude-route" viewBox="0 0 360 680" preserveAspectRatio="xMidYMid meet" aria-label="Altitude route"></svg>
       <div id="altitude-scale" class="altitude-scale" aria-hidden="true"></div>
 
       <div id="brisbane-sun" aria-hidden="true"></div>
@@ -161,6 +172,16 @@
       <div class="beishang-fragment fragment-ch03-right">这原定是一趟找寻信仰的旅程。</div>
       <div class="beishang-fragment fragment-ch03-left">我喜欢那些在长久的时间中并没有染上多余颜色的物件。</div>
       <div class="beishang-fragment fragment-ch04">当你终于获得了看清世界的眼睛，也许，又开始想念那些厚重的镜片。</div>
+
+      <section class="chapter-after-page" id="chapter-after-page" aria-label="Chapter after">
+        <div class="after-file">
+          <div class="after-file-title">一切都会好起来的.txt</div>
+          <pre id="after-file-text">loading...</pre>
+        </div>
+        <div class="after-about">
+          <div>IN_PRAISE_OF_TIME</div>
+        </div>
+      </section>
     </section>
 
     <section id="desktop-object-layer" aria-label="Desktop object layer">
@@ -183,6 +204,10 @@
       <button class="desktop-icon desktop-icon-readme" data-object="readme" aria-label="Open README">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 2h11l3 3v17H5z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M16 2v5h5" fill="none" stroke="#000" stroke-width="2"/><path d="M8 11h8M8 15h8M8 19h6" stroke="#000" stroke-width="2"/></svg>
         <span class="desktop-icon-label">README.txt</span>
+      </button>
+      <button class="desktop-icon desktop-icon-sabine" data-object="sabine" aria-label="Open Sabine analysis PDF">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 2h11l3 3v17H5z" fill="#fff" stroke="#000" stroke-width="2"/><path d="M16 2v5h5" fill="none" stroke="#000" stroke-width="2"/><path d="M8 11h8M8 14h8M8 17h5" stroke="#000" stroke-width="2"/></svg>
+        <span class="desktop-icon-label">SABINE_ANALYSIS.pdf</span>
       </button>
     </section>
 

@@ -24,19 +24,41 @@ window.NEWS_CONTENT = {
   },
   CH03: {
     pages: 2,
-    headline: "SUBJECT ASCENDS TO 3752M",
-    subtitle: "funded by first salary, destination chosen deliberately",
+    headline: "HOMETOWN FILES INSERTED",
+    subtitle: "nantong, huai'an, changshu: ordinary life becomes evidence",
     fig: "fig.3.1",
-    body_p1: `After completing internship obligations, subject purchased transport west. Altitude increased steadily from 1723m (Baiyin) to 3752m (Qilian pass).\n\nAt 3752m, air pressure was confirmed insufficient. The route was provided by others. Subject followed it.`,
-    body_p2: `Being relied upon at elevation feels different from being relied upon at sea level. This has not been studied.\n\n期待は重さがある。\nThe weight is considered acceptable.\n\n祁连山的空气确实稀薄。这是可以测量的。`
+    body_p1: `A new chapter has been inserted after signal loss. It contains Nantong, Huai'an, Changshu, a 2026 Nantong return point, and several no-coordinate still files.\n\nThe missing coordinates are not treated as failure. Hometown does not always appear as a searchable point.`,
+    body_p2: `The archive now pauses around ordinary life rather than between two destinations.\n\n生活不是旅程的反面。\n它是那些路线之外仍然发生的时间。`
   },
   CH04: {
     pages: 2,
-    headline: "FERRY DELAYED: SUN REMAINS IN POSITION",
-    subtitle: "1 hour 47 minutes. nothing to do.",
+    headline: "SUBJECT ASCENDS TO 3752M",
+    subtitle: "funded by first salary, destination chosen deliberately",
     fig: "fig.4.1",
-    body_p1: `The CityCat service from Hamilton Wharf to UQ Lakes stop continues to operate on schedule. Journey time: approximately 87 minutes with standard stops.\n\nPassengers report that sleeping is not possible. Reading is difficult. The sun occupies the upper-right quadrant of the window for the duration.`,
-    body_p2: `No one has complained officially. The river is moving. This has been confirmed.\n\n这里的太阳不让人感到温暖。\n这不是天气问题。\n\nThe Brisbane River tidal range at this point is approximately 1.8 meters. The ferry does not acknowledge this.`
+    body_p1: `After completing internship obligations in July 2025, subject purchased transport west. Altitude increased through Baiyin, Gulang, Qilian and the high road beyond.\n\nThis page records the July route only: road, salary, weather, thin air, and the pressure of being relied upon.`,
+    body_p2: `Being relied upon at elevation feels different from being relied upon at sea level. This has not been studied.\n\n期待は重さがある。\nThe weight is considered acceptable.\n\nThe large altitude chart belongs to this route. It should not borrow meaning from any later climb.`
+  },
+  CH05: {
+    pages: 2,
+    headline: "FERRY DELAYED: SUN REMAINS IN POSITION",
+    subtitle: "one hour plus. nothing to do.",
+    fig: "fig.5.1",
+    body_p1: `The CityCat service from Hamilton Wharf to UQ Lakes stop continues to operate on schedule. The Brisbane chapter begins as a 2025 river-city routine, then accepts Victoria and Melbourne as April 2026 Australian extension material.\n\nIn May 2026, the files return to Brisbane coordinates. The chapter is no longer only a river commute, but it remains a southern-hemisphere continuation.`,
+    body_p2: `No one has complained officially. The river is moving. This has been confirmed.\n\n这里的太阳不让人感到温暖。\n这不是天气问题。\n\nVictoria appears as road, dusk, food, and the feeling that Australia can continue outside Brisbane before returning to Queensland.`
+  },
+  CH06: {
+    pages: 1,
+    headline: "AFTERIMAGE REGISTERED",
+    subtitle: "small files form a chapter after seeing",
+    fig: "fig.6.1",
+    body: `Small-body color fragments and monochrome files have been assigned to CH06.\n\nNo GPS is required. The subject has already moved from geography to apparatus: black-and-white rooms, flowers, tables, windows, and residual light.\n\nThe story now ends twice: once as afterimage, and once as an open text file.`
+  },
+  AFTER: {
+    pages: 1,
+    headline: "TEXT FILE REMAINS OPEN",
+    subtitle: "about page continues without video",
+    fig: "fig.after",
+    body: `No clip is attached to this chapter.\n\nA small text file remains on screen. It says everything will be okay, without proving it.\n\nThe archive has not ended. It has only stopped playing video.`
   },
   INT: {
     pages: 1,

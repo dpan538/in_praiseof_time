@@ -1,0 +1,192 @@
+[
+  {
+    "id": "hometown_nantong_low_altitude",
+    "title": "Hometown / Nantong low-altitude loop",
+    "chapter": "CH03 / HOMETOWN",
+    "date_context": "2025-05-07 to 2026-02-26",
+    "visible_surface": "low streets, repeated evening coordinates, phone camera",
+    "location_name": "Nantong / Tongzhou, Jiangsu",
+    "coordinates": { "lat": 31.98386, "lon": 120.93178 },
+    "altitude_m": 12,
+    "signal_coverage": "GPS repeated across several iPhone files",
+    "camera": "Apple iPhone 14",
+    "files": ["IMG_0995.jpg", "IMG_1745.JPG", "IMG_1752.JPG", "IMG_1755.JPG", "IMG_1771.JPG", "IMG_2026.jpg", "IMG_4389.JPG"],
+    "one_fact": "The files cluster tightly around low-elevation Nantong/Tongzhou coordinates rather than behaving like destination photos.",
+    "narrative_note": "This is the hometown line as ordinary return across 2025 and early 2026: low coordinates, almost no altitude, no need to perform as a landmark.",
+    "source_note": "Nantong official regional material places Tongzhou on the north side of the Yangtze River Delta with Yellow Sea adjacency.",
+    "source_urls": ["https://en.nantong.gov.cn/regions.html"],
+    "calendar_events": [
+      { "date": "2025-05-07", "label": "CH03 HOMETOWN: Nantong phone-photo cluster begins" },
+      { "date": "2026-02-26", "label": "CH03 HOMETOWN: Nantong return coordinate (IMG_0995)" }
+    ],
+    "search_terms": ["hometown", "nantong", "tongzhou", "南通", "通州", "life", "daily"]
+  },
+  {
+    "id": "hometown_no_coordinate_stills",
+    "title": "Hometown / no-coordinate stills",
+    "chapter": "CH03 / HOMETOWN",
+    "date_context": "2026-02-27 14:48-15:11",
+    "visible_surface": "stills with no embedded coordinates, nearby life record",
+    "location_name": "Hometown line / no GPS",
+    "coordinates_status": "no GPS embedded",
+    "signal_coverage": "camera metadata only",
+    "camera": "digital still camera / no GPS",
+    "files": ["1dx-42.JPG", "1dx-43.JPG", "1dx-50.JPG"],
+    "one_fact": "All three files carry time and device metadata, but no usable GPS field.",
+    "narrative_note": "The missing coordinate is useful: it lets the hometown chapter feel less like evidence and more like living nearby.",
+    "calendar_events": [
+      { "date": "2026-02-27", "label": "CH03 HOMETOWN: no-coordinate still group" }
+    ],
+    "search_terms": ["canon", "1dx", "no gps", "hometown", "生活", "故乡"]
+  },
+  {
+    "id": "hometown_huaian_canal_evening",
+    "title": "Hometown / Huai'an canal evening",
+    "chapter": "CH03 / HOMETOWN",
+    "date_context": "2025-06-14 17:34-18:28",
+    "visible_surface": "flat waterway city, early evening, low altitude",
+    "location_name": "Huai'an, Jiangsu",
+    "coordinates": { "lat": 33.55691, "lon": 119.04390 },
+    "altitude_m": 11,
+    "signal_coverage": "GPS matched across four iPhone files",
+    "camera": "Apple iPhone 14",
+    "files": ["IMG_2875.jpg", "IMG_2888.JPG", "IMG_2895.jpg", "IMG_2897.JPG"],
+    "one_fact": "The Huai'an group stays around 33.5569, 119.0439, almost level with the plain.",
+    "narrative_note": "This should read as a remembered everyday city, not a travel trophy: canal, flatness, evening, return.",
+    "source_note": "Recent state-media reporting describes Huai'an's 125-kilometer Grand Canal corridor as a mix of heritage, ecology and livability.",
+    "source_urls": ["https://english.www.gov.cn/news/202505/12/content_WS6821fe7fc6d0868f4e8f27a5.html"],
+    "calendar_events": [
+      { "date": "2025-06-14", "label": "CH03 HOMETOWN: Huai'an evening GPS cluster" }
+    ],
+    "search_terms": ["huaian", "huai'an", "淮安", "canal", "grand canal", "hometown"]
+  },
+  {
+    "id": "hometown_changshu_single_coordinate",
+    "title": "Hometown / Changshu single coordinate",
+    "chapter": "CH03 / HOMETOWN",
+    "date_context": "2025-10-02 16:49",
+    "visible_surface": "one coordinate, Yangtze Delta edge, quiet insertion",
+    "location_name": "Changshu, Jiangsu",
+    "coordinates": { "lat": 31.74510, "lon": 120.93442 },
+    "altitude_m": 27,
+    "signal_coverage": "single iPhone GPS point",
+    "camera": "Apple iPhone 14",
+    "files": ["IMG_6657.jpg"],
+    "one_fact": "This is a single-file marker, so it should stay light in search rather than become a full chapter explanation.",
+    "narrative_note": "Changshu works best as a small hometown-adjacent note: one visible pin, no heavy symbolism.",
+    "source_note": "Changshu is positioned in the Yangtze River Delta and tied administratively to Suzhou.",
+    "source_urls": ["https://www.britannica.com/place/Changshu"],
+    "calendar_events": [
+      { "date": "2025-10-02", "label": "CH03 HOMETOWN: Changshu single coordinate" }
+    ],
+    "search_terms": ["changshu", "常熟", "suzhou", "yangtze delta", "hometown"]
+  },
+  {
+    "id": "ascent_gansu_qinghai_extension",
+    "title": "Ascent / Gansu-Qinghai route additions",
+    "chapter": "CH04 / ASCENT",
+    "date_context": "2025-07-06 to 2025-07-08",
+    "visible_surface": "road, mountain pass, phone altitude, thin-air archive",
+    "location_name": "Gansu-Qinghai route",
+    "coordinates": { "lat": 37.87520, "lon": 101.93460 },
+    "altitude_m": 2824,
+    "signal_coverage": "MOV GPS plus still-photo GPS",
+    "camera": "Apple iPhone 14",
+    "files": ["IMG_3626.MOV", "IMG_3676.MOV", "IMG_3701.jpg", "IMG_3818.JPG", "IMG_3856.JPG", "IMG_3861.JPG"],
+    "one_fact": "The added files extend the old ascent line with altitudes from roughly 2450m to 2824m.",
+    "narrative_note": "This is still a route chapter: altitude is useful as a small chart and rhythm, not as a grand spiritual proof.",
+    "calendar_events": [
+      { "date": "2025-07-06", "label": "CH04 ASCENT: added MOV GPS route points" },
+      { "date": "2025-07-08", "label": "CH04 ASCENT: Qinghai high-road stills" }
+    ],
+    "search_terms": ["ascent", "gansu", "qinghai", "altitude", "mountain", "route", "海拔"]
+  },
+  {
+    "id": "ascent_mount_tai_night_climb",
+    "title": "Ascent / Mount Tai night climb",
+    "chapter": "CH04 / ASCENT",
+    "date_context": "2025-12-23 23:10 to 2025-12-24 07:26",
+    "visible_surface": "night climb, stair route, summit-morning altitude",
+    "location_name": "Mount Tai / Tai'an, Shandong",
+    "coordinates": { "lat": 36.25606, "lon": 117.10623 },
+    "altitude_m": 1508,
+    "signal_coverage": "GPS altitude rises from about 504m to 1508m",
+    "camera": "Apple iPhone 14",
+    "files": ["IMG_8863", "IMG_8869.JPG", "IMG_8920.JPG", "IMG_8921.JPG", "IMG_8928.JPG"],
+    "one_fact": "The photo metadata gives a visible climb curve: 503.8m at night, then around 1500m after sunrise.",
+    "narrative_note": "泰山 should support the ascent chapter with a small bottom-right altitude graph, almost like a held breath.",
+    "source_note": "UNESCO describes Mount Taishan as a sacred mountain with a long imperial-cult history and cultural landscape.",
+    "source_urls": ["https://whc.unesco.org/en/list/437/"],
+    "calendar_events": [
+      { "date": "2025-12-23", "label": "CH04 ASCENT: Mt Tai night climb begins" },
+      { "date": "2025-12-24", "label": "CH04 ASCENT: Mt Tai morning altitude points" }
+    ],
+    "search_terms": ["mount tai", "taishan", "泰山", "taian", "altitude", "night climb", "ascent"]
+  },
+  {
+    "id": "brisbane_victoria_melbourne_2026",
+    "title": "Brisbane / Victoria-Melbourne extension",
+    "chapter": "CH05 / BRISBANE",
+    "date_context": "2026-04-06 to 2026-04-09",
+    "visible_surface": "Australian extension, High Country road, Melbourne river, Queensland return",
+    "location_name": "Victoria / Melbourne / South East Queensland",
+    "coordinates": { "lat": -37.81225, "lon": 144.97340 },
+    "altitude_m": 36,
+    "signal_coverage": "GPS route across four iPhone files",
+    "camera": "Apple iPhone 14",
+    "files": ["IMG_2009.JPG", "IMG_2094.JPG", "IMG_2118.jpg", "IMG_2157.jpg"],
+    "one_fact": "The 2026 Australian group moves from Victoria High Country coordinates into central Melbourne, then returns toward Queensland.",
+    "narrative_note": "Keep this inside Brisbane as an extension of southern-hemisphere living, not as a new epic chapter.",
+    "source_note": "Visit Victoria frames the Great Alpine Road as Wangaratta-to-Metung via Bright, Mount Hotham and diverse high-country landscapes; Melbourne Water describes the Yarra running through Melbourne to Port Phillip Bay.",
+    "source_urls": ["https://www.visitvictoria.com/see-and-do/road-trips-and-itineraries/the-great-alpine-road", "https://www.melbournewater.com.au/water-and-environment/water-management/rivers-and-creeks/yarra-river"],
+    "calendar_events": [
+      { "date": "2026-04-06", "label": "CH05 BRISBANE: Victoria High Country extension" },
+      { "date": "2026-04-08", "label": "CH05 BRISBANE: Melbourne / Yarra coordinate" },
+      { "date": "2026-04-09", "label": "CH05 BRISBANE: Queensland return point" }
+    ],
+    "search_terms": ["victoria", "melbourne", "yarra", "bright", "wangaratta", "brisbane", "australia", "澳洲"]
+  },
+  {
+    "id": "brisbane_daily_coordinates_2025_2026",
+    "title": "Brisbane / daily coordinates and return",
+    "chapter": "CH05 / BRISBANE",
+    "date_context": "2025-08-06 to 2026-05-14",
+    "visible_surface": "river city, commute coordinates, subtropical light, May return clips",
+    "location_name": "Brisbane, Queensland",
+    "coordinates": { "lat": -27.44352, "lon": 153.08539 },
+    "altitude_m": 14,
+    "signal_coverage": "repeated iPhone GPS points",
+    "camera": "Apple iPhone 14",
+    "files": ["IMG_5058.JPG", "IMG_5071.jpg", "IMG_5764.jpg", "IMG_7435.jpg", "IMG_7533.jpg", "IMG_7543.jpg", "IMG_7546.jpg", "IMG_7547.jpg", "IMG_7597.JPG", "IMG_5671.mov", "IMG_6010.mov", "IMG_3483.mov"],
+    "one_fact": "The Brisbane additions repeatedly sit near low river-city coordinates from August to November 2025, then return to Brisbane/Morningside/Balmoral coordinates on 2026-05-14.",
+    "narrative_note": "This should explain the Brisbane chapter as routine and light direction: ferry, river, commute, sun, and return to Queensland after the April 2026 Victoria extension.",
+    "source_note": "Brisbane City Council describes Brisbane as a subtropical river city on the coastal plain of South East Queensland.",
+    "source_urls": ["https://www.brisbane.qld.gov.au/content/dam/brisbanecitycouncil/corpwebsite/about-council/documents/brisbane-city-council-local-disaster-management-plan.pdf.coredownload.pdf"],
+    "calendar_events": [
+      { "date": "2025-08-06", "label": "CH05 BRISBANE: daily coordinate series begins" },
+      { "date": "2025-11-14", "label": "CH05 BRISBANE: late-2025 Brisbane coordinate" },
+      { "date": "2026-05-14", "label": "CH05 BRISBANE: May return clips" }
+    ],
+    "search_terms": ["brisbane", "river", "ferry", "subtropical", "queensland", "布里斯班"]
+  },
+  {
+    "id": "afterimage_pentax_ricoh_black",
+    "title": "Afterimage / small-body and monochrome fragments",
+    "chapter": "CH06 / AFTERIMAGE",
+    "date_context": "2026-01-22 to 2026-05-03",
+    "visible_surface": "camera-after-camera, black-and-white fragments, no GPS",
+    "location_name": "camera roll / no mapped location",
+    "coordinates_status": "no usable GPS embedded",
+    "signal_coverage": "camera metadata only",
+    "camera": "small color body / monochrome digital body",
+    "files": ["QS1-07.JPG", "QS1-08.JPG", "QS1-11.JPG", "QS1-12.JPG", "QS1-21.JPG", "QS1-22.JPG", "QS1-28.JPG", "_K336876.JPG", "_K336877.JPG", "_K336892.JPG", "_K336914.JPG", "_K336976.JPG", "_K336987.JPG", "_K337013.JPG", "_K337032.JPG", "_K337090.JPG", "_K337093.JPG", "_K337101.JPG", "_K337129.JPG", "_K337141.JPG", "_K337154.JPG", "_K337602.DNG"],
+    "one_fact": "The AFTERIMAGE set is defined less by place than by small color fragments, monochrome files, and missing GPS.",
+    "narrative_note": "This should stay quiet: a chapter after looking, after color, after the map has stopped helping.",
+    "calendar_events": [
+      { "date": "2026-01-22", "label": "CH06 AFTERIMAGE: small-body color group" },
+      { "date": "2026-02-07", "label": "CH06 AFTERIMAGE: monochrome group begins" },
+      { "date": "2026-05-03", "label": "CH06 AFTERIMAGE: monochrome DNG marker" }
+    ],
+    "search_terms": ["afterimage", "pentax", "ricoh", "monochrome", "black and white", "后像", "黑白"]
+  }
+]

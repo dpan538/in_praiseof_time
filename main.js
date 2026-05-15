@@ -1,4 +1,5 @@
 const MANIFEST_URL = "signal_data/MANIFEST.json";
+const MEDIA_ARCHIVE_URL = "signal_data/media_archive_index.json";
 
 const CHAPTERS = {
   ch00: {
@@ -28,20 +29,44 @@ const CHAPTERS = {
   },
   ch03: {
     code: "CHAPTER 03",
+    label: "HOMETOWN",
+    primary: "#FFB02E",
+    secondary: "#1A1208",
+    coordinates: "31.9840, 120.9316",
+    clips: [],
+  },
+  ch04: {
+    code: "CHAPTER 04",
     label: "ASCENT",
     primary: "#45D7D0",
     secondary: "#323232",
     tertiary: "#888888",
     coordinates: "37.3300, 101.4005",
-    clips: ["IMG_3484", "IMG_3549", "IMG_3551", "IMG_3567", "IMG_3612", "IMG_3618", "IMG_3682", "IMG_3727", "IMG_3773", "IMG_3798", "IMG_3810", "IMG_3840", "IMG_3940"],
+    clips: ["IMG_3484", "IMG_3549", "IMG_3551", "IMG_3567", "IMG_3612", "IMG_3618", "IMG_3626", "IMG_3676", "IMG_3682", "IMG_3727", "IMG_3773", "IMG_3798", "IMG_3810", "IMG_3840", "IMG_3940", "IMG_8863"],
   },
-  ch04: {
-    code: "CHAPTER 04",
+  ch05: {
+    code: "CHAPTER 05",
     label: "BRISBANE",
     primary: "#F39A13",
     secondary: "#1A1208",
     coordinates: "-27.4431, 153.0639",
     clips: ["IMG_5523", "IMG_5521", "IMG_5671", "IMG_6010", "IMG_3483"],
+  },
+  ch06: {
+    code: "CHAPTER 06",
+    label: "AFTERIMAGE",
+    primary: "#F0F0F0",
+    secondary: "#1A1208",
+    coordinates: "NO GPS / AFTER SEEING",
+    clips: [],
+  },
+  after: {
+    code: "CHAPTER AFTER",
+    label: "TXT",
+    primary: "#F0F0F0",
+    secondary: "#1A1208",
+    coordinates: "TEXT STILL RUNNING",
+    clips: [],
   },
   int: {
     code: "INT",
@@ -52,6 +77,8 @@ const CHAPTERS = {
     clips: ["IMG_8863"],
   },
 };
+
+const AUTO_CHAPTER_ORDER = ["ch01", "ch02", "ch03", "ch04", "ch05", "ch06", "after"];
 
 const BOOT_SEQUENCE_BASE = [
   { text: "in_praise_of_time", delay: 0 },
@@ -67,7 +94,40 @@ const SHUTDOWN_SUBTEXT = "2024 – 2026";
 const SHUTDOWN_FINAL = "daipan.art  /  daipan.ink";
 
 const DATE_OVERRIDES = {
-  IMG_6010: "2025-09-05T06:26:16+1000",
+  IMG_6010: "2026-05-14T00:23:36+1000",
+};
+
+const EXTRA_SIGNAL_ENTRIES = {
+  IMG_3626: {
+    clip: "IMG_3626",
+    filename: "IMG_3626.MOV",
+    rgb: { luminance_mean: 0.45, contrast: 0.18, motion_score: 0.08 },
+    rms_peak: 0.04,
+    glitch_weight: 0.05,
+    altitude_normalized: 0.51,
+    altitude_m: 2823.835,
+    ios: "18.1.1",
+    local_time: "2025-07-06 13:44",
+    time_of_day: "afternoon",
+    location: "Qilian corridor, CN",
+    lat: 37.8752,
+    lon: 101.9346,
+  },
+  IMG_3676: {
+    clip: "IMG_3676",
+    filename: "IMG_3676.MOV",
+    rgb: { luminance_mean: 0.42, contrast: 0.16, motion_score: 0.07 },
+    rms_peak: 0.04,
+    glitch_weight: 0.05,
+    altitude_normalized: 0.44,
+    altitude_m: 2575.376,
+    ios: "18.1.1",
+    local_time: "2025-07-06 19:46",
+    time_of_day: "evening",
+    location: "Qilian corridor, CN",
+    lat: 37.8949,
+    lon: 101.8205,
+  },
 };
 
 const NARRATIVE_TEXTS = {
@@ -94,42 +154,382 @@ const NARRATIVE_TEXTS = {
     "45.7° N。\n草原的边界只存在于地图里。\n在屏幕上它是一条线，在身体里它是一阵持续很久的沉默。",
   ],
   ch03: [
-    "银行给了我工资。\n我用它买了一张去西边的票。\n这是很普通的交换：劳动变成车票，车票变成海拔，海拔又变成身体里的重量。",
-    "有路线。有地图。\n我就往那里走。\n这不是没有选择，而是选择被画成一条线以后，人会忍不住相信它。",
-    "空気が薄い，但很好呼吸。\n被人需要，是一种重量。\n期待は重さがある，重さは証明だ。",
-    "3752m。\n这是我待过的最高的地方。\n空气少了三分之一，声音也少了一部分，连自己的名字都变轻了。",
-    "在高处，声音变得很轻。\n自己的声音也是。\n我想起那些没有染上多余颜色的物件，石头、票根、经年不换的位置。",
-    "走了八个小时的山路。\n到了之后发现没什么可看的。\n有时候旅程的意义不是抵达，而是承认身体确实把时间搬运到了这里。",
-    "门源。张掖。祁连。\n这些名字比地方本身更好看。\n它们像旧系统里的文件夹图标，打开以后只有风、光和继续上升的路。",
-    "翻越一座山需要的时间比想象中少。\n可从山上下来以后，那条路会留在身体里很久，像一段无法关闭的后台进程。",
-    "青海的星星不是浪漫。\n是一种压力。\n它们太亮，太确定，像在要求我给这趟旅行一个配得上的理由。",
+    "低地。\nlow light。\n回来的感觉。",
+    "南通 / 淮安 / 常熟\n水汽很慢。\n生活没有标题。",
+    "home is not a pin.\n故乡不是坐标。\nただ一个方向。",
+    "白花。\n晚饭。\nold table, new dust.",
+    "无坐标。\nno signal.\n还是能到。",
+    "coffee stain\n纸边\n门口的风。",
+    "not a journey.\n只是回来一下。\n停一会儿。",
+    "低海拔。\nlow altitude.\n心跳很近。",
+    "室内光。\nsoft bowl.\n小小的晚饭。",
+    "一张桌子。\none chair.\nまだ在这里。",
+    "打印纸。\n白墙。\nwater in the room.",
+    "return file\n未命名\n生活本身。",
+    "ordinary proof.\n普通证据。\nふつう 的光。",
+    "没有远方。\nno destination.\n只是生活。",
+    "窗很亮。\n人很安静。\n稍微停住。",
+    "HOMETOWN\n小声一点。\nlow, lower.",
   ],
   ch04: [
-    "船。一个半小时。\n什么都做不了。\n这反而像一种被批准的空白：河水替我移动，时间替我保持沉默。",
-    "太阳让人感到不安。\n不是热，是它的存在方式。\n它从正上方落下来，太明亮，太直接，不给记忆留下阴影。",
-    "Diese Stadt ist nicht schlecht.\n「悪い」でもない。\n这个地方让人不放松，像一张曝光正确但情绪错误的照片。",
-    "当你终于获得了看清世界的眼睛，\n也许，又开始想念那些厚重的镜片。\n模糊不是失败，它曾经替我保留过余地。",
-    "Brisbane River，水是棕色的。\n阳光从正上方打下来。\n南半球的夏天没有我熟悉的季节感，一切都像被重新命名。",
-    "渡轮靠岸。没有人等我。\n这是我要的。\n可是人真的得到想要的东西时，常常先感到轻微的不适。",
-    "City Cat, 07:22。\n乘客们不看窗外。\n我看得太久，像在等这座城市露出一个可以被我误解的表情。",
-    "-27.443° S。\n这是我去过最南的地方。\n不知道为什么要记录这件事，但记录本身正在变成理由。",
-    "读了三遍那本书，在不同的城市。\n每次读到的都不一样。\n也许变化的不是书，而是我每次都把另一个自己带到了页面前。",
+    "salary -> ticket -> altitude\n很普通。\n有一点冷。",
+    "Baiyin.\nGulang.\nthin road.",
+    "门源 / 张掖 / 祁连\nnames before air.",
+    "空気 稀薄。\n但是很好呼吸。\n身体变轻。",
+    "3752m\n声音变小。\n名字也轻。",
+    "red earth.\nwhite sky.\n继续上升。",
+    "expectation has weight.\n期待 有重量。\n不是隐喻。",
+    "山路八小时。\narrival: almost nothing.\nそれでいい。",
+    "stone ticket wind.\n石头 / 票根 / 风。",
+    "青海的星星。\ntoo bright.\n太明确。",
+    "ASCENT\n不是证明。\njust pressure.",
+    "route line\nbody line\n呼吸很短。",
+    "wind archive\n山口\nafter salary.",
+    "high place.\nlow voice.\n轻くなる。",
+  ],
+  ch05: [
+    "brown river.\nwhite sun.\n没有人等。",
+    "one hour plus.\nnothing to do.\n水替我走。",
+    "too bright.\n太直接。\n影が足りない。",
+    "07:10\nferry breath\n河也很困。",
+    "not bad.\nnot good.\nただ明るい。",
+    "Hamilton -> UQ\nsoft engine\n水面很脏。",
+    "south light.\n陌生的热。\n新的夏天。",
+    "blur was mercy.\n模糊曾经很好。\nやさしい 失败。",
+    "no one waits.\n正好。\n有点不安。",
+    "-27.443\n日常坐标\ndaily south.",
+    "river skin\nbrown / gold / grey.",
+    "three readings.\nthree cities.\n同一本书不回来。",
+    "April road.\nVictoria dusk.\n南方又远了一点。",
+    "Melbourne plate.\nYarra line.\nnot another chapter.",
+    "Queensland return.\n回到热。\nback to glare.",
+    "sun remains.\n我先移开眼睛。\n太晃。",
+    "ferry delay\napproved blank\n空白 被允许。",
+    "BRISBANE\n水慢。\nlight refuses shade.",
+  ],
+  ch06: [
+    "AFTERIMAGE\n残光\nまだ visible.",
+    "black room.\nwhite flower.\n小杯子。",
+    "after color\nafter map\nafter saying yes.",
+    "窗。\n花。\n床边的灰。",
+    "slow button.\nsmall click.\n低速生活。",
+    "水落下去。\ncoffee bloom.\n早晨变慢。",
+    "grey is not empty.\n灰不是少。\n余白 很多。",
+    "no GPS.\nno proof.\nstill there.",
+    "table light\nskin edge\n暗い白.",
+    "Rousseau, maybe.\n自然太远。\n杯子比较近。",
+    "Benjamin, maybe.\n复制的午後。\nstill warm.",
+    "Schopenhauer, maybe.\n世界很薄。\nshadow remains.",
+    "grain.\n反差。\n藏起来的温度。",
+    "after seeing\n看完以后\n眼睛还在。",
+    "not conclusion.\n只是小问题。\ncoffee / black / dust.",
+    "mono morning\nwithout answer\n白い 静默.",
+    "flowers on desk.\n不是纪念。\n只是放着。",
+    "AFTERIMAGE\n轻一点。\n不要结束得太像结束。",
   ],
 };
+
+const CH04_QINGHAI_TEXTS = NARRATIVE_TEXTS.ch04;
+const TAI_ASCENT_KEYS = new Set(["IMG_8863", "IMG_8869", "IMG_8920", "IMG_8921", "IMG_8928"]);
+const CH04_TAI_TEXTS = [
+  "泰山夜里。\nsteps, breath, no answer.",
+  "石阶。\n冷风。\n手电照到下一段路。",
+  "1508m\ncold morning\n再上去一次。",
+  "人群还没有出现。\n山已经醒了。\nただ cold.",
+  "夜爬不需要旁证。\n每一级石阶都单独成立。\n不要解释。",
+  "sunrise file\nstone gate\n脚先记住。",
+  "泰安很低。\n山顶很冷。\n中间全是台阶。",
+];
+
+const MONOLOGUE_TEXTS = {
+  ch01: [
+    "I stayed because leaving also needed a reason.\n窗外每一分钟都像别人的节日。",
+    "The room is not lonely.\nIt is just measured by one body.",
+    "纽约没有回答。\n它只把光放在玻璃上，然后继续。",
+    "A window can become a calendar\nwhen nothing else agrees to begin.",
+  ],
+  ch02: [
+    "地图缩小以后，草原看起来很好理解。\n身体不是这样。",
+    "No signal is not silence.\nIt is the phone admitting distance.",
+    "北方把名字拉长。\n城市、油田、边境，都慢慢变成风。",
+    "我不想把辽阔写成浪漫。\n辽阔有时候只是无法求助。",
+  ],
+  ch03: [
+    "回来不是事件。\n回来只是把杯子放回桌上。",
+    "Hometown is a low sound.\n不需要证明，也很难描述。",
+    "水汽、白墙、晚饭。\n生活用很小的东西保存人。",
+    "不是寻找过去。\n只是让今天靠近一点。",
+  ],
+  ch04: [
+    "上升不是胜利。\n只是呼吸被迫变得诚实。",
+    "High place, small voice.\n海拔把身体里的废话拿走。",
+    "路的尽头没有答案。\n只有更薄的空气和更清楚的脚步。",
+    "山不是象征。\n山只是很重，所以期待也变重。",
+  ],
+  ch05: [
+    "The river keeps its own schedule.\n我只是短暂坐在旁边。",
+    "南方的光太直接。\n有些事情因此看不清。",
+    "A ferry is a soft delay.\n它允许一天没有结论。",
+    "水面很脏，也很亮。\n这两件事不冲突。",
+  ],
+  ch06: [
+    "After seeing, the eye keeps working.\n残光比结论慢一点。",
+    "黑白不是减少。\n只是把噪音放到别处。",
+    "There is no last image.\n只有下一次回头时还在的灰。",
+    "看完以后，生活继续变小。\n杯子、花、影子，都还够用。",
+  ],
+};
+
+const CHAPTER_MEDIA_ARCHIVES = {
+  ch01: [
+    mediaEntry("IMG_3647.JPG", "NYC umbrella", "2024-04-13 / 40.7128, -74.0002"),
+    mediaEntry("IMG_4597.jpg", "NYC print table", "2024-11-19 / 40.7426, -73.9951"),
+    mediaEntry("IMG_4245.jpg", "window ice", "2024-05-03 / no GPS"),
+  ],
+  ch03: [
+    mediaEntry("IMG_1745.JPG", "Nantong / room", "2025-05-07 / 31.9837, 120.9316"),
+    mediaEntry("IMG_1752.JPG", "Nantong / portrait", "2025-05-07 / 31.9839, 120.9326"),
+    mediaEntry("IMG_1755.JPG", "Nantong / prints", "2025-05-07 / 31.9838, 120.9316"),
+    mediaEntry("IMG_1771.JPG", "Nantong / night", "2025-05-07 / 31.9838, 120.9316"),
+    mediaEntry("IMG_2026.jpg", "Nantong / small object", "2025-05-13 / 31.9842, 120.9317"),
+    mediaEntry("IMG_0995.jpg", "Nantong / return", "2026-02-26 / 31.9839, 120.9318"),
+    mediaEntry("IMG_2875.jpg", "Huai'an / portrait", "2025-06-14 / 33.5570, 119.0439"),
+    mediaEntry("IMG_2888.JPG", "Huai'an / large format", "2025-06-14 / 33.5569, 119.0440"),
+    mediaEntry("IMG_2895.jpg", "Huai'an / print", "2025-06-14 / 33.5569, 119.0439"),
+    mediaEntry("IMG_6657.jpg", "Changshu / table", "2025-10-02 / 31.7451, 120.9344"),
+    mediaEntry("1dx-42.JPG", "no-coordinate / coffee", "2026-02-27 / no GPS"),
+    mediaEntry("1dx-43.JPG", "no-coordinate / toy", "2026-02-27 / no GPS"),
+    mediaEntry("1dx-50.JPG", "no-coordinate / night food", "2026-02-27 / no GPS"),
+  ],
+  ch04: [
+    mediaEntry("IMG_3626.MOV", "Qilian road video", "2025-07-06 / 2824m"),
+    mediaEntry("IMG_3676.MOV", "Qilian mirror video", "2025-07-06 / 2575m"),
+    mediaEntry("IMG_3701.jpg", "Qinghai / window", "2025-07-07 / 2584m"),
+    mediaEntry("IMG_3818.JPG", "Xining / corridor", "2025-07-08 / 2451m"),
+    mediaEntry("IMG_3856.JPG", "Qinghai / shadow", "2025-07-08 / 2662m"),
+    mediaEntry("IMG_3861.JPG", "Qinghai / sign", "2025-07-08 / 2669m"),
+    mediaEntry("IMG_8869.JPG", "Mt Tai night", "2025-12-23 / 504m"),
+    mediaEntry("IMG_8920.JPG", "Mt Tai snow", "2025-12-24 / 1487m"),
+    mediaEntry("IMG_8921.JPG", "Mt Tai city lights", "2025-12-24 / 1506m"),
+    mediaEntry("IMG_8928.JPG", "Mt Tai morning", "2025-12-24 / 1508m"),
+  ],
+  ch05: [
+    mediaEntry("IMG_5058.JPG", "Brisbane / dark light", "2025-08-06 / -27.4435, 153.0854"),
+    mediaEntry("IMG_5071.jpg", "Brisbane / bus", "2025-08-06 / -27.4751, 153.0337"),
+    mediaEntry("IMG_5764.jpg", "Brisbane / water", "2025-08-29 / -27.4970, 153.0198"),
+    mediaEntry("IMG_7435.jpg", "Brisbane / river", "2025-11-07 / -27.4506, 153.0519"),
+    mediaEntry("IMG_7533.jpg", "Brisbane / print", "2025-11-12 / -27.4790, 153.0258"),
+    mediaEntry("IMG_7543.jpg", "Brisbane / table", "2025-11-13 / -27.4991, 153.0154"),
+    mediaEntry("IMG_7547.jpg", "Brisbane / east", "2025-11-13 / -27.4460, 153.0815"),
+    mediaEntry("IMG_7597.JPG", "Brisbane / night", "2025-11-14 / -27.4434, 153.0854"),
+    mediaEntry("IMG_2009.JPG", "Victoria / dusk", "2026-04-06 / -36.7272, 146.9604"),
+    mediaEntry("IMG_2094.JPG", "Victoria / road", "2026-04-07 / -36.4369, 146.3334"),
+    mediaEntry("IMG_2118.jpg", "Melbourne / plate", "2026-04-08 / -37.8123, 144.9734"),
+    mediaEntry("IMG_2157.jpg", "Queensland / hill", "2026-04-09 / -27.9502, 153.1811"),
+    mediaEntry("IMG_5671.mov", "Brisbane / night return", "2026-05-14 / -27.4157, 153.0587"),
+    mediaEntry("IMG_6010.mov", "Brisbane / river night", "2026-05-14 / -27.4622, 153.0513"),
+    mediaEntry("IMG_3483.mov", "Morningside / morning", "2026-05-14 / -27.4434, 153.0853"),
+  ],
+  ch06: [
+    mediaEntry("QS1-07.JPG", "small body / window", "2026-01-22 / no GPS"),
+    mediaEntry("QS1-08.JPG", "small body / table", "2026-01-22 / no GPS"),
+    mediaEntry("QS1-21.JPG", "small body / ground", "2026-01-22 / no GPS"),
+    mediaEntry("_K336876.JPG", "mono / night", "2026-02-07 / no GPS"),
+    mediaEntry("_K336892.JPG", "mono / late", "2026-02-08 / no GPS"),
+    mediaEntry("_K336976.JPG", "mono / flowers", "2026-02-11 / no GPS"),
+    mediaEntry("_K337013.JPG", "mono / window", "2026-02-16 / no GPS"),
+    mediaEntry("_K337090.JPG", "mono / bed", "2026-02-18 / no GPS"),
+    mediaEntry("_K337101.JPG", "mono / table", "2026-02-18 / no GPS"),
+    mediaEntry("_K337154.JPG", "mono / after", "2026-02-19 / no GPS"),
+    mediaEntry("_K337602.DNG", "mono DNG / tree", "2026-05-03 / no GPS"),
+  ],
+  after: [],
+};
+
+const CHAPTER_MEDIA_SEQUENCES = {
+  ch01: [
+    videoEntry("IMG_1401"),
+    videoEntry("IMG_1410"),
+    mediaEntry("IMG_3647.JPG", "NYC umbrella", "2024-04-13 / 40.7128, -74.0002"),
+    videoEntry("IMG_2140"),
+    videoEntry("IMG_2361"),
+    mediaEntry("IMG_4597.jpg", "NYC print table", "2024-11-19 / 40.7426, -73.9951"),
+    videoEntry("IMG_4700"),
+    videoEntry("IMG_1448"),
+    videoEntry("IMG_1565"),
+    mediaEntry("IMG_4245.jpg", "window ice", "2024-05-03 / no GPS"),
+    videoEntry("IMG_1627"),
+  ],
+  ch03: CHAPTER_MEDIA_ARCHIVES.ch03,
+  ch04: [
+    videoEntry("IMG_3484"),
+    videoEntry("IMG_3549"),
+    videoEntry("IMG_3551"),
+    videoEntry("IMG_3567"),
+    mediaEntry("IMG_3626.MOV", "Qilian road video", "2025-07-06 / 2824m"),
+    videoEntry("IMG_3612"),
+    videoEntry("IMG_3618"),
+    mediaEntry("IMG_3676.MOV", "Qilian mirror video", "2025-07-06 / 2575m"),
+    mediaEntry("IMG_3701.jpg", "Qinghai / window", "2025-07-07 / 2584m"),
+    videoEntry("IMG_3682"),
+    videoEntry("IMG_3727"),
+    mediaEntry("IMG_3818.JPG", "Xining / corridor", "2025-07-08 / 2451m"),
+    videoEntry("IMG_3773"),
+    videoEntry("IMG_3798"),
+    videoEntry("IMG_3810"),
+    mediaEntry("IMG_3856.JPG", "Qinghai / shadow", "2025-07-08 / 2662m"),
+    mediaEntry("IMG_3861.JPG", "Qinghai / sign", "2025-07-08 / 2669m"),
+    videoEntry("IMG_3840"),
+    videoEntry("IMG_3940"),
+    videoEntry("IMG_8863"),
+    mediaEntry("IMG_8869.JPG", "Mt Tai night", "2025-12-23 / 504m"),
+    mediaEntry("IMG_8920.JPG", "Mt Tai snow", "2025-12-24 / 1487m"),
+    mediaEntry("IMG_8921.JPG", "Mt Tai city lights", "2025-12-24 / 1506m"),
+    mediaEntry("IMG_8928.JPG", "Mt Tai morning", "2025-12-24 / 1508m"),
+  ],
+  ch05: [
+    mediaEntry("IMG_5058.JPG", "Brisbane / dark light", "2025-08-06 / -27.4435, 153.0854"),
+    mediaEntry("IMG_5071.jpg", "Brisbane / bus", "2025-08-06 / -27.4751, 153.0337"),
+    videoEntry("IMG_5523"),
+    videoEntry("IMG_5521"),
+    mediaEntry("IMG_5764.jpg", "Brisbane / water", "2025-08-29 / -27.4970, 153.0198"),
+    mediaEntry("IMG_7435.jpg", "Brisbane / river", "2025-11-07 / -27.4506, 153.0519"),
+    mediaEntry("IMG_7533.jpg", "Brisbane / print", "2025-11-12 / -27.4790, 153.0258"),
+    mediaEntry("IMG_2009.JPG", "Victoria / dusk", "2026-04-06 / -36.7272, 146.9604"),
+    mediaEntry("IMG_2094.JPG", "Victoria / road", "2026-04-07 / -36.4369, 146.3334"),
+    mediaEntry("IMG_2118.jpg", "Melbourne / plate", "2026-04-08 / -37.8123, 144.9734"),
+    mediaEntry("IMG_2157.jpg", "Queensland / hill", "2026-04-09 / -27.9502, 153.1811"),
+    videoEntry("IMG_5671"),
+    videoEntry("IMG_6010"),
+    videoEntry("IMG_3483"),
+  ],
+  ch06: CHAPTER_MEDIA_ARCHIVES.ch06,
+};
+
+const QINGHAI_ALTITUDE_POINTS = [
+  { clip: "IMG_3484", time: "07/04 17:57", place: "Baiyin", altitude: 1724 },
+  { clip: "IMG_3549", time: "07/05 20:24", place: "Gulang", altitude: 1909 },
+  { clip: "IMG_3551", time: "20:40", place: "Gulang", altitude: 1861 },
+  { clip: "IMG_3567", time: "07/06 10:21", place: "Yangxiang", altitude: 1953 },
+  { clip: "IMG_3626", time: "13:44", place: "Qilian rd.", altitude: 2824 },
+  { clip: "IMG_3612", time: "12:09", place: "Yangxiang", altitude: 3119 },
+  { clip: "IMG_3618", time: "12:58", place: "pass down", altitude: 2270 },
+  { clip: "IMG_3676", time: "19:46", place: "Qilian rd.", altitude: 2575 },
+  { clip: "IMG_3682", time: "20:03", place: "Dongtan", altitude: 2635 },
+  { clip: "IMG_3727", time: "07/07 12:15", place: "Nanfeng", altitude: 2801 },
+  { clip: "IMG_3773", time: "18:17", place: "Qingshizui", altitude: 3408 },
+  { clip: "IMG_3798", time: "20:17", place: "Qilian pass", altitude: 3492 },
+  { clip: "IMG_3810", time: "20:31", place: "max 3753m", altitude: 3753 },
+  { clip: "IMG_3840", time: "07/08 13:56", place: "Dongxia", altitude: 3168 },
+  { clip: "IMG_3940", time: "07/09 05:47", place: "Gandi", altitude: 3227 },
+];
+
+const TAI_ALTITUDE_POINTS = [
+  { clip: "IMG_8863", time: "12/23 22:02", place: "Tai'an base", altitude: 197 },
+  { clip: "IMG_8869", time: "23:10", place: "stairs", altitude: 504 },
+  { clip: "IMG_8920", time: "06:36", place: "south gate", altitude: 1487 },
+  { clip: "IMG_8921", time: "06:39", place: "summit light", altitude: 1506 },
+  { clip: "IMG_8928", time: "07:26", place: "morning", altitude: 1508 },
+];
+
+function mediaEntry(file, label, meta) {
+  const key = file.replace(/\.[^.]+$/, "");
+  return { type: /\.(mov|mp4|m4v)$/i.test(file) ? "video" : "photo", key, file, label, meta };
+}
+
+function videoEntry(key) {
+  return { type: "video", key };
+}
 
 const MAP_CENTERS = {
   CH00: { lat: 40.7194, lon: -73.9896, zoom: 15, city: "New York" },
   CH01: { lat: 40.7194, lon: -73.9896, zoom: 15, city: "New York" },
   CH02: { lat: 48.9213, lon: 117.1130, zoom: 9, city: "Arxan" },
-  CH03: { lat: 37.3784, lon: 101.4117, zoom: 10, city: "Qilian" },
-  CH04: { lat: -27.443, lon: 153.064, zoom: 13, city: "Brisbane" },
+  CH03: { lat: 31.984, lon: 120.932, zoom: 10, city: "Hometown" },
+  CH04: { lat: 37.3784, lon: 101.4117, zoom: 10, city: "Qilian" },
+  CH05: { lat: -27.443, lon: 153.064, zoom: 8, city: "Brisbane / Victoria" },
+  CH06: { lat: 0, lon: 0, zoom: 2, city: "Afterimage" },
+  AFTER: { lat: -27.443, lon: 153.064, zoom: 2, city: "after" },
   INT: { lat: 36.2043, lon: 117.0843, zoom: 12, city: "Tai'an" },
 };
 
+const SABINE_ANALYSIS_TEXT = `Analysis of "The Abduction of the Sabine Women"
+
+The painting "The Abduction of the Sabine Women" illustrates a fictional historical scene based on a Roman legend story. They invited their neighbors, the Sabines, to Rome only to forcibly take their young women as their wives.
+
+The work adopts a diagonally focused composition, with Romulus held aloft as a conducting figure on the left side, drawing the viewer's attention to the principal action. The diagonal structure establishes the fundamental tension between stability and chaos that characterizes the entire work.
+
+The painting's composition is organized along two direct diagonals that create dynamic visual collides. A powerful diagonal forms from the upper left to the lower right through women in blue and green and a warrior in yellow leather armor with a knife in his hand.
+
+The visual center is not prominently centric in the painting, but rather distributed across these diagonal axes, creating multiple focal points that draw the viewer's eye across different spatial planes.
+
+Poussin's use of rhythmic lines is evident in the fluid, but also systematically controlled gestures of the figures, similar to our impression of classical sculptures. Columns and masonry in the background provide stability in the middle ground in contrast to the chaos among the figures.
+
+Pure, bright colors are utilized throughout the main characters' clothes in the painting. The color palette is composed of bold primary colors - red, blue, and yellow, carefully arranged and concentrated in the foreground.
+
+These solid colors form a triangular framework with three points: Romulus in red, warriors in yellow, and women in blue.
+
+In this painting, Poussin skillfully uses dull gray tones to emphasize the chaotic nature of the scene. Particularly notable is the dark architectural structure in the upper right part, which occupies nearly one-fourth of the entire painting.
+
+This predominantly dark-toned architecture with completely black interior spaces creates an impressive contrast against the bright sky and the vivid colors of the figures' clothing.
+
+The architectural precision represents Roman civilization and order, while the gestures and colors embody inestimable desires and violence. The painting invites viewers to consider how societies interplay chaos and stability, encourages contemplation of narrative and personal interpretation to remind us of the extreme power, gender, love and fear.`;
+
 const TRASH_ITEMS = [
-  { id: "freedom-wanted", filename: "想要自由.txt", type: "text", content: [] },
-  { id: "freedom-forbidden", filename: "不该有自由.txt", type: "text", content: [] },
-  { id: "freedom-still", filename: "还是应该有.txt", type: "text", statusSequence: true, content: [] },
+  {
+    id: "freedom-wanted",
+    filename: "想要自由.txt",
+    type: "text",
+    content: [
+      "想要自由。",
+      "",
+      "这句话被放进垃圾桶，不是因为它不成立。",
+      "只是因为它太容易被说出口。",
+      "",
+      "自由不是离开所有人，",
+      "也不是把门关上以后假装自己没有重量。",
+      "",
+      "我只是想在某些时刻，",
+      "可以不解释自己为什么站在那里。",
+    ],
+  },
+  {
+    id: "freedom-forbidden",
+    filename: "不该有自由.txt",
+    type: "text",
+    content: [
+      "不该有自由。",
+      "",
+      "这句话看起来像惩罚，",
+      "其实更像一种害怕。",
+      "",
+      "如果选择真的存在，",
+      "错误就不能再完全推给别人。",
+      "",
+      "于是我把它也存下来：",
+      "一份相反的备忘录，",
+      "提醒自己不要把恐惧误认成秩序。",
+    ],
+  },
+  {
+    id: "freedom-still",
+    filename: "还是应该有.txt",
+    type: "text",
+    content: [
+      "还是应该有。",
+      "",
+      "不是很多。",
+      "不是完全。",
+      "也不是一种漂亮的口号。",
+      "",
+      "只是应该有一点可以移动的余地。",
+      "可以反悔的余地。",
+      "可以晚一点回答的余地。",
+      "",
+      "哪怕最后什么都没有改变，",
+      "那一点余地也不能被提前删除。",
+    ],
+  },
   {
     id: "cambridge-as",
     filename: "Cambridge_AS_2020.pdf",
@@ -198,26 +598,36 @@ const PROJECT_EVENTS = [
   { date: "2025-05-04", label: "last NYC clip (IMG_1627)" },
   { date: "2025-06-01", label: "SVA graduation (approximate)" },
   { date: "2025-07-04", label: "Gansu-Qinghai traverse begins" },
-  { date: "2025-07-09", label: "traverse ends (Gandi)" },
+  { date: "2025-07-09", label: "Gansu-Qinghai traverse ends" },
   { date: "2025-07-21", label: "UQ orientation Brisbane" },
   { date: "2025-07-28", label: "UQ classes begin" },
   { date: "2025-08-22", label: "first Brisbane clip (Ascot)" },
   { date: "2025-12-23", label: "Mt Tai night climb" },
-  { date: "2026-05-13", label: "most recent clips (Brisbane)" },
+  { date: "2026-05-14", label: "most recent clips (Brisbane)" },
 ];
 
 const state = {
   signal: {},
+  mediaArchiveEntries: [],
   chapter: "ch00",
   previousChapter: "ch01",
   clipIndex: 0,
+  mediaIndex: 0,
+  photoPositionIndex: 0,
   currentClip: null,
+  currentMediaItem: null,
   previousClip: null,
   wasInterrupted: false,
   videoHoldTimer: null,
+  photoTimer: null,
+  photoLoadToken: 0,
   isVideoHold: false,
   textTimer: null,
   textFadeTimer: null,
+  narrativeCurrent: null,
+  monologueTimer: null,
+  monologueFadeTimer: null,
+  monologueToken: 0,
   ch00BootLogTimer: null,
   ch04DriftTimer: null,
   textCycle: {
@@ -225,6 +635,17 @@ const state = {
     ch02: -1,
     ch03: -1,
     ch04: -1,
+    ch05: -1,
+    ch06: -1,
+    after: -1,
+  },
+  monologueCycle: {
+    ch01: -1,
+    ch02: -1,
+    ch03: -1,
+    ch04: -1,
+    ch05: -1,
+    ch06: -1,
   },
   textureRects: [],
   textureTarget: [],
@@ -312,11 +733,15 @@ const dom = {
   lonScan: document.getElementById("lon-scan"),
   signalAcquired: document.getElementById("signal-acquired"),
   video: document.getElementById("chapter-video"),
+  photo: document.getElementById("chapter-photo"),
+  monologue: document.getElementById("monologue-text"),
   crtFrame: document.getElementById("crt-frame"),
   crtShell: document.getElementById("crt-shell"),
+  afterFileText: document.getElementById("after-file-text"),
   videoToggle: document.getElementById("video-toggle"),
   videoTime: document.getElementById("video-time"),
   monitor: document.getElementById("signal-monitor"),
+  mediaArchive: document.getElementById("chapter-media-archive"),
   route: document.getElementById("altitude-route"),
   scale: document.getElementById("altitude-scale"),
   p5Layer: document.getElementById("p5-layer"),
@@ -395,6 +820,8 @@ function constrainDesktopWindow(win) {
 async function init() {
   const response = await fetch(MANIFEST_URL);
   state.signal = await response.json();
+  Object.assign(state.signal, EXTRA_SIGNAL_ENTRIES);
+  state.mediaArchiveEntries = await loadMediaArchiveIndex();
   window.SIGNAL = state.signal;
   dom.video.muted = true;
   dom.interruptVideo.muted = true;
@@ -469,13 +896,19 @@ function bindEvents() {
   });
 
   dom.video.addEventListener("ended", onVideoEnded);
-  dom.video.addEventListener("loadedmetadata", updateVideoControls);
+  dom.video.addEventListener("loadedmetadata", () => {
+    updateVideoControls();
+    syncNarrativeToVideoDuration();
+  });
   dom.video.addEventListener("timeupdate", () => {
     trackClipReadProgress();
     updateVideoControls();
   });
   dom.video.addEventListener("play", updateVideoControls);
   dom.video.addEventListener("pause", updateVideoControls);
+  dom.photo?.addEventListener("load", () => {
+    dom.crtFrame?.classList.remove("is-photo-loading");
+  });
   dom.crtFrame?.addEventListener("click", () => {
     if (state.isVideoHold) finishVideoHold();
   });
@@ -654,6 +1087,7 @@ function positionDesktopIcons() {
     brisbane: { right: 20, top: 236 },
     nogps:    { right: 20, top: 330 },
     readme:   { right: 20, top: 424 },
+    sabine:   { right: 20, top: 518 },
   };
   dom.desktopIcons.forEach((icon) => {
     if (icon.dataset.dragged === "1") return;
@@ -685,6 +1119,7 @@ function openDesktopObject(type) {
     nogps: buildNoGpsWindow,
     trash: buildTrashWindow,
     readme: buildReadmeWindow,
+    sabine: buildSabineWindow,
   };
   const builder = builders[type];
   if (!builder) return;
@@ -710,6 +1145,7 @@ function desktopObjectWindowPosition(type) {
     nogps: { left: 460, top: 230 },
     trash: { left: 340, top: 260 },
     readme: { left: 300, top: 90 },
+    sabine: { left: 360, top: 120 },
   }[type] || { left: 80, top: 80 };
 }
 
@@ -969,7 +1405,7 @@ function handleDockApp(id) {
     return;
   }
   if (id === "eyu" && !canOpenEyuFromDock()) {
-    showDockTooltip(state.dockApps.get("eyu"), "available in CHAPTER 01 and CHAPTER 04 only");
+    showDockTooltip(state.dockApps.get("eyu"), "available in CHAPTER 01, 05, 06, and AFTER");
     return;
   }
   if (id === "trash") {
@@ -1019,7 +1455,7 @@ function toggleSystemWindow(id) {
 }
 
 function canOpenEyuFromDock() {
-  return state.chapter === "ch01" || state.chapter === "ch04";
+  return state.chapter === "ch01" || state.chapter === "ch05" || state.chapter === "ch06" || state.chapter === "after";
 }
 
 function updateDockState() {
@@ -1158,8 +1594,8 @@ function buildSearchWindow() {
   input.type = "search";
   input.autocomplete = "off";
   input.spellcheck = false;
-  input.placeholder = "search locations…";
-  const scope = Object.assign(document.createElement("span"), { className: "search-system-scope", textContent: "ENVIRONMENT DB" });
+  input.placeholder = "search encyclopedia…";
+  const scope = Object.assign(document.createElement("span"), { className: "search-system-scope", textContent: "ENCYCLOPEDIA" });
   inputWrap.append(scope, input);
 
   const body = document.createElement("div");
@@ -1187,10 +1623,10 @@ function buildSearchWindow() {
     const allMatches = needle
       ? entries.filter((e) => e.search.includes(needle))
       : entries;
-    const matches = allMatches.slice(0, needle ? 36 : 24);
+    const matches = sortEncyclopediaEntries(allMatches);
     results.innerHTML = "";
     detail.innerHTML = "";
-    footer.textContent = `${matches.length}/${allMatches.length} shown - curated view`;
+    footer.textContent = `${matches.length} entries`;
 
     if (!matches.length) {
       detail.appendChild(Object.assign(document.createElement("div"), { className: "search-empty", textContent: "NO MATCH" }));
@@ -1212,12 +1648,16 @@ function buildSearchWindow() {
       const meta = Object.assign(document.createElement("span"), {
         className: "search-result-meta",
         textContent: [
-          raw.chapter_relevance,
-          extractSearchDate(raw),
-          extractEnvironmentAltitude(raw),
-        ].filter((value) => value && value !== "—").join(" / ") || "unindexed",
+          raw.term_type,
+          raw.term_category,
+          raw.region,
+        ].filter((value) => value && value !== "—").join(" / ") || "encyclopedia entry",
       });
-      button.append(title, meta);
+      const preview = Object.assign(document.createElement("span"), {
+        className: "search-result-preview",
+        textContent: raw.preview || raw.definition || raw.one_fact || "",
+      });
+      button.append(title, meta, preview);
       button.addEventListener("click", () => selectEntry(entry, button));
       results.appendChild(button);
       if (index === 0) requestAnimationFrame(() => selectEntry(entry, button));
@@ -1235,18 +1675,24 @@ function buildSearchWindow() {
 function renderSearchSystemDetail(entry, detail) {
   const raw = entry.raw || {};
   detail.innerHTML = "";
-  const eyebrow = Object.assign(document.createElement("div"), { className: "search-detail-eyebrow", textContent: raw.chapter_relevance || entry.group || "LOCATION" });
+  const eyebrow = Object.assign(document.createElement("div"), {
+    className: "search-detail-eyebrow",
+    textContent: [raw.term_type || "TERM", raw.term_category].filter(Boolean).join(" / "),
+  });
   const title = Object.assign(document.createElement("h2"), { className: "search-detail-heading", textContent: entry.label });
   detail.append(eyebrow, title);
 
   const table = document.createElement("div");
   table.className = "search-system-table";
   [
-    ["WHEN", extractSearchDate(raw)],
-    ["VISIBLE", extractVisibleSurface(raw)],
-    ["WHERE", extractEnvironmentCoordinates(raw)],
-    ["SIGNAL", raw.signal_coverage],
-    ["SYSTEM TRUST", extractSearchConfidence(raw)],
+    ["TYPE", raw.term_type],
+    ["CATEGORY", raw.term_category],
+    ["PLACE", raw.region || raw.location_name],
+    ["PERIOD", extractSearchDate(raw)],
+    ["COORDINATES", extractEnvironmentCoordinates(raw)],
+    ["ALTITUDE", extractEnvironmentAltitude(raw)],
+    ["OTHER NAMES", formatLexiconList(raw.aliases, 8)],
+    ["RELATED", formatLexiconList(raw.related_terms, 8)],
   ].forEach(([label, value]) => {
     const row = document.createElement("div");
     row.className = "search-system-row";
@@ -1260,16 +1706,16 @@ function renderSearchSystemDetail(entry, detail) {
 
   detail.appendChild(Object.assign(document.createElement("p"), {
     className: "search-system-fact",
-    textContent: `visible fact: ${formatSearchValue(raw.one_fact)}`,
+    textContent: formatSearchValue(raw.definition || raw.one_fact || raw.preview),
   }));
   detail.appendChild(Object.assign(document.createElement("p"), {
     className: "search-system-note",
-    textContent: `why it stayed: ${formatSearchValue(extractWhyStayed(raw))}`,
+    textContent: formatSearchValue(raw.encyclopedia_note || raw.source_note || raw.narrative_note || "No additional note."),
   }));
   const more = document.createElement("button");
   more.type = "button";
   more.className = "search-more-button";
-  more.textContent = "[one more thing]";
+  more.textContent = "[more]";
   more.addEventListener("click", () => {
     const note = document.createElement("p");
     note.className = "search-system-note";
@@ -1282,22 +1728,628 @@ function renderSearchSystemDetail(entry, detail) {
 async function loadEnvironmentEntries() {
   if (state.environmentEntries) return state.environmentEntries;
   const env = await fetch("signal_data/environment.json").then((response) => response.json());
-  state.environmentEntries = Object.keys(env)
+  const archiveEntries = (state.mediaArchiveEntries || [])
+    .filter((entry) => entry.coordinates)
+    .map(makeMediaSearchEntry);
+  const environmentEntries = Object.keys(env)
     .filter((group) => group.startsWith("GROUP_"))
-    .flatMap((group) => Object.entries(env[group] || {}).map(([key, raw]) => ({
-      key,
-      group,
-      raw,
-      label: raw.full_name || key.replaceAll("_", " "),
-      search: [key, raw.full_name, raw.terrain, raw.one_fact, raw.narrative_note, raw.chapter_relevance].filter(Boolean).join(" ").toLowerCase(),
-    })));
+    .flatMap((group) => Object.entries(env[group] || {}).map(([key, raw]) => makeEnvironmentLexiconEntry(group, key, raw)));
+  state.environmentEntries = sortEncyclopediaEntries(dedupeLexiconEntries([
+    ...makeEncyclopediaCoreEntries(),
+    makeSearchTextEntry(),
+    ...archiveEntries,
+    ...environmentEntries,
+  ]));
   return state.environmentEntries;
+}
+
+async function loadMediaArchiveIndex() {
+  try {
+    const response = await fetch(MEDIA_ARCHIVE_URL);
+    if (!response.ok) throw new Error(`media index ${response.status}`);
+    const entries = await response.json();
+    return Array.isArray(entries) ? entries : [];
+  } catch (err) {
+    console.warn("media archive index unavailable", err);
+    return [];
+  }
+}
+
+function makeMediaSearchEntry(entry) {
+  const raw = mediaEntryToSearchRaw(entry);
+  return {
+    key: entry.id || String(entry.title || "").replace(/\W+/g, "_").toUpperCase(),
+    group: "GROUP_MEDIA_ARCHIVE",
+    raw,
+    label: entry.location_name || entry.title || "Encyclopedia entry",
+    search: [
+      entry.date_context,
+      entry.visible_surface,
+      entry.location_name,
+      entry.camera,
+      entry.source_note,
+      ...(entry.search_terms || []),
+    ].filter(Boolean).join(" ").toLowerCase(),
+  };
+}
+
+function mediaEntryToSearchRaw(entry) {
+  const coordinates = entry.coordinates || null;
+  const hasCoordinates = Boolean(coordinates);
+  return {
+    full_name: entry.location_name || entry.title,
+    term_type: hasCoordinates ? "PLACE" : "OBJECT",
+    term_category: encyclopediaCategoryFromArchive(entry),
+    date_context: entry.date_context,
+    region: entry.location_name || "unmapped object",
+    terrain: entry.visible_surface,
+    light_note: entry.camera,
+    signal_coverage: entry.signal_coverage || entry.coordinates_status,
+    preview: encyclopediaPreview(entry.one_fact || entry.narrative_note || entry.visible_surface),
+    definition: encyclopediaDefinitionFromArchive(entry),
+    one_fact: entry.one_fact,
+    encyclopedia_note: entry.source_note || "",
+    coordinates,
+    coordinates_verified: coordinates
+      ? { status: "matched_from_media_metadata", manifest: coordinates }
+      : { status: entry.coordinates_status || "no_coordinates" },
+    altitude: Number.isFinite(Number(entry.altitude_m)) ? { meters: Number(entry.altitude_m), status: "media_metadata" } : null,
+    location_name: entry.location_name,
+    source_note: entry.source_note,
+    aliases: entry.search_terms || lexiconAliasesFromName(entry.location_name || entry.title, entry.id || ""),
+    related_terms: [entry.location_name, ...(entry.search_terms || [])].filter(Boolean),
+  };
+}
+
+function makeSearchTextEntry() {
+  return makeLexiconEntry({
+    key: "IN_PRAISE_OF_SHADOWS",
+    label: "In Praise of Shadows",
+    type: "BOOK",
+    category: "essay / aesthetics",
+    date: "1933",
+    region: "Japan",
+    definition: "In Praise of Shadows is a 1933 essay by Jun'ichiro Tanizaki on aesthetics, architecture, light, darkness, lacquerware, interiors, and the cultural value of shadow.",
+    note: "The title is often associated with Japanese aesthetics and with a preference for dimness, patina, indirect light, and incomplete visibility.",
+    aliases: ["in praise of shadow", "Tanizaki Junichiro", "谷崎润一郎", "阴翳礼赞", "shadow", "shadows"],
+    related: ["Japanese aesthetics", "shadow", "architecture", "lacquerware"],
+  });
+}
+
+function makeEnvironmentLexiconEntry(group, key, raw) {
+  const label = shortLexiconName(raw.full_name || key.replaceAll("_", " "));
+  const type = inferEnvironmentTermType(group, raw);
+  return makeLexiconEntry({
+    key,
+    group,
+    label,
+    type,
+    category: type === "ROUTE" ? "route" : "place",
+    date: raw.date_context || raw.local_time || raw.time_context,
+    region: encyclopediaRegion(raw.full_name || label),
+    coordinates: raw.coordinates_verified?.manifest || raw.coordinates_verified?.requested || raw.coordinates,
+    altitude: raw.altitude || raw.altitude_verified,
+    definition: encyclopediaDefinitionFromEnvironment(raw, label, type),
+    note: raw.source_note || raw.narrative_note,
+    aliases: lexiconAliasesFromName(raw.full_name || label, key),
+    related: [raw.terrain, raw.light_note, raw.signal_coverage].filter(Boolean),
+    sourceNote: raw.source_note,
+  });
+}
+
+function makeEncyclopediaCoreEntries() {
+  const fixed = [
+    {
+      key: "ENCYCLOPEDIA_PLAYING_CARDS",
+      label: "Playing cards",
+      type: "OBJECT",
+      category: "game equipment",
+      definition: "Playing cards are portable game objects, usually arranged as a deck with suits and ranks, used for games, divination, probability exercises, and symbolic systems.",
+      note: "A standard modern French-suited deck has spades, hearts, diamonds, and clubs, but many regional decks use different suit systems.",
+      aliases: ["cards", "deck", "poker cards", "扑克牌", "卡牌"],
+      related: ["poker", "suits", "rank", "chance"],
+    },
+    {
+      key: "ENCYCLOPEDIA_CHESS",
+      label: "Chess",
+      type: "GAME",
+      category: "board game",
+      definition: "Chess is a two-player strategy board game played on an 8 by 8 grid with pieces that move by fixed rules, aiming to checkmate the opposing king.",
+      note: "Its modern international form developed from older South Asian and Persian board-game traditions.",
+      aliases: ["chess", "国际象棋", "棋"],
+      related: ["board game", "strategy", "king", "checkmate"],
+    },
+    {
+      key: "ENCYCLOPEDIA_DIARY",
+      label: "Diary",
+      type: "TEXT FORM",
+      category: "personal writing",
+      definition: "A diary is a dated form of personal writing that records events, observations, moods, routines, and private reflections.",
+      note: "Diary writing can be documentary, literary, administrative, or fragmentary.",
+      aliases: ["diary", "journal", "日记", "博客"],
+      related: ["blog", "memoir", "dated writing"],
+    },
+    {
+      key: "ENCYCLOPEDIA_TXT_FILE",
+      label: "TXT file",
+      type: "FILE FORMAT",
+      category: "plain text",
+      definition: "A TXT file is a plain-text file format that stores characters without rich formatting, images, or document layout.",
+      note: "Its simplicity makes it readable across many systems and useful for notes, logs, drafts, and minimal documents.",
+      aliases: ["txt", "plain text", "text file", "纯文本"],
+      related: ["ASCII", "Unicode", "log file"],
+    },
+    {
+      key: "ENCYCLOPEDIA_ABDUCTION_SABINE_WOMEN",
+      label: "The Abduction of the Sabine Women",
+      type: "ARTWORK / SUBJECT",
+      category: "Roman legend in painting",
+      definition: "The Abduction of the Sabine Women is a Roman legendary subject often represented in European art, depicting the seizure of Sabine women by Romans after the founding of Rome.",
+      note: "Nicolas Poussin painted major versions of the subject, using classical composition to organize violence, gesture, architecture, and color.",
+      aliases: ["Sabine Women", "Rape of the Sabine Women", "Poussin", "Roman legend"],
+      related: ["Rome", "Sabines", "classical painting"],
+    },
+    ...makeHiddenEncyclopediaEntries(),
+    ...makeCameraLexiconEntries(),
+  ];
+
+  return fixed.map((entry) => makeLexiconEntry(entry));
+}
+
+function makeHiddenEncyclopediaEntries() {
+  return [
+    {
+      key: "ENCYCLOPEDIA_MONOCHROME_SENSOR",
+      label: "Monochrome sensor",
+      type: "TECHNOLOGY",
+      category: "camera sensor",
+      definition: "A monochrome sensor records luminance without a color filter array, producing black-and-white image data directly.",
+      note: "Because it does not divide incoming light through color filters, it can produce a distinct tonal response compared with converted color files.",
+      aliases: ["black-and-white sensor", "B&W sensor", "monochrome camera"],
+      related: ["digital camera", "luminance", "black-and-white photography"],
+    },
+    {
+      key: "ENCYCLOPEDIA_FILM_GRAIN",
+      label: "Film grain",
+      type: "IMAGE PROPERTY",
+      category: "analog photography",
+      definition: "Film grain is the visible texture produced by light-sensitive silver halide crystals or dye clouds in photographic film.",
+      note: "Grain size and character vary with film stock, exposure, processing, enlargement, and scanning.",
+      aliases: ["grain", "颗粒", "silver halide"],
+      related: ["negative film", "film scanning", "darkroom"],
+    },
+    {
+      key: "ENCYCLOPEDIA_NEGATIVE_FILM",
+      label: "Negative film",
+      type: "MATERIAL",
+      category: "analog photography",
+      definition: "Negative film records light and color as inverted tonal values, producing a negative image that is later printed, scanned, or digitally inverted.",
+      note: "Color negative film generally has wide exposure latitude, while black-and-white negative film can be processed in many developers.",
+      aliases: ["film negative", "底片", "胶片"],
+      related: ["film grain", "film scanning", "darkroom"],
+    },
+    {
+      key: "ENCYCLOPEDIA_FILM_SCANNING",
+      label: "Film scanning",
+      type: "PROCESS",
+      category: "analog-to-digital photography",
+      definition: "Film scanning converts photographic film into digital image files using a scanner, camera scanning setup, or lab scanning system.",
+      note: "Scanning choices affect sharpness, dust visibility, color interpretation, dynamic range, and apparent grain.",
+      aliases: ["scan", "scanning negatives", "扫底", "胶片扫描"],
+      related: ["negative film", "digital image", "photography"],
+    },
+    {
+      key: "ENCYCLOPEDIA_LIGHT_METER",
+      label: "Light meter",
+      type: "TOOL",
+      category: "photography",
+      definition: "A light meter measures scene brightness or incident light to help determine exposure settings such as aperture, shutter speed, and ISO.",
+      note: "Modern cameras usually contain built-in meters, but handheld meters remain useful in studio, cinema, and large-format work.",
+      aliases: ["metering", "测光", "exposure meter"],
+      related: ["exposure", "aperture", "shutter speed"],
+    },
+    {
+      key: "ENCYCLOPEDIA_FLASH_PHOTOGRAPHY",
+      label: "Flash photography",
+      type: "TECHNIQUE",
+      category: "photography",
+      definition: "Flash photography uses a brief burst of artificial light to illuminate a scene, freeze motion, or alter contrast and shadow.",
+      note: "On-camera flash often creates direct frontal light, hard shadows, reflective glare, and a distinct snapshot look.",
+      aliases: ["flash", "闪光灯", "strobe"],
+      related: ["exposure", "night photography", "light meter"],
+    },
+    {
+      key: "ENCYCLOPEDIA_FOCAL_LENGTH",
+      label: "Focal length",
+      type: "OPTICAL TERM",
+      category: "photography",
+      definition: "Focal length is an optical measurement, usually in millimeters, that describes a lens's angle of view and magnification on a given camera format.",
+      note: "Short focal lengths appear wide; long focal lengths narrow the field of view and enlarge distant subjects.",
+      aliases: ["50mm", "28mm", "lens length", "焦距"],
+      related: ["lens", "angle of view", "bokeh"],
+    },
+    {
+      key: "ENCYCLOPEDIA_BOKEH",
+      label: "Bokeh",
+      type: "IMAGE PROPERTY",
+      category: "photography",
+      definition: "Bokeh refers to the visual quality of out-of-focus areas in a photograph, especially blurred highlights and background rendering.",
+      note: "Bokeh depends on lens design, aperture shape, focus distance, background distance, and optical aberrations.",
+      aliases: ["background blur", "散景", "out-of-focus rendering"],
+      related: ["focal length", "aperture", "lens"],
+    },
+    {
+      key: "ENCYCLOPEDIA_LUCKY_5112",
+      label: "Lucky 5112",
+      type: "FILM STOCK",
+      category: "Chinese photographic film",
+      definition: "Lucky 5112 is a Chinese black-and-white motion-picture or photographic film stock often discussed through its contrast, grain, age, and repackaged-roll behavior.",
+      note: "Expired or bulk-loaded film can vary noticeably because storage and handling change the final image.",
+      aliases: ["乐凯5112", "Lucky film", "5112"],
+      related: ["negative film", "film grain", "film scanning"],
+    },
+    {
+      key: "ENCYCLOPEDIA_FUJIFILM_ACROS",
+      label: "Fujifilm Neopan Acros",
+      type: "FILM STOCK",
+      category: "black-and-white film",
+      definition: "Fujifilm Neopan Acros is a black-and-white film line known for fine grain, smooth tonality, and controlled reciprocity characteristics.",
+      note: "Acros is often associated with clean tonal separation and a refined black-and-white look.",
+      aliases: ["Acros", "Neopan Acros", "富士 Acros"],
+      related: ["black-and-white film", "film grain", "Foma 100"],
+    },
+    {
+      key: "ENCYCLOPEDIA_FOMA_100",
+      label: "Foma 100",
+      type: "FILM STOCK",
+      category: "black-and-white film",
+      definition: "Foma 100 is a black-and-white photographic film made by Foma Bohemia, commonly used for its traditional grain and affordable availability.",
+      note: "It is often chosen for everyday analog photography and darkroom experimentation.",
+      aliases: ["Fomapan 100", "Foma100", "福马100"],
+      related: ["negative film", "film grain", "darkroom"],
+    },
+    {
+      key: "ENCYCLOPEDIA_KODAK_VISION3_5219",
+      label: "Kodak Vision3 5219",
+      type: "FILM STOCK",
+      category: "motion-picture film",
+      definition: "Kodak Vision3 5219 is a 500T color negative motion-picture film stock designed for tungsten-balanced low-light cinematography.",
+      note: "When repurposed for still photography, it is often processed through cinema-film workflows or remjet-removal services.",
+      aliases: ["5219", "Vision3 500T", "Kodak 500T"],
+      related: ["motion-picture film", "negative film", "Kodak Vision3 5213"],
+    },
+    {
+      key: "ENCYCLOPEDIA_KODAK_VISION3_5213",
+      label: "Kodak Vision3 5213",
+      type: "FILM STOCK",
+      category: "motion-picture film",
+      definition: "Kodak Vision3 5213 is a 200T color negative motion-picture film stock with tungsten balance and moderate sensitivity.",
+      note: "Like other cinema stocks, it can be bulk-loaded or repackaged for still-camera use.",
+      aliases: ["5213", "Vision3 200T", "Kodak 200T"],
+      related: ["motion-picture film", "Kodak Vision3 5219", "negative film"],
+    },
+    {
+      key: "ENCYCLOPEDIA_NIKON_F80",
+      label: "Nikon F80",
+      type: "CAMERA",
+      category: "35mm film SLR",
+      definition: "Nikon F80 is a 35mm autofocus film SLR camera introduced by Nikon, positioned as an advanced consumer body with automatic exposure and autofocus features.",
+      note: "It is also known as the N80 in some markets.",
+      aliases: ["Nikon N80", "F80", "尼康F80"],
+      related: ["35mm film", "Nikon F4", "autofocus"],
+    },
+    {
+      key: "ENCYCLOPEDIA_NIKON_F4",
+      label: "Nikon F4",
+      type: "CAMERA",
+      category: "35mm professional film SLR",
+      definition: "Nikon F4 is a professional 35mm autofocus film SLR camera introduced by Nikon in the late 1980s.",
+      note: "It combines electronic automation with many physical controls and compatibility with a wide range of Nikon F-mount lenses.",
+      aliases: ["F4", "尼康F4", "Nikon professional SLR"],
+      related: ["35mm film", "Nikon F80", "F-mount"],
+    },
+    {
+      key: "ENCYCLOPEDIA_KONICA_GENBA_KANTOKU_28HG",
+      label: "Konica Genba Kantoku 28HG",
+      type: "CAMERA",
+      category: "rugged compact film camera",
+      definition: "Konica Genba Kantoku 28HG is a rugged 35mm compact camera with a wide-angle lens, associated with construction-site or field-use durability.",
+      note: "Its Japanese name is often translated as something like site supervisor or field supervisor.",
+      aliases: ["现场监督28HG", "Genba Kantoku", "Konica 28HG"],
+      related: ["35mm film", "compact camera", "flash photography"],
+    },
+    {
+      key: "ENCYCLOPEDIA_TOPCOR_50MM_F2",
+      label: "Tokyo Kogaku Topcor 50mm F2",
+      type: "LENS",
+      category: "standard lens",
+      definition: "Tokyo Kogaku Topcor 50mm F2 is a standard photographic lens associated with Tokyo Kogaku and the Topcon camera system.",
+      note: "Older standard lenses are often discussed through rendering qualities such as contrast, flare, swirl, and out-of-focus character.",
+      aliases: ["Topcor 50mm F2", "东京光学 50mm F2", "Topcon lens"],
+      related: ["focal length", "bokeh", "lens rendering"],
+    },
+    {
+      key: "ENCYCLOPEDIA_LOWER_EAST_SIDE",
+      label: "Lower East Side",
+      type: "PLACE",
+      category: "New York neighborhood",
+      region: "Manhattan, New York City",
+      definition: "The Lower East Side is a neighborhood in Manhattan historically shaped by immigration, tenements, small businesses, nightlife, art spaces, and dense street life.",
+      note: "Its street grid and storefront scale make it highly legible as a walking neighborhood.",
+      aliases: ["LES", "下东城", "Lower East Side Manhattan"],
+      related: ["Ludlow Street", "Stanton Street", "Rivington Street"],
+    },
+    {
+      key: "ENCYCLOPEDIA_LUDLOW_STREET",
+      label: "Ludlow Street",
+      type: "PLACE",
+      category: "street",
+      region: "Lower East Side, Manhattan",
+      definition: "Ludlow Street is a north-south street in Manhattan's Lower East Side, associated with storefronts, apartments, bars, restaurants, and street-level urban life.",
+      note: "It runs through a dense part of the neighborhood between Houston Street and Canal Street.",
+      aliases: ["Ludlow", "Ludlow St"],
+      related: ["Lower East Side", "Stanton Street", "Rivington Street"],
+    },
+    {
+      key: "ENCYCLOPEDIA_STANTON_STREET",
+      label: "Stanton Street",
+      type: "PLACE",
+      category: "street",
+      region: "Lower East Side, Manhattan",
+      definition: "Stanton Street is an east-west street on Manhattan's Lower East Side, crossing a neighborhood known for dense residential blocks and small storefronts.",
+      note: "It is one of the named streets that helps locate the Lower East Side street grid.",
+      aliases: ["Stanton", "Stanton St"],
+      related: ["Lower East Side", "Ludlow Street", "Rivington Street"],
+    },
+    {
+      key: "ENCYCLOPEDIA_RIVINGTON_STREET",
+      label: "Rivington Street",
+      type: "PLACE",
+      category: "street",
+      region: "Lower East Side, Manhattan",
+      definition: "Rivington Street is an east-west street in Manhattan's Lower East Side, known for residential buildings, restaurants, shops, and nightlife.",
+      note: "Together with Ludlow and Stanton, it names a recognizable section of the neighborhood.",
+      aliases: ["Rivington", "Rivington St"],
+      related: ["Lower East Side", "Ludlow Street", "Stanton Street"],
+    },
+    {
+      key: "ENCYCLOPEDIA_JERSEY_CITY",
+      label: "Jersey City",
+      type: "PLACE",
+      category: "city",
+      region: "New Jersey, United States",
+      definition: "Jersey City is a city in Hudson County, New Jersey, located across the Hudson River from Lower Manhattan.",
+      note: "Its waterfront and transit links connect it closely to New York City commuting patterns.",
+      aliases: ["JC", "Hudson County", "新泽西"],
+      related: ["PATH train", "Hudson River", "New York City"],
+    },
+    {
+      key: "ENCYCLOPEDIA_COPENHAGEN_AIRPORT",
+      label: "Copenhagen Airport",
+      type: "PLACE",
+      category: "airport",
+      region: "Kastrup, Denmark",
+      definition: "Copenhagen Airport, also called Kastrup Airport, is the main international airport serving Copenhagen and the surrounding region.",
+      note: "It functions as a major Nordic transfer airport.",
+      aliases: ["Kastrup Airport", "CPH", "Københavns Lufthavn", "哥本哈根机场"],
+      related: ["airport transit", "Denmark", "layover"],
+    },
+    {
+      key: "ENCYCLOPEDIA_BRISBANE_RIVER",
+      label: "Brisbane River",
+      type: "PLACE",
+      category: "river",
+      region: "Queensland, Australia",
+      definition: "The Brisbane River is a major river in South East Queensland flowing through the city of Brisbane toward Moreton Bay.",
+      note: "It shapes the city's ferry routes, bridges, flood history, and riverside urban development.",
+      aliases: ["布里斯班河"],
+      related: ["Brisbane", "CityCat", "Moreton Bay"],
+    },
+    {
+      key: "ENCYCLOPEDIA_CITYCAT",
+      label: "CityCat",
+      type: "TRANSPORT",
+      category: "ferry service",
+      region: "Brisbane, Queensland",
+      definition: "CityCat is Brisbane's high-speed catamaran ferry service operating along the Brisbane River.",
+      note: "It is both public transport and a way to experience the river geography of the city.",
+      aliases: ["Brisbane CityCat", "ferry", "布里斯班渡轮"],
+      related: ["Brisbane River", "public transport", "catamaran"],
+    },
+    {
+      key: "ENCYCLOPEDIA_YARRA_RIVER",
+      label: "Yarra River",
+      type: "PLACE",
+      category: "river",
+      region: "Victoria, Australia",
+      definition: "The Yarra River flows through Melbourne and into Port Phillip Bay, forming a central geographic and cultural line through the city.",
+      note: "Its lower urban section is closely tied to Melbourne's bridges, promenades, transport, and civic spaces.",
+      aliases: ["Yarra", "雅拉河"],
+      related: ["Melbourne", "Port Phillip Bay", "Victoria"],
+    },
+    {
+      key: "ENCYCLOPEDIA_GREAT_ALPINE_ROAD",
+      label: "Great Alpine Road",
+      type: "ROUTE",
+      category: "road",
+      region: "Victoria, Australia",
+      definition: "The Great Alpine Road is a scenic road route in Victoria crossing high-country landscapes between the Wangaratta area and East Gippsland.",
+      note: "It is associated with mountain roads, seasonal weather, towns such as Bright, and access to alpine regions.",
+      aliases: ["Victoria High Country road", "Alpine Road"],
+      related: ["Bright", "Wangaratta", "Mount Hotham"],
+    },
+    {
+      key: "ENCYCLOPEDIA_MOUNT_TAI",
+      label: "Mount Tai",
+      type: "PLACE",
+      category: "sacred mountain",
+      region: "Tai'an, Shandong, China",
+      definition: "Mount Tai, or Taishan, is a historically important mountain in Shandong, long associated with imperial rites, pilgrimage, inscriptions, temples, and sunrise views.",
+      note: "Its cultural status is as important as its physical summit.",
+      aliases: ["Taishan", "泰山", "Tai Shan"],
+      related: ["Tai'an", "Jade Emperor Peak", "pilgrimage"],
+    },
+    {
+      key: "ENCYCLOPEDIA_LANGSHAN",
+      label: "Langshan",
+      type: "PLACE",
+      category: "hill / scenic area",
+      region: "Nantong, Jiangsu, China",
+      definition: "Langshan, or Wolf Mountain, is a scenic hill area in Nantong near the Yangtze River, associated with temples, views, gardens, and local tourism.",
+      note: "It is one of Nantong's best-known landscape and religious sites.",
+      aliases: ["Wolf Mountain", "狼山", "Langshan Scenic Area"],
+      related: ["Nantong", "Guangjiao Temple", "Yangtze River"],
+    },
+    {
+      key: "ENCYCLOPEDIA_GUANGJIAO_TEMPLE",
+      label: "Guangjiao Temple",
+      type: "PLACE",
+      category: "Buddhist temple",
+      region: "Langshan, Nantong, Jiangsu",
+      definition: "Guangjiao Temple is a Buddhist temple associated with the Langshan scenic area in Nantong.",
+      note: "Temple names in scenic areas often connect religious practice, tourism, historical memory, and landscape viewing.",
+      aliases: ["广教寺", "广教禅寺", "Guangjiao Chan Temple"],
+      related: ["Langshan", "Nantong", "Buddhist temple"],
+    },
+    {
+      key: "ENCYCLOPEDIA_HAO_RIVER",
+      label: "Hao River",
+      type: "PLACE",
+      category: "urban river / moat",
+      region: "Nantong, Jiangsu, China",
+      definition: "Hao River is an urban river and historic moat landscape in Nantong, forming a recognizable ring-like water system in the city center.",
+      note: "It is often used as a walking, leisure, and scenic route through the city.",
+      aliases: ["濠河", "Haohe", "Nantong moat"],
+      related: ["Nantong", "Sports Park", "urban river"],
+    },
+    {
+      key: "ENCYCLOPEDIA_GRAND_CANAL",
+      label: "Grand Canal",
+      type: "PLACE / ROUTE",
+      category: "canal system",
+      region: "China",
+      definition: "The Grand Canal is a vast historic canal system in China connecting major river basins, cities, transport routes, and cultural landscapes.",
+      note: "In Jiangsu, canal cities often combine transport history, urban life, water management, and heritage tourism.",
+      aliases: ["京杭大运河", "大运河", "China Grand Canal"],
+      related: ["Huai'an", "canal", "water transport"],
+    },
+    {
+      key: "ENCYCLOPEDIA_HULUN_LAKE",
+      label: "Hulun Lake",
+      type: "PLACE",
+      category: "lake",
+      region: "Inner Mongolia, China",
+      definition: "Hulun Lake, also known as Dalai Lake, is a large freshwater lake in Inner Mongolia near the Hulunbuir grasslands.",
+      note: "The surrounding region is associated with steppe ecology, borderland geography, and wide open grassland landscapes.",
+      aliases: ["Dalai Lake", "呼伦湖", "达赉湖"],
+      related: ["Hulunbuir", "Inner Mongolia", "grassland"],
+    },
+    {
+      key: "ENCYCLOPEDIA_GENGHIS_KHAN_TETHERING_POST",
+      label: "Genghis Khan's Tethering Post",
+      type: "PLACE / LEGEND",
+      category: "named site",
+      region: "Hulun Lake area, Inner Mongolia",
+      definition: "Genghis Khan's Tethering Post is a named site associated with local legend and commemoration around the Hulun Lake area.",
+      note: "Such place names often combine tourism, oral history, monument culture, and regional identity.",
+      aliases: ["成吉思汗拴马桩", "tethering post", "Genghis Khan site"],
+      related: ["Hulun Lake", "Inner Mongolia", "Mongol history"],
+    },
+    {
+      key: "ENCYCLOPEDIA_NANXIANG_ANCIENT_TOWN",
+      label: "Nanxiang Ancient Town",
+      type: "PLACE",
+      category: "historic town",
+      region: "Jiading District, Shanghai",
+      definition: "Nanxiang Ancient Town is a historic town area in Shanghai's Jiading District, known for old streets, gardens, temples, and xiaolongbao food culture.",
+      note: "It is one of the better-known historic-town destinations within greater Shanghai.",
+      aliases: ["南翔古镇", "Nanxiang", "南翔"],
+      related: ["Shanghai", "Jiading", "xiaolongbao"],
+    },
+    {
+      key: "ENCYCLOPEDIA_SCHOOL_OF_VISUAL_ARTS",
+      label: "School of Visual Arts",
+      type: "INSTITUTION",
+      category: "art school",
+      region: "New York City",
+      definition: "School of Visual Arts is a private art and design college in New York City with programs across visual art, design, film, photography, and related fields.",
+      note: "Its Manhattan location connects studio education with New York's galleries, streets, and creative industries.",
+      aliases: ["SVA", "纽约视觉艺术学院", "School of Visual Arts NYC"],
+      related: ["New York City", "art school", "photography"],
+    },
+    {
+      key: "ENCYCLOPEDIA_UNIVERSITY_OF_QUEENSLAND",
+      label: "University of Queensland",
+      type: "INSTITUTION",
+      category: "university",
+      region: "Brisbane, Queensland",
+      definition: "The University of Queensland is a major Australian research university with its main campus at St Lucia in Brisbane.",
+      note: "The St Lucia campus sits near a bend of the Brisbane River.",
+      aliases: ["UQ", "昆士兰大学", "University of Queensland St Lucia"],
+      related: ["Brisbane", "St Lucia", "Brisbane River"],
+    },
+  ];
+}
+
+function makeCameraLexiconEntries() {
+  return [
+    ["Apple iPhone 14", "CAMERA", "smartphone", "Apple iPhone 14 is a smartphone released in 2022 with integrated cameras and computational photography features.", ["iphone", "phone", "Apple"]],
+    ["Canon EOS-1D X", "CAMERA", "digital SLR", "Canon EOS-1D X is a professional full-frame DSLR camera introduced by Canon as part of its EOS-1 series.", ["canon", "1dx", "EOS-1D X", "DSLR"]],
+    ["PENTAX Q-S1", "CAMERA", "mirrorless camera", "PENTAX Q-S1 is a compact interchangeable-lens mirrorless camera in Ricoh's Pentax Q system.", ["pentax", "Q-S1", "QS1", "mirrorless"]],
+    ["PENTAX K-3 Mark III Monochrome", "CAMERA", "monochrome digital SLR", "PENTAX K-3 Mark III Monochrome is a Ricoh Imaging digital SLR designed for black-and-white photography with a monochrome image sensor.", ["ricoh", "monochrome", "K-3", "black and white"]],
+  ].map(([label, type, category, definition, aliases]) => ({
+    key: `ENCYCLOPEDIA_${String(label).replace(/\W+/g, "_").toUpperCase()}`,
+    label,
+    type,
+    category,
+    definition,
+    note: "Camera models are listed here as object names, not as project controls.",
+    aliases,
+    related: ["camera", "photography", "metadata"],
+  }));
+}
+
+function makeLexiconEntry({ key, group = "ENCYCLOPEDIA", label, type, category, date, region, definition, note, coordinates, altitude, aliases = [], related = [], sourceNote = "" }) {
+  const raw = {
+    full_name: label,
+    term_type: type || "ENTRY",
+    term_category: category || "general",
+    date_context: date || "—",
+    region: region || "—",
+    preview: encyclopediaPreview(definition || note || label),
+    definition: definition || "Encyclopedia entry.",
+    one_fact: definition || "Encyclopedia entry.",
+    encyclopedia_note: note || "",
+    coordinates,
+    altitude,
+    aliases,
+    related_terms: related,
+    source_note: sourceNote,
+  };
+  return {
+    key,
+    group,
+    raw,
+    label,
+    search: [
+      label,
+      type,
+      category,
+      date,
+      region,
+      definition,
+      note,
+      sourceNote,
+      ...aliases,
+      ...related,
+    ].filter(Boolean).join(" ").toLowerCase(),
+  };
 }
 
 function renderSearchWindow(query, results, detail) {
   const entries = state.environmentEntries || [];
   const needle = query.trim().toLowerCase();
-  const matches = entries.filter((entry) => !needle || entry.search.includes(needle)).slice(0, 24);
+  const matches = entries.filter((entry) => !needle || entry.search.includes(needle));
   results.innerHTML = "";
   matches.forEach((entry, index) => {
     const button = document.createElement("button");
@@ -1374,7 +2426,7 @@ function extractEnvironmentCoordinates(raw) {
 }
 
 function extractEnvironmentAltitude(raw) {
-  const altitude = raw.altitude_verified;
+  const altitude = raw.altitude_verified ?? raw.altitude;
   if (typeof altitude === "number") return `${Math.round(altitude)}m`;
   if (altitude && typeof altitude === "object") {
     const meters = altitude.meters ?? altitude.manifest_meters ?? altitude.altitude_m;
@@ -1411,24 +2463,138 @@ function extractSearchConfidence(raw) {
   return "partial";
 }
 
+function formatLexiconList(value, limit = 5) {
+  const list = Array.isArray(value) ? value : value ? [value] : [];
+  if (!list.length) return "—";
+  const shown = list.slice(0, limit).map((item) => String(item));
+  const rest = list.length - shown.length;
+  return rest > 0 ? `${shown.join("; ")}; +${rest}` : shown.join("; ");
+}
+
+function shortLexiconName(name) {
+  const text = String(name || "").trim();
+  if (!text) return "Untitled term";
+  const cleaned = text
+    .replace(/, People's Republic of China$/i, "")
+    .replace(/, United States$/i, "")
+    .replace(/, Australia$/i, "")
+    .replace(/, Denmark$/i, "")
+    .replace(/\s+specifically\s+.+$/i, "");
+  const first = cleaned.split(",")[0]?.trim() || cleaned;
+  return first.length > 68 ? `${first.slice(0, 65)}...` : first;
+}
+
+function lexiconAliasesFromName(name, key) {
+  const text = String(name || "");
+  const parts = text
+    .split(/[,/()：:;|]+/)
+    .map((part) => part.trim())
+    .filter((part) => part.length > 1 && part.length < 64);
+  return [...new Set(parts)].slice(0, 10);
+}
+
+function inferEnvironmentTermType(group, raw) {
+  const text = [group, raw.full_name, raw.terrain, raw.one_fact].filter(Boolean).join(" ").toLowerCase();
+  if (text.includes("route") || text.includes("corridor") || text.includes("transit") || text.includes("path")) return "ROUTE";
+  return "PLACE";
+}
+
+function encyclopediaCategoryFromArchive(entry) {
+  const text = [entry.title, entry.location_name, entry.camera, entry.visible_surface].filter(Boolean).join(" ").toLowerCase();
+  if (text.includes("canon") || text.includes("pentax") || text.includes("ricoh")) return "camera object";
+  if (text.includes("mount tai") || text.includes("altitude") || text.includes("route")) return "place / mountain route";
+  if (text.includes("victoria") || text.includes("melbourne") || text.includes("brisbane")) return "place / Australia";
+  if (text.includes("nantong") || text.includes("huaian") || text.includes("changshu")) return "place / Jiangsu";
+  return entry.coordinates ? "place" : "object";
+}
+
+function encyclopediaDefinitionFromArchive(entry) {
+  const name = entry.location_name || entry.title || "This entry";
+  if (entry.coordinates) {
+    const altitude = Number.isFinite(Number(entry.altitude_m)) ? ` The recorded elevation is approximately ${Math.round(Number(entry.altitude_m))} meters.` : "";
+    const source = entry.source_note ? ` ${entry.source_note}` : "";
+    return `${name} is a place entry with coordinates ${entry.coordinates.lat.toFixed(5)}, ${entry.coordinates.lon.toFixed(5)}.${altitude}${source}`.trim();
+  }
+  return `${name} is an object entry without stable geographic coordinates.`.trim();
+}
+
+function encyclopediaDefinitionFromEnvironment(raw, label, type) {
+  const where = raw.full_name || label;
+  const surface = raw.one_fact || raw.terrain || raw.terrain_detail || "";
+  const coords = extractEnvironmentCoordinates(raw);
+  const altitude = extractEnvironmentAltitude(raw);
+  const typeText = type === "ROUTE" ? "route or corridor" : "place";
+  return `${where} is listed as a ${typeText}.${coords !== "—" ? ` Coordinates: ${coords}.` : ""}${altitude !== "—" ? ` Approximate altitude: ${altitude}.` : ""} ${surface}`.trim();
+}
+
+function encyclopediaRegion(name) {
+  const text = String(name || "");
+  const parts = text.split(",").map((part) => part.trim()).filter(Boolean);
+  if (parts.length > 1) return parts.slice(1).join(", ");
+  if (/Australia|Queensland|Victoria|Melbourne|Brisbane/i.test(text)) return "Australia";
+  if (/China|Jiangsu|Gansu|Qinghai|Heilongjiang|Inner Mongolia|Shandong/i.test(text)) return "China";
+  if (/New York|Brooklyn|Manhattan|Queens|Pennsylvania|New Jersey/i.test(text)) return "United States";
+  return "—";
+}
+
+function encyclopediaPreview(text) {
+  const value = String(text || "").replace(/\s+/g, " ").trim();
+  if (!value) return "";
+  return value.length > 150 ? `${value.slice(0, 147)}...` : value;
+}
+
+function coordinateStringToObject(value) {
+  const match = String(value || "").match(/(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)/);
+  if (!match) return null;
+  return { lat: Number(match[1]), lon: Number(match[2]) };
+}
+
+function dedupeLexiconEntries(entries) {
+  const seen = new Set();
+  return entries.filter((entry) => {
+    const key = `${entry.raw?.term_type || ""}:${String(entry.label || "").toLowerCase()}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function sortEncyclopediaEntries(entries) {
+  return [...entries].sort((a, b) => encyclopediaSortKey(a).localeCompare(encyclopediaSortKey(b), "en", {
+    sensitivity: "base",
+    numeric: true,
+  }));
+}
+
+function encyclopediaSortKey(entry) {
+  const label = String(entry?.label || "").trim();
+  const asciiFirst = /^[A-Za-z0-9]/.test(label) ? "0" : "1";
+  return `${asciiFirst}:${label}`;
+}
+
 function extractWhyStayed(raw) {
   const note = String(raw.narrative_note || "");
   if (note) return note;
   const chapter = raw.chapter_relevance || "";
   if (chapter === "CH01") return "because the room kept recording a night that did not move.";
   if (chapter === "CH02") return "because the map became less certain than the road.";
-  if (chapter === "CH03") return "because the route had a measurable weight.";
-  if (chapter === "CH04") return "because the commute repeated until it looked like evidence.";
+  if (chapter === "CH03") return "because ordinary life needed a place between departure and ascent.";
+  if (chapter === "CH04") return "because the route had a measurable weight.";
+  if (chapter === "CH05") return "because the commute repeated until it looked like evidence.";
+  if (chapter === "CH06") return "because the camera kept looking after the trip ended.";
+  if (String(chapter).includes("HOMETOWN")) return "because ordinary coordinates can carry more pressure than landmarks.";
+  if (String(chapter).includes("ASCENT")) return "because altitude briefly made the route measurable.";
+  if (String(chapter).includes("BRISBANE")) return "because the commute repeated until it looked like evidence.";
+  if (String(chapter).includes("AFTERIMAGE")) return "because the camera kept looking after the map stopped helping.";
   if (chapter === "INT") return "because no reason was provided.";
   return "because it remained in the folder.";
 }
 
 function randomSearchAside(raw) {
   const options = [
-    `altitude: ${extractEnvironmentAltitude(raw)}`,
-    `light: ${formatSearchValue(raw.light_note || raw.sensory_atmospheric)}`,
-    `weather-ish: ${formatSearchValue(raw.climate_note || raw.climate || raw.seasonal_light)}`,
-    `database says: ${formatSearchValue(raw.one_fact)}`,
+    `related: ${formatLexiconList(raw.related_terms, 8)}`,
+    `other names: ${formatLexiconList(raw.aliases, 8)}`,
+    `source: ${formatSearchValue(raw.source_note)}`,
     `coordinates: ${extractEnvironmentCoordinates(raw)}`,
   ].filter((line) => !line.endsWith("—"));
   return options[Math.floor(Math.random() * options.length)] || "nothing else surfaced.";
@@ -1938,6 +3104,7 @@ function applySystemSettings() {
 function buildFinderWindow() {
   const layout = document.createElement("div");
   layout.className = "finder-layout";
+  let activeSection = "desktop";
 
   const sidebar = document.createElement("div");
   sidebar.className = "finder-sidebar";
@@ -1950,15 +3117,17 @@ function buildFinderWindow() {
 
   const statusbar = document.createElement("div");
   statusbar.className = "finder-statusbar";
-  statusbar.textContent = "5 items";
+  statusbar.textContent = "ready";
 
   const sections = [
-    { key: "desktop", icon: "▣", label: "DESKTOP" },
-    { key: "windows", icon: "⊡", label: "WINDOWS" },
-    { key: "system",  icon: "◈", label: "SYSTEM INFO" },
+    { key: "desktop", icon: "▣", label: "OBJECTS" },
+    { key: "windows", icon: "⊡", label: "OPEN WINDOWS" },
+    { key: "system",  icon: "◈", label: "SYSTEM" },
   ];
 
   function renderSection(key) {
+    activeSection = key;
+    layout.dataset.section = key;
     sidebar.querySelectorAll(".finder-nav-btn").forEach((btn) => {
       btn.classList.toggle("is-active", btn.dataset.section === key);
     });
@@ -1995,31 +3164,355 @@ function buildFinderWindow() {
 
     if (key === "desktop") {
       const files = [
-        { icon: "▶", name: "NYE_3SEC.MOV",       meta: "video", id: "nye" },
-        { icon: "▶", name: "NANXIANG.MOV",        meta: "video", id: "nanxiang" },
-        { icon: "▶", name: "BRISBANE_WATER.MOV",  meta: "video", id: "brisbane" },
-        { icon: "?", name: "NO_GPS",              meta: "object", id: "nogps" },
-        { icon: "☰", name: "README.txt",          meta: "text",   id: "readme" },
+        {
+          icon: "▶",
+          name: "NYE_3SEC.MOV",
+          kind: "QuickTime Movie",
+          kindShort: "Movie",
+          id: "nye",
+          size: "175.4 MB",
+          status: "Readable",
+          details: [
+            ["Kind", "QuickTime Movie"],
+            ["Size", "175.4 MB on disk"],
+            ["Created", "2024-09-01 20:01:45"],
+            ["Modified", "2024-09-02 10:01:45"],
+            ["Duration", "00:03"],
+            ["Codec", "HEVC / AAC"],
+            ["Device", "iPhone / iOS 17.5.1"],
+            ["Where", "~/Desktop/in_praiseof_time/IMG_1401.MOV"],
+            ["Coordinates", "40.7141, -73.9735"],
+            ["Permissions", "You can read and write"],
+          ],
+        },
+        {
+          icon: "▶",
+          name: "NANXIANG.MOV",
+          kind: "QuickTime Movie",
+          kindShort: "Movie",
+          id: "nanxiang",
+          size: "2.7 MB",
+          status: "Readable",
+          details: [
+            ["Kind", "QuickTime Movie"],
+            ["Size", "2.7 MB on disk"],
+            ["Created", "2024-01-12 20:55:17"],
+            ["Modified", "2024-01-12 22:55:17"],
+            ["Duration", "00:04"],
+            ["Codec", "HEVC / AAC"],
+            ["Device", "iPhone / iOS 16.6"],
+            ["Where", "~/Desktop/in_praiseof_time/IMG_0196.MOV"],
+            ["Coordinates", "31.2869, 121.3215"],
+            ["Altitude", "11.7 m"],
+          ],
+        },
+        {
+          icon: "▶",
+          name: "BRISBANE_WATER.MOV",
+          kind: "QuickTime Movie",
+          kindShort: "Movie",
+          id: "brisbane",
+          size: "52.0 MB",
+          status: "Readable",
+          details: [
+            ["Kind", "QuickTime Movie"],
+            ["Size", "52.0 MB on disk"],
+            ["Created", "2025-08-22 17:20:13"],
+            ["Modified", "2025-08-22 17:20:13"],
+            ["Duration", "00:16"],
+            ["Codec", "HEVC / AAC"],
+            ["Device", "iPhone / iOS 18.1.1"],
+            ["Where", "~/Desktop/in_praiseof_time/IMG_5523.MOV"],
+            ["Coordinates", "-27.4431, 153.0639"],
+            ["Altitude", "5.4 m"],
+          ],
+        },
+        {
+          icon: "?",
+          name: "NO_GPS",
+          kind: "Data Document",
+          kindShort: "Data",
+          id: "nogps",
+          size: "metadata",
+          status: "Partial",
+          details: [
+            ["Kind", "Data Document"],
+            ["Size", "metadata record"],
+            ["Created", "2024-07-04 01:46:56 UTC"],
+            ["Modified", "2026-05-15 14:12:00"],
+            ["Source File", "IMG_8084.MOV"],
+            ["Location", "No GPS payload"],
+            ["Altitude", "not available"],
+            ["Signal", "location services unavailable"],
+            ["Permissions", "Read only"],
+          ],
+        },
+        {
+          icon: "☰",
+          name: "README.txt",
+          kind: "Plain Text Document",
+          kindShort: "Text",
+          id: "readme",
+          size: "4 KB",
+          status: "Readable",
+          details: [
+            ["Kind", "Plain Text Document"],
+            ["Size", "4 KB on disk"],
+            ["Created", "2026-05-14 17:42:13"],
+            ["Modified", "2026-05-14 17:42:13"],
+            ["Encoding", "UTF-8 text"],
+            ["Where", "~/Desktop/in_praiseof_time/README.txt"],
+            ["Permissions", "You can read and write"],
+          ],
+        },
+        {
+          icon: "□",
+          name: "SABINE_ANALYSIS.pdf",
+          kind: "PDF Document",
+          kindShort: "PDF",
+          id: "sabine",
+          size: "56 KB",
+          status: "Readable",
+          details: [
+            ["Kind", "PDF Document"],
+            ["Size", "56 KB on disk"],
+            ["Created", "2025-04-15 01:45:59"],
+            ["Modified", "2025-04-15 01:45:59"],
+            ["Pages", "2"],
+            ["Original", "The Abduction of the Sabine Women_Dai Pan_1_3.pdf"],
+            ["Where", "~/Desktop/in_praiseof_time/"],
+            ["Permissions", "You can read and write"],
+          ],
+        },
+        {
+          icon: "☰",
+          name: "OBJECTS_INDEX.txt",
+          kind: "Plain Text Document",
+          kindShort: "Text",
+          size: "1 KB",
+          status: "Readable",
+          details: [
+            ["Kind", "Plain Text Document"],
+            ["Size", "1 KB on disk"],
+            ["Created", "2026-05-15 13:58:41"],
+            ["Modified", "2026-05-15 15:08:10"],
+            ["Encoding", "UTF-8 text"],
+            ["Where", "~/Library/Application Support/in_praise/objects/"],
+            ["Permissions", "You can read and write"],
+          ],
+          content: [
+            "OBJECTS_INDEX.txt",
+            "",
+            "Name: OBJECTS_INDEX.txt",
+            "Kind: Plain Text Document",
+            "Size: 1 KB on disk",
+            "Created: 2026-05-15 13:58:41",
+            "Modified: 2026-05-15 15:08:10",
+            "Encoding: UTF-8",
+            "Where: ~/Library/Application Support/in_praise/objects/",
+            "",
+            "Inventory:",
+            "QuickTime Movie      3 files",
+            "Plain Text Document  3 files",
+            "PDF Document         1 file",
+            "Data Document        1 file",
+            "Unreadable archive   3 files",
+          ],
+        },
+        {
+          icon: "☰",
+          name: "FREE_SPACE_NOTE.txt",
+          kind: "Plain Text Document",
+          kindShort: "Text",
+          size: "784b",
+          status: "Readable",
+          details: [
+            ["Kind", "Plain Text Document"],
+            ["Size", "784 bytes"],
+            ["Created", "2026-05-15 14:02:12"],
+            ["Modified", "2026-05-15 14:19:44"],
+            ["Encoding", "UTF-8 text"],
+            ["Where", "~/Desktop/in_praiseof_time/.system/notes/"],
+            ["Permissions", "You can read and write"],
+          ],
+          content: [
+            "FREE_SPACE_NOTE.txt",
+            "",
+            "Name: Macintosh HD",
+            "Capacity: 994.66 GB",
+            "Available: 112.26 GB",
+            "Purgeable: not reported",
+            "Format: APFS",
+            "",
+            "Note:",
+            "The system can report available storage.",
+            "It cannot report whether a file should be kept.",
+          ],
+        },
+        {
+          icon: "☰",
+          name: "ROUTE_CACHE.txt",
+          kind: "Plain Text Document",
+          kindShort: "Text",
+          size: "2.1k",
+          status: "Readable",
+          details: [
+            ["Kind", "Plain Text Document"],
+            ["Size", "2 KB on disk"],
+            ["Created", "2026-05-15 14:03:50"],
+            ["Modified", "2026-05-15 14:27:16"],
+            ["Encoding", "UTF-8 text"],
+            ["Where", "~/Library/Caches/in_praise/routes/"],
+            ["Permissions", "You can read and write"],
+          ],
+          content: [
+            "ROUTE_CACHE.txt",
+            "",
+            "Cached route names only. Not navigation data.",
+            "",
+            "2024-02  Lower East Side / New York City",
+            "2024-07  Qiqihar -> Arxan -> Hulun Lake -> Jilin",
+            "2025-07  Baiyin -> Gulang -> Qilian -> Xining",
+            "2025-08  Hamilton -> UQ Lakes -> Brisbane River",
+            "2026-04  Wangaratta -> Bright -> Melbourne -> Queensland",
+            "",
+            "Checksum: local-only",
+            "Map provider: none",
+          ],
+        },
+        {
+          icon: "!",
+          name: "IMG_8084.gps",
+          kind: "GPS Sidecar File",
+          kindShort: "Sidecar",
+          size: "0b",
+          status: "Unreadable",
+          broken: true,
+          details: [
+            ["Kind", "GPS Sidecar File"],
+            ["Size", "0 bytes"],
+            ["Created", "2024-07-04 01:46:56 UTC"],
+            ["Modified", "2026-05-15 14:22:08"],
+            ["Source File", "IMG_8084.MOV"],
+            ["Status", "No coordinate payload"],
+            ["Error", "kCLLocationCoordinate2DInvalid"],
+            ["Permissions", "Read only"],
+          ],
+          content: [
+            "IMG_8084.gps",
+            "",
+            "Get Info",
+            "Kind: GPS Sidecar File",
+            "Size: 0 bytes",
+            "Created: 2024-07-04 01:46:56 UTC",
+            "Source file: IMG_8084.MOV",
+            "Location field: null",
+            "Altitude field: null",
+            "",
+            "The movie file is readable.",
+            "The coordinate sidecar is empty.",
+          ],
+        },
+        {
+          icon: "!",
+          name: "calendar_old.ics",
+          kind: "iCalendar File",
+          kindShort: "Calendar",
+          size: "4k?",
+          status: "Damaged",
+          broken: true,
+          details: [
+            ["Kind", "iCalendar File"],
+            ["Size", "4 KB, partial"],
+            ["Created", "2024-07-04 00:00:00"],
+            ["Modified", "2026-05-15 14:24:51"],
+            ["Encoding", "UTF-8 / CRLF"],
+            ["Status", "VEVENT body truncated"],
+            ["Importer", "Calendar.app could not repair this file"],
+          ],
+          content: [
+            "calendar_old.ics",
+            "",
+            "Kind: iCalendar File",
+            "Size: 4 KB, partial",
+            "Importer: Calendar.app",
+            "Status: damaged",
+            "",
+            "BEGIN:VCALENDAR",
+            "VERSION:2.0",
+            "BEGIN:VEVENT",
+            "DTSTART:20240704",
+            "SUMMARY:北上",
+            "DESCRIPTION:[truncated]",
+            "END:VEVENT",
+            "",
+            "Parser stopped before the return route.",
+          ],
+        },
+        {
+          icon: "!",
+          name: "voice_note.aif",
+          kind: "AIFF Audio File",
+          kindShort: "Audio",
+          size: "??",
+          status: "Unreadable",
+          broken: true,
+          details: [
+            ["Kind", "AIFF Audio File"],
+            ["Size", "unknown"],
+            ["Created", "2025-12-24 07:31:09"],
+            ["Modified", "2026-05-15 14:26:05"],
+            ["Sample Rate", "not available"],
+            ["Channels", "not available"],
+            ["Status", "header missing FORM chunk"],
+          ],
+          content: [
+            "voice_note.aif",
+            "",
+            "Kind: AIFF Audio File",
+            "Status: unreadable",
+            "Error: Missing FORM chunk at byte 0.",
+            "Sample rate: not available",
+            "Channels: not available",
+            "",
+            "QuickTime Player cannot open this file.",
+            "No transcript could be generated.",
+          ],
+        },
       ];
+      main.appendChild(finderColumnHeader(["", "NAME", "KIND", "SIZE", ""]));
       files.forEach((f) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
+        const btn = document.createElement("div");
         btn.className = "finder-item";
+        btn.tabIndex = 0;
         const iconEl = Object.assign(document.createElement("span"), { className: "finder-item-icon", textContent: f.icon });
         const nameEl = Object.assign(document.createElement("span"), { className: "finder-item-name", textContent: f.name });
-        const metaEl = Object.assign(document.createElement("span"), { className: "finder-item-meta", textContent: f.meta });
-        btn.append(iconEl, nameEl, metaEl);
-        const action = () => openDesktopObject(f.id);
+        const metaEl = Object.assign(document.createElement("span"), { className: "finder-item-meta", textContent: f.kindShort || f.kind || "Document" });
+        const sizeEl = Object.assign(document.createElement("span"), { className: "finder-item-size", textContent: f.size || "—" });
+        const actionEl = document.createElement("button");
+        actionEl.type = "button";
+        actionEl.className = `finder-row-action${f.broken ? " is-broken" : ""}`;
+        actionEl.textContent = f.broken ? "INFO" : "OPEN";
+        btn.append(iconEl, nameEl, metaEl, sizeEl, actionEl);
+        const action = () => openFinderObject(f);
+        actionEl.addEventListener("click", (event) => {
+          event.stopPropagation();
+          action();
+        });
         btn.addEventListener("click", () => {
           main.querySelectorAll(".finder-item").forEach((item) => item.classList.remove("is-selected"));
           btn.classList.add("is-selected");
-          setPreview(f.name, { icon: f.icon, kind: f.meta }, [
-            ["LOCATION", "desktop"],
-            ["OBJECT ID", f.id],
-            ["ACTION", "double-click or OPEN"],
+          setPreview(f.name, { icon: f.icon, kind: f.kind || "Document" }, f.details || [
+            ["Kind", f.kind || "Document"],
+            ["Status", f.status || (f.broken ? "Damaged" : "Readable")],
+            ["Size", f.size || "—"],
           ], action);
+          if (!f.id && (f.content || f.broken)) action();
         });
         btn.addEventListener("dblclick", action);
+        btn.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") action();
+        });
         main.appendChild(btn);
         if (!main.querySelector(".is-selected")) btn.click();
       });
@@ -2039,19 +3532,21 @@ function buildFinderWindow() {
         const empty = Object.assign(document.createElement("div"), { className: "finder-empty", textContent: "NO OPEN WINDOWS" });
         main.appendChild(empty);
       } else {
+        main.appendChild(finderColumnHeader(["", "WINDOW", "STATE", "SIZE", ""]));
         openWins.forEach((w) => {
           const btn = document.createElement("button");
           btn.type = "button";
           btn.className = "finder-item";
           const iconEl = Object.assign(document.createElement("span"), { className: "finder-item-icon", textContent: "⊡" });
           const nameEl = Object.assign(document.createElement("span"), { className: "finder-item-name", textContent: w.name.toUpperCase() });
-          const metaEl = Object.assign(document.createElement("span"), { className: "finder-item-meta", textContent: "window" });
-          btn.append(iconEl, nameEl, metaEl);
+          const rect = w.ref.getBoundingClientRect();
+          const metaEl = Object.assign(document.createElement("span"), { className: "finder-item-meta", textContent: "visible" });
+          const sizeEl = Object.assign(document.createElement("span"), { className: "finder-item-size", textContent: `${Math.round(rect.width)}×${Math.round(rect.height)}` });
+          btn.append(iconEl, nameEl, metaEl, sizeEl);
           const action = () => bringWindowForward(w.ref);
           btn.addEventListener("click", () => {
             main.querySelectorAll(".finder-item").forEach((item) => item.classList.remove("is-selected"));
             btn.classList.add("is-selected");
-            const rect = w.ref.getBoundingClientRect();
             setPreview(w.name.toUpperCase(), { icon: "⊡", kind: "open window" }, [
               ["SIZE", `${Math.round(rect.width)} × ${Math.round(rect.height)}`],
               ["POSITION", `${Math.round(rect.left)}, ${Math.round(rect.top)}`],
@@ -2066,29 +3561,41 @@ function buildFinderWindow() {
       statusbar.textContent = `${openWins.length} open window${openWins.length !== 1 ? "s" : ""}`;
 
     } else if (key === "system") {
-      const pairs = [
-        ["CHAPTER",  (state.chapter || "----").toUpperCase()],
-        ["CLIP",     state.currentClip || "----"],
-        ["UPTIME",   sessionDuration()],
-        ["MEMORY",   "OK"],
+      const hardware = [
+        ["MODEL", "MacBook Pro 13-inch, M1, 2020"],
+        ["NAME", "Dai Pan MacBook Pro"],
+        ["CHIP", "Apple M1"],
+        ["MEMORY", "16 GB"],
+        ["SERIAL", "C02DT••••KPF"],
+      ];
+      const software = [
+        ["OS", "macOS Tahoe 26.4"],
+        ["DISPLAY", "Built-in Retina 13.3 inch / 2560×1600"],
+        ["STORAGE", "Macintosh HD / 112.26 GB available of 994.66 GB"],
+        ["INPUT", "trackpad wheel preserved inside windows"],
+      ];
+      const runtime = [
+        ["ARCHIVE", "in_praise_of_time"],
+        ["UPTIME", sessionDuration()],
+        ["ACTIVE", (state.chapter || "----").toUpperCase()],
+        ["CURRENT", state.currentClip || state.currentMediaItem?.file || "----"],
         ["VIEWPORT", `${window.innerWidth} × ${window.innerHeight}`],
         ["PLATFORM", navigator.platform || "unknown"],
       ];
-      pairs.forEach(([label, value]) => {
-        const row = document.createElement("div");
-        row.className = "finder-readout-row";
-        const lblEl = Object.assign(document.createElement("span"), { className: "finder-readout-label", textContent: label });
-        const valEl = Object.assign(document.createElement("span"), { className: "finder-readout-value", textContent: value });
-        row.append(lblEl, valEl);
-        main.appendChild(row);
-      });
-      setPreview("IN_PRAISE_OF_TIME", { icon: "◈", kind: "system information" }, pairs);
-      statusbar.textContent = "system information";
+      appendFinderSystemGroup(main, "MACHINE", hardware);
+      appendFinderSystemGroup(main, "SOFTWARE / DISPLAY", software);
+      appendFinderSystemGroup(main, "ARCHIVE RUNTIME", runtime);
+      setPreview("MacBook Pro", { icon: "◈", kind: "system profile" }, [
+        ...hardware.slice(0, 4),
+        ["OS", "macOS Tahoe 26.4"],
+        ["INPUT", "native trackpad scroll"],
+      ]);
+      statusbar.textContent = "system profile / archive runtime";
     }
   }
 
   // Build sidebar
-  const locHeader = Object.assign(document.createElement("div"), { className: "finder-section-label", textContent: "LOCATIONS" });
+  const locHeader = Object.assign(document.createElement("div"), { className: "finder-section-label", textContent: "BROWSE" });
   sidebar.appendChild(locHeader);
   sections.forEach((section) => {
     const btn = document.createElement("button");
@@ -2108,13 +3615,52 @@ function buildFinderWindow() {
   wrapper.append(layout, statusbar);
 
   const win = createSizedDesktopWindow("finder", wrapper, "desktop-window-finder");
-  win._finderRender = renderSection;
+  win._finderRender = (key = activeSection) => renderSection(key);
+  win._finderActiveSection = () => activeSection;
   return win;
+}
+
+function finderColumnHeader(labels) {
+  const row = document.createElement("div");
+  row.className = "finder-column-header";
+  labels.forEach((label) => row.appendChild(Object.assign(document.createElement("span"), { textContent: label })));
+  return row;
+}
+
+function appendFinderSystemGroup(parent, title, rows) {
+  const heading = Object.assign(document.createElement("div"), { className: "finder-readout-heading", textContent: title });
+  parent.appendChild(heading);
+  rows.forEach(([label, value]) => {
+    const row = document.createElement("div");
+    row.className = "finder-readout-row";
+    const lblEl = Object.assign(document.createElement("span"), { className: "finder-readout-label", textContent: label });
+    const valEl = Object.assign(document.createElement("span"), { className: "finder-readout-value", textContent: value });
+    row.append(lblEl, valEl);
+    parent.appendChild(row);
+  });
+}
+
+function openFinderObject(item) {
+  if (item.id) {
+    openDesktopObject(item.id);
+    return;
+  }
+  closeOldestWindowsForNewOne();
+  const shell = document.createElement("pre");
+  shell.className = `trash-doc finder-object-doc${item.broken ? " finder-object-broken" : ""}`;
+  shell.textContent = (item.content || [item.note || "No readable content."]).join("\n");
+  const win = createSizedDesktopWindow(item.name, shell, item.broken ? "desktop-window-object-broken" : "desktop-window-object-text");
+  mountDesktopWindow(win, {
+    id: `finder-${String(item.name).replace(/\W+/g, "-").toLowerCase()}`,
+    kind: "object",
+    left: 420 + Math.floor(Math.random() * 80),
+    top: 160 + Math.floor(Math.random() * 80),
+  });
 }
 
 function updateFinderWindow(win = findWindowById("finder")) {
   if (!win) return;
-  if (win._finderRender) win._finderRender("desktop");
+  if (win._finderRender) win._finderRender(win._finderActiveSection?.() || "desktop");
 }
 
 function finderTitle(text) {
@@ -2143,14 +3689,26 @@ function readoutLine(label, value) {
 function buildNoteWindow() {
   const shell = document.createElement("div");
   shell.className = "note-panel os-window-body";
+  const head = document.createElement("div");
+  head.className = "note-head";
+  head.innerHTML = `<div>NOTE.pad</div><span>local scratch file</span>`;
+  const tools = document.createElement("div");
+  tools.className = "note-tools";
   const textarea = document.createElement("textarea");
   textarea.spellcheck = false;
   textarea.setAttribute("autocorrect", "off");
   textarea.autocapitalize = "off";
   textarea.autocomplete = "off";
+  textarea.placeholder = "type here...";
   textarea.value = sessionStorage.getItem("note_content") || "";
   const footer = document.createElement("div");
   footer.className = "note-footer";
+  const stamp = document.createElement("button");
+  stamp.type = "button";
+  stamp.textContent = "[time]";
+  const sticky = document.createElement("button");
+  sticky.type = "button";
+  sticky.textContent = "[sticky]";
   const clear = document.createElement("button");
   clear.type = "button";
   clear.textContent = "[clear]";
@@ -2164,9 +3722,22 @@ function buildNoteWindow() {
     update();
     textarea.focus();
   });
+  stamp.addEventListener("click", () => {
+    const stampText = new Date().toLocaleString("en-AU", { hour12: false });
+    textarea.setRangeText(`[${stampText}]`, textarea.selectionStart, textarea.selectionEnd, "end");
+    update();
+    textarea.focus();
+  });
+  sticky.addEventListener("click", () => {
+    createStickyNote({ content: textarea.value.trim() || "new note" });
+  });
   textarea.addEventListener("input", update);
-  footer.append(clear, count);
-  shell.append(textarea, footer);
+  tools.append(stamp, sticky, clear);
+  footer.append(
+    Object.assign(document.createElement("span"), { textContent: "sessionStorage / autosaved" }),
+    count
+  );
+  shell.append(head, tools, textarea, footer);
   update();
   return createSizedDesktopWindow("note", shell, "desktop-window-note");
 }
@@ -2326,6 +3897,13 @@ function calendarTimelineData() {
     map[event.date].push(event.label);
     return map;
   }, {});
+  (state.mediaArchiveEntries || []).forEach((entry) => {
+    (entry.calendar_events || []).forEach((event) => {
+      if (!event.date || !event.label) return;
+      events[event.date] = events[event.date] || [];
+      events[event.date].push(event.label);
+    });
+  });
   return { clips, events };
 }
 
@@ -2508,11 +4086,23 @@ function buildCardsWindow() {
   toolbar.className = "cards-toolbar";
   toolbar.innerHTML = `
     <div>CARDS.app</div>
-    <span>make pairs, routes, or small contradictions</span>
+    <span>five-card draw / click cards to hold</span>
   `;
 
   const table = document.createElement("div");
   table.className = "cards-table";
+  const piles = document.createElement("div");
+  piles.className = "cards-piles";
+  const deckPile = document.createElement("div");
+  deckPile.className = "cards-pile cards-deck-pile";
+  const discardPile = document.createElement("div");
+  discardPile.className = "cards-pile cards-discard-pile";
+  piles.append(deckPile, discardPile);
+  const hand = document.createElement("div");
+  hand.className = "cards-hand";
+  const log = document.createElement("pre");
+  log.className = "cards-log";
+  table.append(piles, hand, log);
 
   const footer = document.createElement("div");
   footer.className = "cards-footer";
@@ -2524,41 +4114,38 @@ function buildCardsWindow() {
 
   const controls = document.createElement("div");
   controls.className = "cards-controls";
-  const play = Object.assign(document.createElement("button"), { type: "button", textContent: "[play set]" });
-  const deal = Object.assign(document.createElement("button"), { type: "button", textContent: "[redeal]" });
+  const deal = Object.assign(document.createElement("button"), { type: "button", textContent: "[deal]" });
+  const draw = Object.assign(document.createElement("button"), { type: "button", textContent: "[draw]" });
+  const score = Object.assign(document.createElement("button"), { type: "button", textContent: "[score]" });
   const close = Object.assign(document.createElement("button"), { type: "button", textContent: "[close archive]" });
-  controls.append(play, deal, close);
+  controls.append(deal, draw, score, close);
   footer.append(status, meters, controls);
 
   const win = createSizedDesktopWindow("cards.app", shell, "desktop-window-cards");
-  const cs = {
-    deck: shuffleCards(makeArchiveDeck()),
-    selected: [],
-    played: [],
-    order: 0,
-    signal: 70,
-    drift: 0,
-    moves: 0,
-    complete: false,
-  };
+  const cs = newCardsState();
+  cs.hand = drawCards(cs, 5);
+  cs.phase = "dealt";
+  cs.rounds = 1;
+  cs.log.push(`HAND 1: ${cardsNotation(cs.hand)}`);
   win.cardsState = cs;
 
-  const render = (message = "Select two or three cards. Rank, suit, route, sequence, contradiction.") => {
-    table.innerHTML = "";
-    cs.deck.forEach((entry, index) => {
-      const card = renderArchiveCard(entry, index);
-      card.classList.toggle("is-selected", cs.selected.includes(entry.id));
-      card.classList.toggle("is-cleared", entry.cleared);
+  const render = (message = "Five cards dealt. Click cards to hold, then draw or score.") => {
+    deckPile.innerHTML = `<b>DECK</b><span>${cs.deck.length}</span>`;
+    discardPile.innerHTML = `<b>DISCARD</b><span>${cs.discard.length}</span>`;
+    hand.innerHTML = "";
+    cs.hand.forEach((entry, index) => {
+      const card = renderPokerCard(entry, index);
+      card.classList.toggle("is-held", cs.held.has(index));
       card.addEventListener("click", () => {
-        if (entry.cleared || cs.complete) return;
-        if (cs.selected.includes(entry.id)) cs.selected = cs.selected.filter((id) => id !== entry.id);
-        else if (cs.selected.length < 3) cs.selected.push(entry.id);
-        else cs.selected = [entry.id];
-        render(`${entry.rank}${entry.suit} / ${entry.label}`);
+        if (cs.phase !== "dealt") return;
+        if (cs.held.has(index)) cs.held.delete(index);
+        else cs.held.add(index);
+        render(`${entry.rank}${entry.suit} ${entry.label} ${cs.held.has(index) ? "held" : "released"}`);
       });
-      table.appendChild(card);
+      hand.appendChild(card);
     });
     status.textContent = message;
+    log.textContent = cs.log.join("\n") || "No hand yet.";
     meters.innerHTML = [
       cardsMeter("ORDER", cs.order),
       cardsMeter("SIGNAL", cs.signal),
@@ -2566,54 +4153,151 @@ function buildCardsWindow() {
     ].join("");
   };
 
-  play.addEventListener("click", () => {
-    if (cs.complete) return;
-    const cards = cs.selected.map((id) => cs.deck.find((entry) => entry.id === id)).filter(Boolean);
-    const result = evaluateArchiveSet(cards);
-    if (!result.ok) {
-      render(result.message);
+  deal.addEventListener("click", () => {
+    Object.assign(cs, newCardsState());
+    cs.hand = drawCards(cs, 5);
+    cs.phase = "dealt";
+    cs.rounds += 1;
+    cs.log.push(`HAND ${cs.rounds}: ${cardsNotation(cs.hand)}`);
+    render("Choose holds, then draw. Or score the first hand.");
+  });
+
+  draw.addEventListener("click", () => {
+    if (cs.phase !== "dealt") {
+      render(cs.phase === "idle" ? "Deal first." : "Only one draw per hand.");
       return;
     }
-    cards.forEach((entry) => { entry.cleared = true; });
-    cs.moves += 1;
-    cs.played.push(result.name);
+    cs.hand = cs.hand.map((entry, index) => {
+      if (cs.held.has(index)) return entry;
+      cs.discard.push(entry);
+      return drawCards(cs, 1)[0];
+    });
+    cs.phase = "drawn";
+    cs.log.push(`DRAW: held ${cs.held.size}, replaced ${5 - cs.held.size}`);
+    render("Draw complete. Score the hand.");
+  });
+
+  score.addEventListener("click", () => {
+    if (!cs.hand.length) {
+      render("Deal first.");
+      return;
+    }
+    const result = scorePokerHand(cs.hand);
+    cs.phase = "scored";
     cs.order = Math.min(100, cs.order + result.order);
     cs.signal = Math.max(0, Math.min(100, cs.signal + result.signal));
     cs.drift = Math.min(100, cs.drift + result.drift);
-    cs.selected = [];
-    if (result.flash) whiteFlash();
+    cs.log.push(`SCORE: ${result.name.toUpperCase()} / ${result.note}`);
     if (result.chart) setTimeout(() => openHiddenChartWindow(result.chart), 300);
-    const cleared = cs.deck.filter((entry) => entry.cleared).length;
-    if (cleared >= cs.deck.length) {
-      cs.complete = true;
-      render(cardsSummary(cs, "table cleared"));
-    } else {
-      render(`${result.message} / ${cleared}/${cs.deck.length} filed`);
-    }
-  });
-
-  deal.addEventListener("click", () => {
-    Object.assign(cs, {
-      deck: shuffleCards(makeArchiveDeck()),
-      selected: [],
-      played: [],
-      order: 0,
-      signal: 70,
-      drift: 0,
-      moves: 0,
-      complete: false,
-    });
-    render("A clean table. Not a clean chronology.");
+    render(`${result.name}. ${result.note}`);
   });
 
   close.addEventListener("click", () => {
     cs.complete = true;
-    render(cardsSummary(cs, "archive closed by user"));
+    render(cardsSummary(cs, "archive closed"));
   });
 
   shell.append(toolbar, table, footer);
   render();
   return win;
+}
+
+function newCardsState() {
+  return {
+    deck: shuffleCards(makePokerArchiveDeck()),
+    hand: [],
+    discard: [],
+    held: new Set(),
+    log: [],
+    order: 0,
+    signal: 70,
+    drift: 0,
+    rounds: 0,
+    phase: "idle",
+    complete: false,
+  };
+}
+
+function makePokerArchiveDeck() {
+  const suits = [
+    { suit: "♠", theme: "WINDOW", chapter: "ch01" },
+    { suit: "♥", theme: "SIGNAL", chapter: "ch02" },
+    { suit: "♦", theme: "ALTITUDE", chapter: "ch04" },
+    { suit: "♣", theme: "SUN", chapter: "ch05" },
+  ];
+  const ranks = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"];
+  const labels = {
+    "A♠": "floor 18", "K♠": "NYE", "Q♠": "window", "J♠": "street", "10♠": "cold air",
+    "A♥": "NO GPS", "K♥": "grass", "Q♥": "Arxan", "J♥": "Daqing", "10♥": "north",
+    "A♦": "3752m", "K♦": "route", "Q♦": "salary", "J♦": "thin air", "10♦": "map",
+    "A♣": "ferry", "K♣": "sun", "Q♣": "river", "J♣": "Ascot", "10♣": "glare",
+  };
+  return suits.flatMap(({ suit, theme, chapter }) => ranks.map((rank) => ({
+    id: `${rank}${suit}`,
+    rank,
+    suit,
+    theme,
+    chapter,
+    label: labels[`${rank}${suit}`] || theme.toLowerCase(),
+  })));
+}
+
+function drawCards(cs, count) {
+  if (cs.deck.length < count) {
+    cs.deck = shuffleCards(cs.discard);
+    cs.discard = [];
+  }
+  return cs.deck.splice(0, count).filter(Boolean);
+}
+
+function renderPokerCard(entry) {
+  const card = document.createElement("button");
+  card.type = "button";
+  card.className = "playing-card poker-card";
+  if (entry.suit === "♥" || entry.suit === "♦") card.classList.add("is-red");
+  card.innerHTML = `
+    <span class="card-corner">${entry.rank}${entry.suit}</span>
+    <strong>${entry.suit}</strong>
+    <em>${entry.label}</em>
+  `;
+  return card;
+}
+
+function cardsNotation(cards) {
+  return cards.map((entry) => `${entry.rank}${entry.suit}`).join(" ");
+}
+
+function scorePokerHand(cards) {
+  const rankOrder = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
+  const ranks = cards.map((entry) => entry.rank);
+  const suits = cards.map((entry) => entry.suit);
+  const counts = Object.values(ranks.reduce((acc, rank) => {
+    acc[rank] = (acc[rank] || 0) + 1;
+    return acc;
+  }, {})).sort((a, b) => b - a);
+  const values = ranks.map((rank) => rankOrder.indexOf(rank)).sort((a, b) => a - b);
+  const flush = suits.every((suit) => suit === suits[0]);
+  const straight = values.every((value, index) => index === 0 || value === values[index - 1] + 1) ||
+    ranks.sort().join(",") === ["A", "2", "3", "4", "5"].sort().join(",");
+  const majority = cards.reduce((acc, entry) => {
+    acc[entry.theme] = (acc[entry.theme] || 0) + 1;
+    return acc;
+  }, {});
+  const theme = Object.entries(majority).sort((a, b) => b[1] - a[1])[0]?.[0] || "ARCHIVE";
+
+  if (straight && flush) return pokerScore("straight flush", 34, 8, 12, `${theme} holds a clean line.`, "motion");
+  if (counts[0] === 4) return pokerScore("four of a kind", 30, 6, 10, "Four copies of the same refusal.");
+  if (counts[0] === 3 && counts[1] === 2) return pokerScore("full house", 26, 5, 9, "A room inside another room.");
+  if (flush) return pokerScore("flush", 22, 3, 8, `${theme} takes the table.`, theme === "ALTITUDE" ? "altitude" : null);
+  if (straight) return pokerScore("straight", 20, 4, 7, "Chronology briefly behaves.");
+  if (counts[0] === 3) return pokerScore("three of a kind", 16, 2, 7, "Three marks agree.");
+  if (counts[0] === 2 && counts[1] === 2) return pokerScore("two pair", 13, 1, 6, "Two small shelves.");
+  if (counts[0] === 2) return pokerScore("pair", 9, 1, 4, "A coincidence stays.");
+  return pokerScore("high card", 4, -2, 8, `${cardsNotation(cards)} remains unfiled.`);
+}
+
+function pokerScore(name, order, signal, drift, note, chart = null) {
+  return { name, order, signal, drift, note, chart };
 }
 
 function makeArchiveDeck() {
@@ -2628,19 +4312,22 @@ function makeArchiveDeck() {
     { id: "qiqihar", rank: "Q", suit: "♥", label: "city edge", chapter: "ch02", date: "2024-07-03", tags: ["north", "route"], clip: "IMG_8033" },
     { id: "nogps", rank: "K", suit: "♥", label: "NO GPS", chapter: "ch02", date: "2024-07-04", tags: ["glitch", "lost", "signal"], clip: "IMG_8084" },
     { id: "grass", rank: "3", suit: "♥", label: "too green", chapter: "ch02", date: "2024-07-07", tags: ["green", "lost"], clip: "IMG_8300" },
-    { id: "baiyin", rank: "A", suit: "♦", label: "1723m", chapter: "ch03", date: "2025-07-04", tags: ["altitude", "salary"], clip: "IMG_3484" },
-    { id: "gulang", rank: "7", suit: "♦", label: "Gulang", chapter: "ch03", date: "2025-07-05", tags: ["route", "altitude"], clip: "IMG_3549" },
-    { id: "yangxiang", rank: "Q", suit: "♦", label: "3119m", chapter: "ch03", date: "2025-07-06", tags: ["route", "altitude"], clip: "IMG_3612" },
-    { id: "qilian", rank: "K", suit: "♦", label: "3752m", chapter: "ch03", date: "2025-07-07", tags: ["altitude", "weight"], clip: "IMG_3810" },
-    { id: "xining", rank: "3", suit: "♦", label: "05:47 road", chapter: "ch03", date: "2025-07-09", tags: ["route", "morning"], clip: "IMG_3940" },
-    { id: "ascot", rank: "A", suit: "♣", label: "Ascot", chapter: "ch04", date: "2025-08-22", tags: ["brisbane", "arrival"], clip: "IMG_5523" },
-    { id: "morning", rank: "7", suit: "♣", label: "07:10", chapter: "ch04", date: "2025-08-23", tags: ["sun", "commute"], clip: "IMG_5521" },
-    { id: "river", rank: "Q", suit: "♣", label: "river mesh", chapter: "ch04", date: "2026-05-14", tags: ["river", "motion"], clip: "IMG_6010" },
-    { id: "morningside", rank: "K", suit: "♣", label: "Morningside", chapter: "ch04", date: "2026-05-14", tags: ["brisbane", "routine"], clip: "IMG_3483" },
-    { id: "sun", rank: "3", suit: "♣", label: "sun fixed", chapter: "ch04", date: "2026-05-14", tags: ["sun", "glare"], clip: "IMG_5671" },
+    { id: "nantong", rank: "A", suit: "♥", label: "Nantong", chapter: "ch03", date: "2025-05-07", tags: ["hometown", "life"] },
+    { id: "huaian", rank: "Q", suit: "♥", label: "Huai'an", chapter: "ch03", date: "2025-06-14", tags: ["hometown", "portrait"] },
+    { id: "nogps-home", rank: "J", suit: "♥", label: "no coord", chapter: "ch03", date: "2026-02-27", tags: ["hometown", "nogps"] },
+    { id: "baiyin", rank: "A", suit: "♦", label: "1723m", chapter: "ch04", date: "2025-07-04", tags: ["altitude", "salary"], clip: "IMG_3484" },
+    { id: "gulang", rank: "7", suit: "♦", label: "Gulang", chapter: "ch04", date: "2025-07-05", tags: ["route", "altitude"], clip: "IMG_3549" },
+    { id: "yangxiang", rank: "Q", suit: "♦", label: "3119m", chapter: "ch04", date: "2025-07-06", tags: ["route", "altitude"], clip: "IMG_3612" },
+    { id: "qilian", rank: "K", suit: "♦", label: "3752m", chapter: "ch04", date: "2025-07-07", tags: ["altitude", "weight"], clip: "IMG_3810" },
+    { id: "taishan", rank: "3", suit: "♦", label: "Mt Tai", chapter: "ch04", date: "2025-12-23", tags: ["altitude", "night"], clip: "IMG_8863" },
+    { id: "ascot", rank: "A", suit: "♣", label: "Ascot", chapter: "ch05", date: "2025-08-22", tags: ["brisbane", "arrival"], clip: "IMG_5523" },
+    { id: "morning", rank: "7", suit: "♣", label: "07:10", chapter: "ch05", date: "2025-08-23", tags: ["sun", "commute"], clip: "IMG_5521" },
+    { id: "river", rank: "Q", suit: "♣", label: "river mesh", chapter: "ch05", date: "2026-05-14", tags: ["river", "motion"], clip: "IMG_6010" },
+    { id: "morningside", rank: "K", suit: "♣", label: "Morningside", chapter: "ch05", date: "2026-05-14", tags: ["brisbane", "routine"], clip: "IMG_3483" },
+    { id: "victoria", rank: "3", suit: "♣", label: "Victoria", chapter: "ch05", date: "2026-04-06", tags: ["australia", "extension"] },
     { id: "blur", rank: "J", suit: "♠", label: "blur", chapter: "ch00", date: "2024-01-01", tags: ["blur", "memory"] },
     { id: "clear", rank: "J", suit: "♦", label: "clear", chapter: "ch00", date: "2026-05-14", tags: ["clear", "system"] },
-    { id: "deadline", rank: "9", suit: "♦", label: "deadline", chapter: "ch03", date: "2025-07-01", tags: ["deadline", "weight"] },
+    { id: "deadline", rank: "9", suit: "♦", label: "deadline", chapter: "ch04", date: "2025-07-01", tags: ["deadline", "weight"] },
     { id: "freedom", rank: "9", suit: "♥", label: "freedom", chapter: "ch02", date: "2024-07-04", tags: ["freedom", "lost"] },
   ];
 }
@@ -2691,7 +4378,7 @@ function evaluateArchiveSet(cards) {
       name: `${cards[0].chapter.toUpperCase()} route`,
       order: 22,
       signal: cards[0].chapter === "ch02" ? -8 : 5,
-      drift: cards[0].chapter === "ch04" ? 12 : 6,
+      drift: cards[0].chapter === "ch05" ? 12 : 6,
       chart: cards[0].chapter === "ch03" ? "altitude" : null,
       message: `${cards[0].chapter.toUpperCase()} route filed. ${cards[0].chapter === "ch02" ? "grass accepts no border." : "not a solution, just a line."}`,
     };
@@ -2729,13 +4416,13 @@ function cardsMeter(label, value) {
 
 function cardsSummary(cs, reason) {
   const mood = cs.drift > 70 ? "drifting" : cs.order > 70 ? "almost organized" : cs.signal < 35 ? "low signal" : "locally stable";
-  const last = cs.played.slice(-3).join(" / ") || "none";
+  const last = cs.log.slice(-3).join(" / ") || "none";
   return [
     `SESSION SUMMARY - ${reason}`,
-    `routes/rules made: ${cs.moves}`,
-    `last sets: ${last}`,
+    `hands dealt: ${cs.rounds}`,
+    `last table: ${last}`,
     `archive mood: ${mood}`,
-    "nothing solved. table lighter.",
+    "the deck can be dealt again.",
   ].join("\n");
 }
 
@@ -3164,7 +4851,7 @@ function updateProfilerWindow(win = findWindowById("profiler")) {
   shell.innerHTML = `
     <div class="profiler-head">
       <div>PROFILER</div>
-      <span>${state.chapter.toUpperCase()} / ${state.currentClip || "NO CLIP"}</span>
+      <span>${state.chapter.toUpperCase()} / ${currentMediaLabel()}</span>
     </div>
     <div class="profiler-grid">
       ${profilerMeter("CLIPS READ", clipsRead, 46)}
@@ -3173,10 +4860,10 @@ function updateProfilerWindow(win = findWindowById("profiler")) {
       ${profilerMeter("TIME", Math.min(sessionSeconds(), 600), 600)}
     </div>
     <div class="profiler-process">
-      <div><span>CHAPTERS</span><b>5</b></div>
+      <div><span>CHAPTERS</span><b>6</b></div>
       <div><span>CLIPS</span><b>46</b></div>
       <div><span>LOCATIONS</span><b>47</b></div>
-      <div><span>OBJECTS</span><b>6</b></div>
+      <div><span>OBJECTS</span><b>7</b></div>
       <div><span>FRAGMENTS</span><b>12</b></div>
       <div><span>DURATION</span><b>${sessionDuration()}</b></div>
     </div>
@@ -3447,7 +5134,13 @@ function renderNewsWindow(win = findWindowById("news")) {
   const issue = sessionStorage.getItem("news_issue") || "0";
   const header = document.createElement("div");
   header.className = "news-header";
-  header.innerHTML = `<div class="news-logo">NEWS!!!</div><div class="news-issue">issue ${issue}</div>`;
+  header.innerHTML = `
+    <div>
+      <div class="news-kicker">in_praise daily register</div>
+      <div class="news-logo">NEWS</div>
+    </div>
+    <div class="news-issue">NO. ${issue}<br>${new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }).toUpperCase()}</div>
+  `;
   const subtitle = document.createElement("div");
   subtitle.className = "news-subtitle";
   subtitle.textContent = content.subtitle;
@@ -3462,8 +5155,24 @@ function renderNewsWindow(win = findWindowById("news")) {
   figure.append(image, caption);
   const article = document.createElement("article");
   article.className = "news-copy";
-  article.innerHTML = `<h2>${content.headline}</h2><p>${body}</p>`;
-  bodyWrap.append(figure, article);
+  const headline = Object.assign(document.createElement("h2"), { textContent: content.headline });
+  const meta = Object.assign(document.createElement("div"), { className: "news-meta", textContent: `${key} / page ${win.newsPage} of ${total}` });
+  const text = document.createElement("div");
+  text.className = "news-columns";
+  String(body).split(/\n\s*\n/).filter(Boolean).forEach((para) => {
+    const p = document.createElement("p");
+    p.textContent = para.trim();
+    text.appendChild(p);
+  });
+  article.append(headline, meta, text);
+  const rail = document.createElement("aside");
+  rail.className = "news-rail";
+  rail.append(
+    Object.assign(document.createElement("div"), { textContent: "WIRE" }),
+    Object.assign(document.createElement("p"), { textContent: `${content.fig || "fig."} / ${content.pages || 1} page dispatch` }),
+    Object.assign(document.createElement("p"), { textContent: "Filed locally. Verified only by recurrence." })
+  );
+  bodyWrap.append(figure, article, rail);
   const footer = document.createElement("div");
   footer.className = "news-footer";
   const prev = document.createElement("button");
@@ -3632,6 +5341,11 @@ function sessionSeconds() {
   return Math.floor((performance.now() - state.startedAt) / 1000);
 }
 
+function currentMediaLabel() {
+  if (state.currentMediaItem?.type === "photo") return state.currentMediaItem.file || "PHOTO";
+  return state.currentClip || "NO CLIP";
+}
+
 function sessionDuration() {
   const seconds = sessionSeconds();
   return `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
@@ -3695,6 +5409,13 @@ MOTION: 0.136</pre>`,
   return createDesktopWindow("04 JUL 2024  09:46  QIQIHAR->ARXAN", body);
 }
 
+function buildSabineWindow() {
+  const shell = document.createElement("pre");
+  shell.className = "trash-doc trash-doc-pdf sabine-doc";
+  shell.textContent = SABINE_ANALYSIS_TEXT;
+  return createSizedDesktopWindow("The Abduction of the Sabine Women_Dai Pan_1_3.pdf", shell, "desktop-window-pdf desktop-window-sabine");
+}
+
 function buildTrashWindow() {
   const body = `<div class="trash-list"></div>`;
   const win = createDesktopWindow(`TRASH - ${TRASH_ITEMS.length} items`, body);
@@ -3713,10 +5434,6 @@ function buildTrashWindow() {
 function openTrashItem(id) {
   const item = TRASH_ITEMS.find((entry) => entry.id === id);
   if (!item) return;
-  if (item.statusSequence) {
-    openTrashTextWindow(item.filename);
-    return;
-  }
   closeOldestWindowsForNewOne();
   const shell = document.createElement("pre");
   shell.className = `trash-doc trash-doc-${item.type}`;
@@ -3733,6 +5450,7 @@ function trashItemWindowPosition(id) {
   return {
     "freedom-wanted": { left: 360, top: 300 },
     "freedom-forbidden": { left: 390, top: 330 },
+    "freedom-still": { left: 420, top: 360 },
     "cambridge-as": { left: 420, top: 160 },
     "cambridge-al-forecast": { left: 450, top: 190 },
   }[id] || { left: 360, top: 300 };
@@ -3793,20 +5511,30 @@ function buildEyuWindow() {
 
 function sortedEyuArticles() {
   const articles = Array.isArray(window.EYU_ARTICLES) ? window.EYU_ARTICLES : [];
-  const order = [
-    "kaishi_sheying",
-    "shicha_diyi_juan",
-    "meiyou_lajitong",
-    "daohang_shixiao",
-    "lekai_5112",
-    "langshan",
-    "dongjing_guangxue",
-    "gongzi_maipiao",
-    "dulun_wushifasheng",
-    "jiyi_bianma",
-    "xue_qian_xue_hou",
-  ];
-  return [...articles].sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+  return [...articles].sort((a, b) => eyuSortTime(b) - eyuSortTime(a));
+}
+
+function eyuSortTime(article) {
+  const override = {
+    dulun_wushifasheng: "2026-05-01",
+    meiyou_lajitong: "2025-05-01",
+    xue_qian_xue_hou: "2025-02-01",
+    shicha_diyi_juan: "2025-01-21",
+    jiyi_bianma: "2025-01-14",
+    dongjing_guangxue: "2025-01-10",
+    gongzi_maipiao: "2025-07-01",
+    langshan: "2024-11-01",
+    lekai_5112: "2024-10-21",
+    kaishi_sheying: "2024-09-10",
+    daohang_shixiao: "2024-07-01",
+  }[article.id];
+  const raw = override || article.date || "";
+  const match = String(raw).match(/(\d{4})(?:年|-)?\s*(\d{1,2})?(?:月|-)?\s*(\d{1,2})?/);
+  if (!match) return 0;
+  const year = Number(match[1]);
+  const month = Number(match[2] || 1);
+  const day = Number(match[3] || 1);
+  return new Date(year, month - 1, day).getTime();
 }
 
 function eyuListDate(article) {
@@ -4042,9 +5770,17 @@ function fadeAudioToZero(duration) {
 }
 
 function onWheel(event) {
-  if (state.chapter !== "ch04") return;
+  if (state.chapter !== "ch05") return;
+  if (event.ctrlKey || shouldAllowNativeWheel(event.target)) return;
   event.preventDefault();
   window.scrollBy(0, event.deltaY * 0.4);
+}
+
+function shouldAllowNativeWheel(target) {
+  const node = target?.closest?.(".desktop-window, .calendar-scroll, .news-scroll, .finder-main, .finder-sidebar, .finder-preview, .search-system-results, .search-system-detail, .eyu-list, .eyu-article, .trash-doc, textarea");
+  if (!node) return false;
+  if (node.classList?.contains("desktop-window")) return true;
+  return node.scrollHeight > node.clientHeight || node.scrollWidth > node.clientWidth;
 }
 
 function startClock() {
@@ -4146,6 +5882,12 @@ function activateChapter(chapter) {
   state.chapter = chapter;
   sessionStorage.setItem("last_chapter", chapter);
   state.clipIndex = 0;
+  state.mediaIndex = 0;
+  state.photoPositionIndex = 0;
+  state.textCycle[chapter] = -1;
+  if (Object.prototype.hasOwnProperty.call(state.monologueCycle, chapter)) {
+    state.monologueCycle[chapter] = -1;
+  }
   state.wasInterrupted = false;
 
   const spec = CHAPTERS[chapter];
@@ -4160,6 +5902,7 @@ function activateChapter(chapter) {
   dom.chapter00.classList.toggle("is-active", chapter === "ch00");
   dom.stage.classList.toggle("is-active", chapter !== "ch00");
   dom.stage.dataset.mode = chapter;
+  dom.video.pause();
   if (chapter !== "ch00") stopCh00BootLog();
 
   if (chapter === "ch00") {
@@ -4167,19 +5910,73 @@ function activateChapter(chapter) {
     dom.video.pause();
     dom.video.removeAttribute("src");
     dom.video.load();
+    clearPhotoMedia();
+    renderChapterArchive("ch00");
     clearVideoHold();
     clearNarrativeTimers();
     hideNarrativeText();
+    clearMonologueTimers();
+    hideMonologueText();
     setTextureChapter("ch00");
     return;
   }
 
   setTextureChapter(chapter);
+  const sequence = mediaSequenceForChapter(chapter);
+  if (sequence.length) {
+    clearNarrativeTimers();
+    hideNarrativeText();
+    setMediaItem(sequence[0]);
+    startMonologueCycle(chapter);
+    renderChapterArchive(chapter);
+    renderAltitudeRoute();
+    maybeStartP5(chapter);
+    maybeStartCh04InterruptTimer(chapter);
+    maybeShowOnboardingDialog(chapter);
+    if (chapter === "after") renderAfterPage();
+    return;
+  }
+
+  if (!spec.clips.length) {
+    state.currentClip = null;
+    dom.video.removeAttribute("src");
+    dom.video.load();
+    clearPhotoMedia();
+    clearVideoHold();
+    clearNarrativeTimers();
+    hideNarrativeText();
+    clearMonologueTimers();
+    hideMonologueText();
+    renderChapterArchive(chapter);
+    showNextNarrativeText();
+    startMonologueCycle(chapter);
+    updateVideoControls();
+    updateSystemReadout();
+    maybeStartP5(chapter);
+    maybeStartCh04InterruptTimer(chapter);
+    renderAfterPage();
+    return;
+  }
   setClip(spec.clips[0]);
+  startMonologueCycle(chapter);
+  renderChapterArchive(chapter);
   renderAltitudeRoute();
   maybeStartP5(chapter);
   maybeStartCh04InterruptTimer(chapter);
   maybeShowOnboardingDialog(chapter);
+}
+
+function renderAfterPage() {
+  if (!dom.afterFileText) return;
+  dom.afterFileText.textContent = "loading...";
+  fetch("一切都会好起来的.txt")
+    .then((response) => response.ok ? response.text() : Promise.reject(new Error(`txt ${response.status}`)))
+    .then((text) => {
+      dom.afterFileText.textContent = text.trim();
+    })
+    .catch(() => {
+      dom.afterFileText.textContent = "一切都会好起来的。\n\nThis file is still open.";
+    });
 }
 
 function maybeShowOnboardingDialog(chapter) {
@@ -4229,6 +6026,12 @@ function updateDesktopObjectVisibility(chapter) {
   updateDockState();
 }
 
+function renderChapterArchive(chapter = state.chapter) {
+  if (!dom.mediaArchive) return;
+  dom.mediaArchive.innerHTML = "";
+  dom.mediaArchive.classList.remove("is-active");
+}
+
 function setPalette(spec) {
   dom.root.style.setProperty("--chapter-primary", spec.primary);
   dom.root.style.setProperty("--chapter-secondary", spec.secondary);
@@ -4246,9 +6049,218 @@ function updateNav(chapter) {
   });
 }
 
+function mediaSequenceForChapter(chapter = state.chapter) {
+  return (CHAPTER_MEDIA_SEQUENCES[chapter] || []).filter((item) => {
+    if (!item) return false;
+    if (item.type !== "photo") return true;
+    return /\.(jpe?g|png|gif|webp)$/i.test(item.file || "");
+  });
+}
+
+function setMediaItem(item) {
+  if (!item) return;
+  clearTimeout(state.photoTimer);
+  state.photoTimer = null;
+  state.currentMediaItem = item;
+  if (item.type === "video") {
+    const key = item.key || item.file?.replace(/\.[^.]+$/, "");
+    const spec = CHAPTERS[state.chapter];
+    state.clipIndex = Math.max(0, spec?.clips?.indexOf(key) ?? 0);
+    setClip(key);
+    return;
+  }
+  setPhotoMedia(item);
+}
+
+function setPhotoMedia(item) {
+  clearVideoHold();
+  clearTimeout(state.photoTimer);
+  state.photoTimer = null;
+  const loadToken = ++state.photoLoadToken;
+  state.currentMediaItem = item;
+  state.currentClip = null;
+  dom.video.pause();
+  dom.video.removeAttribute("src");
+  dom.video.load();
+  dom.video.dataset.clip = "";
+  dom.crtShell.dataset.mediaType = "photo";
+  dom.crtFrame.classList.add("is-photo", "is-photo-loading");
+  updateVideoControls();
+
+  const loader = new Image();
+  loader.decoding = "async";
+  loader.onload = () => {
+    if (loadToken !== state.photoLoadToken || state.currentMediaItem !== item) return;
+    item.naturalWidth = loader.naturalWidth || 4;
+    item.naturalHeight = loader.naturalHeight || 3;
+    item.positionIndex = state.photoPositionIndex;
+    state.photoPositionIndex += 1;
+    applyPhotoLayout(item);
+    dom.photo.alt = item.label || item.file || "archive photo";
+    dom.photo.src = item.file;
+    requestAnimationFrame(() => dom.crtFrame.classList.remove("is-photo-loading"));
+    updateMonitorForPhoto(item);
+    updateRouteCurrent();
+    showNextNarrativeText();
+    updateVideoControls();
+    updateFinderWindow();
+    updateSystemReadout();
+    state.photoTimer = setTimeout(() => advanceClip(), photoDurationForChapter(state.chapter));
+  };
+  loader.onerror = () => {
+    if (loadToken !== state.photoLoadToken || state.currentMediaItem !== item) return;
+    item.naturalWidth = item.naturalWidth || 4;
+    item.naturalHeight = item.naturalHeight || 3;
+    item.positionIndex = state.photoPositionIndex;
+    state.photoPositionIndex += 1;
+    applyPhotoLayout(item);
+    dom.photo.alt = item.label || item.file || "archive photo";
+    dom.photo.src = item.file;
+    dom.crtFrame.classList.remove("is-photo-loading");
+    updateMonitorForPhoto(item);
+    updateRouteCurrent();
+    showNextNarrativeText();
+    updateVideoControls();
+    updateFinderWindow();
+    updateSystemReadout();
+    state.photoTimer = setTimeout(() => advanceClip(), photoDurationForChapter(state.chapter));
+  };
+  loader.src = item.file;
+}
+
+function clearPhotoMedia() {
+  state.photoLoadToken += 1;
+  clearTimeout(state.photoTimer);
+  state.photoTimer = null;
+  if (!dom.photo || !dom.crtFrame) return;
+  dom.photo.removeAttribute("src");
+  dom.photo.alt = "";
+  dom.crtFrame.classList.remove("is-photo", "is-photo-loading");
+  dom.crtFrame.style.width = "";
+  dom.crtFrame.style.height = "";
+  dom.crtShell?.removeAttribute("data-media-type");
+}
+
+function applyPhotoLayout(item) {
+  const shell = dom.crtShell;
+  if (!shell) return;
+  const safe = contentSafeRect(14);
+  const longEdge = plannedVideoShortEdgeForChapter(state.chapter, safe);
+  const naturalW = item.naturalWidth || dom.photo.naturalWidth || 4;
+  const naturalH = item.naturalHeight || dom.photo.naturalHeight || 3;
+  const landscape = naturalW >= naturalH;
+  const frameW = landscape ? longEdge : Math.round(longEdge * naturalW / naturalH);
+  const frameH = landscape ? Math.round(longEdge * naturalH / naturalW) : longEdge;
+  const scale = Math.min(
+    1,
+    (safe.right - safe.left) / frameW,
+    (safe.bottom - safe.top - 30) / frameH
+  );
+  const displayW = Math.round(frameW * scale);
+  const displayH = Math.round(frameH * scale);
+  const totalH = displayH + 30;
+  const positions = photoPositionsForChapter(state.chapter);
+  const posIndex = Number.isFinite(item.positionIndex) ? item.positionIndex : state.mediaIndex;
+  const posSpec = positions[posIndex % positions.length] || positions[0];
+  const left = safe.left + (safe.right - safe.left - displayW) * posSpec.x;
+  const top = safe.top + (safe.bottom - safe.top - totalH) * posSpec.y;
+  const pos = clampToRect(left, top, displayW, totalH, safe);
+  shell.style.transition = "none";
+  shell.style.width = `${displayW}px`;
+  shell.style.left = `${pos.left}px`;
+  shell.style.top = `${pos.top}px`;
+  shell.style.right = "";
+  shell.style.bottom = "";
+  shell.style.transform = "none";
+  dom.crtFrame.style.width = `${displayW}px`;
+  dom.crtFrame.style.height = `${displayH}px`;
+}
+
+function mediaShellRect() {
+  const rect = dom.crtShell?.getBoundingClientRect();
+  if (!rect || rect.width <= 0 || rect.height <= 0) return null;
+  return rect;
+}
+
+function rectsOverlap(a, b, pad = 0) {
+  if (!a || !b) return false;
+  return !(
+    a.left + a.width + pad < b.left ||
+    b.left + b.width + pad < a.left ||
+    a.top + a.height + pad < b.top ||
+    b.top + b.height + pad < a.top
+  );
+}
+
+function photoDurationForChapter(chapter) {
+  if (chapter === "ch06") return 9800;
+  if (chapter === "ch03") return 8600;
+  if (chapter === "ch05") return 8200;
+  return 7600;
+}
+
+function plannedVideoShortEdgeForChapter(chapter, safe = contentSafeRect(14)) {
+  const stageW = Math.max(280, safe.right - safe.left);
+  if (chapter === "ch03") {
+    const videoWidth = Math.min(860, Math.max(720, stageW * 0.54));
+    return Math.round(Math.max(360, Math.min(500, videoWidth * 9 / 16)));
+  }
+  if (chapter === "ch06") {
+    const videoWidth = Math.min(900, Math.max(760, stageW * 0.58));
+    return Math.round(Math.max(380, Math.min(520, videoWidth * 9 / 16)));
+  }
+  const videoWidth = {
+    ch01: Math.min(680, Math.max(560, stageW * 0.40)),
+    ch02: Math.min(760, Math.max(600, stageW * 0.44)),
+    ch04: Math.min(700, Math.max(620, stageW * 0.42)),
+    ch05: Math.min(760, Math.max(620, stageW * 0.44)),
+  }[chapter] || 560;
+  return Math.round(Math.max(300, Math.min(460, videoWidth * 9 / 16)));
+}
+
+function photoPositionsForChapter(chapter) {
+  if (chapter === "ch03") return [
+    { x: 0.62, y: 0.10 },
+    { x: 0.42, y: 0.46 },
+    { x: 0.70, y: 0.54 },
+    { x: 0.18, y: 0.44 },
+    { x: 0.50, y: 0.18 },
+  ];
+  if (chapter === "ch04") return [
+    { x: 0.58, y: 0.08 },
+    { x: 0.44, y: 0.36 },
+    { x: 0.28, y: 0.58 },
+    { x: 0.66, y: 0.48 },
+  ];
+  if (chapter === "ch05") return [
+    { x: 0.18, y: 0.14 },
+    { x: 0.62, y: 0.10 },
+    { x: 0.50, y: 0.56 },
+    { x: 0.30, y: 0.48 },
+    { x: 0.72, y: 0.34 },
+  ];
+  if (chapter === "ch06") return [
+    { x: 0.70, y: 0.10 },
+    { x: 0.58, y: 0.36 },
+    { x: 0.70, y: 0.56 },
+    { x: 0.22, y: 0.44 },
+    { x: 0.52, y: 0.16 },
+  ];
+  return [
+    { x: 0.16, y: 0.12 },
+    { x: 0.56, y: 0.16 },
+    { x: 0.34, y: 0.56 },
+    { x: 0.70, y: 0.46 },
+  ];
+}
+
 function setClip(clipKey) {
   if (!clipKey || !state.signal[clipKey]) return;
+  clearPhotoMedia();
   clearVideoHold();
+  clearTimeout(state.photoTimer);
+  state.photoTimer = null;
+  state.currentMediaItem = { type: "video", key: clipKey };
   state.currentClip = clipKey;
   const clip = state.signal[clipKey];
 
@@ -4266,6 +6278,7 @@ function setClip(clipKey) {
   updateAmbientGain(clip);
   handleGpsLost(clipKey);
   showNextNarrativeText();
+  syncNarrativeToVideoDuration(clipKey);
   updateVideoControls();
   updateFinderWindow();
   updateSystemReadout();
@@ -4305,15 +6318,16 @@ function applyVideoLayoutForClip(clipKey) {
     }
     return;
   }
-  if (state.chapter === "ch03") {
-    const chartRight = safe.left + Math.min(500, (safe.right - safe.left) * 0.34);
-    const width = Math.min(720, Math.max(660, (safe.right - chartRight) * 0.62));
-    const left = chartRight + ((safe.right - chartRight) - width) / 2;
+  if (state.chapter === "ch04") {
+    const chartRight = safe.left + Math.min(520, (safe.right - safe.left) * 0.36);
+    const rightLane = Math.max(320, safe.right - chartRight - 24);
+    const width = Math.min(720, Math.max(620, rightLane * 0.62));
+    const left = chartRight + (rightLane - width) / 2;
     const top = safe.top + Math.max(38, (safe.bottom - safe.top - (width * 9 / 16 + 24)) * 0.20);
     setBox(width, left, top);
     return;
   }
-  if (state.chapter === "ch04") {
+  if (state.chapter === "ch05") {
     if (state.clipIndex === 0) {
       const box = placeInSafeArea(680, 406, 0.20, 0.12, safe);
       setBox(box.width, box.left, box.top);
@@ -4329,7 +6343,7 @@ function applyVideoLayoutForClip(clipKey) {
 }
 
 function driftCh04VideoWindow() {
-  if (state.chapter !== "ch04" || !dom.crtShell) return;
+  if (state.chapter !== "ch05" || !dom.crtShell) return;
   const rect = dom.crtShell.getBoundingClientRect();
   const safe = contentSafeRect(8);
   const distance = 30;
@@ -4375,6 +6389,10 @@ function finishVideoHold() {
 }
 
 function toggleMainVideoPlayback() {
+  if (state.currentMediaItem?.type === "photo") {
+    advanceClip();
+    return;
+  }
   if (state.isVideoHold) {
     finishVideoHold();
     return;
@@ -4386,6 +6404,11 @@ function toggleMainVideoPlayback() {
 
 function updateVideoControls() {
   if (!dom.videoToggle || !dom.videoTime) return;
+  if (state.currentMediaItem?.type === "photo") {
+    dom.videoToggle.textContent = "[→]";
+    dom.videoTime.textContent = `${state.currentMediaItem.label || "PHOTO"} / ${state.currentMediaItem.meta || state.currentMediaItem.file}`;
+    return;
+  }
   dom.videoToggle.textContent = dom.video.paused || state.isVideoHold ? "[▶]" : "[‖]";
   dom.videoTime.textContent = `${formatMediaTime(dom.video.currentTime)} / ${formatMediaTime(dom.video.duration)}`;
 }
@@ -4401,7 +6424,7 @@ function showNextNarrativeText() {
   clearNarrativeTimers();
   hideNarrativeText();
   const chapter = state.chapter;
-  const texts = NARRATIVE_TEXTS[chapter] || [];
+  const texts = narrativeTextsForChapter(chapter);
   if (!texts.length) return;
   const next = nextTextIndex(chapter, texts.length);
   const target = narrativeTargetForText(chapter, next);
@@ -4413,14 +6436,63 @@ function showNextNarrativeText() {
   target.classList.remove("is-fading");
   target.classList.add("is-visible", "is-entering");
   requestAnimationFrame(() => target.classList.remove("is-entering"));
+  state.narrativeCurrent = { target, body, chapter };
+  scheduleNarrativeFade(target, body, narrativeDurationForChapter(chapter));
+}
+
+function scheduleNarrativeFade(target, body, duration) {
+  const current = state.narrativeCurrent;
+  clearTimeout(state.textTimer);
+  clearTimeout(state.textFadeTimer);
   state.textTimer = setTimeout(() => {
+    if (state.narrativeCurrent !== current) return;
     target.classList.add("is-fading");
     state.textFadeTimer = setTimeout(() => {
+      if (state.narrativeCurrent !== current) return;
       target.classList.remove("is-visible", "is-fading");
       body.textContent = "";
-      if (state.chapter === chapter) showNextNarrativeText();
+      state.narrativeCurrent = null;
     }, 800);
-  }, 7000);
+  }, duration);
+}
+
+function syncNarrativeToVideoDuration(clipKey = state.currentClip) {
+  if (!state.narrativeCurrent) return;
+  if (!clipKey || state.currentClip !== clipKey) return;
+  if (state.currentMediaItem?.type === "photo") return;
+  const duration = dom.video?.duration;
+  if (!Number.isFinite(duration) || duration <= 0) return;
+  const remaining = Math.max(0, duration - (dom.video.currentTime || 0));
+  if (remaining <= 0) return;
+  const fadeAfter = Math.max(narrativeDurationBaseForChapter(state.chapter), remaining * 1000 + 900);
+  scheduleNarrativeFade(state.narrativeCurrent.target, state.narrativeCurrent.body, fadeAfter);
+}
+
+function narrativeTextsForChapter(chapter) {
+  if (chapter === "ch04") {
+    return isTaiAscentActive() ? CH04_TAI_TEXTS : CH04_QINGHAI_TEXTS;
+  }
+  return NARRATIVE_TEXTS[chapter] || [];
+}
+
+function isTaiAscentActive() {
+  return TAI_ASCENT_KEYS.has(activeAltitudeKey());
+}
+
+function narrativeDurationForChapter(chapter) {
+  const base = narrativeDurationBaseForChapter(chapter);
+  if (state.currentMediaItem?.type === "photo") {
+    return Math.max(base, photoDurationForChapter(chapter) - 500);
+  }
+  return base;
+}
+
+function narrativeDurationBaseForChapter(chapter) {
+  if (chapter === "ch03") return 6200;
+  if (chapter === "ch04") return 6600;
+  if (chapter === "ch05") return 6400;
+  if (chapter === "ch06") return 6200;
+  return 7000;
 }
 
 function nextTextIndex(chapter, count) {
@@ -4438,25 +6510,27 @@ function nextTextIndex(chapter, count) {
 function narrativeTargetsForChapter(chapter) {
   if (chapter === "ch01") return [...document.querySelectorAll(".text-slot")];
   if (chapter === "ch02") return [document.querySelector(".text-slot-top")].filter(Boolean);
-  if (chapter === "ch03") {
+  if (chapter === "ch04") {
     const selectors = state.currentClip === "IMG_3810" || state.currentClip === "IMG_3773"
       ? ".ch03-box-c"
       : ".ch03-box-a, .ch03-box-b";
     return [...document.querySelectorAll(selectors)];
   }
-  if (chapter === "ch04") return [...document.querySelectorAll(".ch04-box")];
+  if (chapter === "ch03") return [document.querySelector(".text-slot-top")].filter(Boolean);
+  if (chapter === "ch05" || chapter === "ch06") return [...document.querySelectorAll(".ch04-box")];
   return [];
 }
 
 function narrativeTargetForText(chapter, index) {
   if (chapter === "ch01") return document.querySelector(".text-slot-top");
   if (chapter === "ch02") return document.querySelector(".text-slot-top");
-  if (chapter === "ch03") {
+  if (chapter === "ch04") {
     if (index === 0) return document.querySelector(".ch03-box-a");
     if (index === 1) return document.querySelector(".ch03-box-b");
     return document.querySelector(".ch03-box-c");
   }
-  if (chapter === "ch04") return document.querySelector(".ch04-box");
+  if (chapter === "ch03") return document.querySelector(".text-slot-top");
+  if (chapter === "ch05" || chapter === "ch06") return document.querySelector(".ch04-box");
   return null;
 }
 
@@ -4488,7 +6562,7 @@ function positionNarrativeTarget(target, chapter, index) {
     Object.assign(target.style, { left: `${pos.left}px`, top: `${pos.top}px`, right: "", bottom: "", transform: "", maxWidth: "460px" });
     return;
   }
-  if (chapter === "ch04") {
+  if (chapter === "ch05") {
     const videoRect = dom.crtShell?.getBoundingClientRect();
     const width = Math.min(440, Math.max(340, (safe.right - safe.left) * 0.30));
     const left = videoRect ? videoRect.left + videoRect.width * 0.58 : safe.right - width - 150;
@@ -4498,6 +6572,33 @@ function positionNarrativeTarget(target, chapter, index) {
     return;
   }
   if (chapter === "ch03") {
+    positionFloatingTextAwayFromMedia(target, safe, index, {
+      width: Math.min(500, Math.max(340, (safe.right - safe.left) * 0.30)),
+      height: 176,
+      candidates: [
+        { x: 0.04, y: 0.08 },
+        { x: 0.58, y: 0.10 },
+        { x: 0.06, y: 0.58 },
+        { x: 0.56, y: 0.60 },
+        { x: 0.32, y: 0.08 },
+      ],
+    });
+    return;
+  }
+  if (chapter === "ch06") {
+    positionFloatingTextAwayFromMedia(target, safe, index, {
+      width: Math.min(380, Math.max(300, (safe.right - safe.left) * 0.26)),
+      height: 190,
+      candidates: [
+        { x: 0.04, y: 0.10 },
+        { x: 0.60, y: 0.10 },
+        { x: 0.06, y: 0.58 },
+        { x: 0.54, y: 0.60 },
+      ],
+    });
+    return;
+  }
+  if (chapter === "ch04") {
     const videoRect = dom.crtShell?.getBoundingClientRect();
     const chartRight = safe.left + Math.min(520, (safe.right - safe.left) * 0.36);
     const x = chartRight + 48;
@@ -4506,6 +6607,41 @@ function positionNarrativeTarget(target, chapter, index) {
     const pos = clampToRect(x, y, width, 128, safe);
     Object.assign(target.style, { left: `${pos.left}px`, top: `${pos.top}px`, right: "", bottom: "", transform: "", maxWidth: `${width}px` });
   }
+}
+
+function positionFloatingTextAwayFromMedia(target, safe, index, config) {
+  const mediaRect = mediaShellRect();
+  const width = config.width;
+  const height = config.height;
+  const candidates = config.candidates || [{ x: 0.04, y: 0.10 }];
+  const ordered = candidates.map((_, offset) => candidates[(index + offset) % candidates.length]);
+  const fallback = ordered[0];
+  let chosen = null;
+
+  for (const candidate of ordered) {
+    const left = safe.left + (safe.right - safe.left - width) * candidate.x;
+    const top = safe.top + (safe.bottom - safe.top - height) * candidate.y;
+    const pos = clampToRect(left, top, width, height, safe);
+    if (!rectsOverlap({ left: pos.left, top: pos.top, width, height }, mediaRect, 34)) {
+      chosen = { left: pos.left, top: pos.top };
+      break;
+    }
+  }
+
+  if (!chosen) {
+    const left = safe.left + (safe.right - safe.left - width) * fallback.x;
+    const top = safe.top + (safe.bottom - safe.top - height) * fallback.y;
+    chosen = clampToRect(left, top, width, height, safe);
+  }
+
+  Object.assign(target.style, {
+    left: `${chosen.left}px`,
+    top: `${chosen.top}px`,
+    right: "",
+    bottom: "",
+    transform: "",
+    maxWidth: `${width}px`,
+  });
 }
 
 function altitudeToViewportY(altitude) {
@@ -4521,6 +6657,7 @@ function clearNarrativeTimers() {
   clearTimeout(state.textFadeTimer);
   state.textTimer = null;
   state.textFadeTimer = null;
+  state.narrativeCurrent = null;
 }
 
 function hideNarrativeText() {
@@ -4529,18 +6666,184 @@ function hideNarrativeText() {
   });
 }
 
+function startMonologueCycle(chapter = state.chapter) {
+  clearMonologueTimers();
+  hideMonologueText();
+  if (!dom.monologue || chapter === "ch00" || chapter === "after") return;
+  const texts = MONOLOGUE_TEXTS[chapter] || [];
+  if (!texts.length) return;
+
+  const tick = () => {
+    if (state.chapter !== chapter) return;
+    showNextMonologueText(chapter);
+    state.monologueTimer = setTimeout(tick, monologueIntervalForChapter(chapter));
+  };
+  state.monologueTimer = setTimeout(tick, 900);
+}
+
+function showNextMonologueText(chapter = state.chapter) {
+  const texts = MONOLOGUE_TEXTS[chapter] || [];
+  if (!dom.monologue || !texts.length) return;
+  clearTimeout(state.monologueFadeTimer);
+  const index = nextMonologueIndex(chapter, texts.length);
+  const token = ++state.monologueToken;
+  dom.monologue.textContent = texts[index % texts.length];
+  positionMonologueText(dom.monologue, chapter, index);
+  dom.monologue.classList.remove("is-fading");
+  dom.monologue.classList.add("is-visible", "is-entering");
+  requestAnimationFrame(() => dom.monologue?.classList.remove("is-entering"));
+  state.monologueFadeTimer = setTimeout(() => {
+    if (state.monologueToken !== token || state.chapter !== chapter) return;
+    dom.monologue?.classList.add("is-fading");
+    setTimeout(() => {
+      if (state.monologueToken !== token || state.chapter !== chapter) return;
+      dom.monologue?.classList.remove("is-visible", "is-fading");
+    }, 800);
+  }, monologueDurationForChapter(chapter));
+}
+
+function clearMonologueTimers() {
+  clearTimeout(state.monologueTimer);
+  clearTimeout(state.monologueFadeTimer);
+  state.monologueTimer = null;
+  state.monologueFadeTimer = null;
+}
+
+function hideMonologueText() {
+  if (!dom.monologue) return;
+  state.monologueToken += 1;
+  dom.monologue.classList.remove("is-visible", "is-entering", "is-fading");
+  dom.monologue.textContent = "";
+}
+
+function nextMonologueIndex(chapter, count) {
+  const last = state.monologueCycle[chapter] ?? -1;
+  if (count <= 1) {
+    state.monologueCycle[chapter] = 0;
+    return 0;
+  }
+  const next = (last + 1) % count;
+  state.monologueCycle[chapter] = next;
+  return next;
+}
+
+function monologueDurationForChapter() {
+  return 12000;
+}
+
+function monologueIntervalForChapter() {
+  return 13200;
+}
+
+function positionMonologueText(target, chapter, index) {
+  const safe = contentSafeRect(22);
+  const width = Math.min(360, Math.max(260, (safe.right - safe.left) * 0.28));
+  const height = 120;
+  const mediaRect = mediaShellRect();
+  const shortTextRect = document.querySelector(".text-slot.is-visible, .boxed-text.is-visible")?.getBoundingClientRect();
+  const candidates = monologuePositionsForChapter(chapter);
+  const ordered = candidates.map((_, offset) => candidates[(index + offset) % candidates.length]);
+  let chosen = null;
+
+  for (const candidate of ordered) {
+    const left = safe.left + (safe.right - safe.left - width) * candidate.x;
+    const top = safe.top + (safe.bottom - safe.top - height) * candidate.y;
+    const pos = clampToRect(left, top, width, height, safe);
+    const rect = { left: pos.left, top: pos.top, width, height };
+    if (rectsOverlap(rect, mediaRect, 38)) continue;
+    if (rectsOverlap(rect, shortTextRect, 26)) continue;
+    chosen = pos;
+    break;
+  }
+
+  const fallback = chosen || clampToRect(
+    safe.left + (safe.right - safe.left - width) * ordered[0].x,
+    safe.top + (safe.bottom - safe.top - height) * ordered[0].y,
+    width,
+    height,
+    safe
+  );
+
+  Object.assign(target.style, {
+    left: `${fallback.left}px`,
+    top: `${fallback.top}px`,
+    right: "",
+    bottom: "",
+    transform: "",
+    width: `${width}px`,
+  });
+}
+
+function monologuePositionsForChapter(chapter) {
+  if (chapter === "ch01") return [
+    { x: 0.70, y: 0.12 },
+    { x: 0.10, y: 0.60 },
+    { x: 0.66, y: 0.68 },
+  ];
+  if (chapter === "ch02") return [
+    { x: 0.66, y: 0.14 },
+    { x: 0.08, y: 0.70 },
+    { x: 0.58, y: 0.58 },
+  ];
+  if (chapter === "ch04") return [
+    { x: 0.06, y: 0.14 },
+    { x: 0.08, y: 0.68 },
+    { x: 0.62, y: 0.72 },
+  ];
+  return [
+    { x: 0.08, y: 0.16 },
+    { x: 0.64, y: 0.16 },
+    { x: 0.12, y: 0.70 },
+    { x: 0.60, y: 0.66 },
+  ];
+}
+
 function advanceClip() {
   if (state.wasInterrupted) return;
   const spec = CHAPTERS[state.chapter];
-  if (!spec || !spec.clips.length) return;
+  if (!spec) return;
 
   if (state.chapter === "ch01" && state.currentClip === spec.interruptAfter) {
     triggerNyeInterrupt();
     return;
   }
 
-  state.clipIndex = (state.clipIndex + 1) % spec.clips.length;
+  const sequence = mediaSequenceForChapter(state.chapter);
+  if (sequence.length) {
+    const nextIndex = state.mediaIndex + 1;
+    if (nextIndex >= sequence.length) {
+      advanceToNextChapter();
+      return;
+    }
+    state.mediaIndex = nextIndex;
+    setMediaItem(sequence[state.mediaIndex]);
+    return;
+  }
+
+  if (!spec.clips.length) return;
+  const nextClipIndex = state.clipIndex + 1;
+  if (nextClipIndex >= spec.clips.length) {
+    advanceToNextChapter();
+    return;
+  }
+  state.clipIndex = nextClipIndex;
   setClip(spec.clips[state.clipIndex]);
+}
+
+function advanceToNextChapter() {
+  const index = AUTO_CHAPTER_ORDER.indexOf(state.chapter);
+  if (index < 0 || index >= AUTO_CHAPTER_ORDER.length - 1) {
+    clearVideoHold();
+    clearTimeout(state.photoTimer);
+    state.photoTimer = null;
+    return;
+  }
+  const nextChapter = AUTO_CHAPTER_ORDER[index + 1];
+  clearVideoHold();
+  clearTimeout(state.photoTimer);
+  state.photoTimer = null;
+  clearNarrativeTimers();
+  hardCut(() => activateChapter(nextChapter));
 }
 
 function triggerNyeInterrupt() {
@@ -4551,14 +6854,14 @@ function triggerNyeInterrupt() {
   setTimeout(() => {
     hardCut(() => {
       state.wasInterrupted = false;
-      setClip(state.previousClip || "IMG_1401");
+      advanceClip();
     });
   }, 3000);
 }
 
 function enterInterrupt() {
   if (state.chapter === "int") return;
-  const returnChapter = CHAPTERS[state.chapter] && state.chapter !== "ch00" ? state.chapter : "ch04";
+  const returnChapter = CHAPTERS[state.chapter] && state.chapter !== "ch00" ? state.chapter : "ch05";
   const returnSpec = CHAPTERS[returnChapter];
   const hasCurrentClip = returnSpec?.clips.includes(state.currentClip);
   state.interruptReturn = {
@@ -4594,11 +6897,11 @@ function exitInterrupt() {
   dom.interruptVideo.load();
   dom.body.classList.remove("is-interrupt");
   dom.interruptStage.classList.remove("is-active");
-  const restore = state.interruptReturn || { chapter: "ch04" };
+  const restore = state.interruptReturn || { chapter: "ch05" };
   hardCut(() => {
-    activateChapter(restore.chapter || "ch04");
+    activateChapter(restore.chapter || "ch05");
     if (restore.clip && state.signal[restore.clip]) {
-      const spec = CHAPTERS[restore.chapter || "ch04"];
+      const spec = CHAPTERS[restore.chapter || "ch05"];
       state.clipIndex = Math.max(0, spec.clips.indexOf(restore.clip));
       if (restore.time) {
         const seek = () => {
@@ -4653,7 +6956,7 @@ function updateMonitor(clip) {
   const place = (clip.location || "----").replace("New York City, US", "NYC");
   const altitude = Number.isFinite(clip.altitude_m) ? `${Math.round(clip.altitude_m).toString().padStart(4, "0")}m` : "----";
   const gps = clip.glitch_weight >= 1 ? "NO GPS" : `SIG ${(1 - clip.glitch_weight).toFixed(2)}`;
-  const ascent = state.chapter === "ch03" && Number.isFinite(clip.altitude_m) ? `| ASCENT   | ${signed(Math.round(clip.altitude_m - 1723))}m from start |` : "";
+  const ascent = state.chapter === "ch04" && Number.isFinite(clip.altitude_m) ? `| ASCENT   | ${signed(Math.round(clip.altitude_m - 1723))}m from start |` : "";
 
   dom.monitor.textContent = [
     "+-----------------------------+",
@@ -4668,11 +6971,38 @@ function updateMonitor(clip) {
     row("GLITCH", `${num(clip.glitch_weight)} ${bar(clip.glitch_weight)}`),
     row("RMS PEAK", `${num(clip.rms_peak)} ${bar(clip.rms_peak * 3)}`),
     row("iOS", clip.ios || "----"),
-    state.chapter === "ch03" ? row("ALTITUDE", `${Math.round(clip.altitude_m || 0)}m ${bar(clip.altitude_normalized)}`) : "",
+    state.chapter === "ch04" ? row("ALTITUDE", `${Math.round(clip.altitude_m || 0)}m ${bar(clip.altitude_normalized)}`) : "",
     ascent,
     "+-----------------------------+",
   ].filter(Boolean).join("\n");
   renderMonitorWindow(findWindowById("monitor"), clip);
+}
+
+function updateMonitorForPhoto(item) {
+  const file = item.file || "PHOTO";
+  dom.monitor.textContent = [
+    "+-----------------------------+",
+    "| SIGNAL MONITOR              |",
+    "+-----------------------------+",
+    row("MEDIA", "PHOTO"),
+    row("FILE", file),
+    row("LOCAL", item.meta || "archive"),
+    row("GPS SIG", item.meta?.includes("no GPS") ? "NO GPS" : "STILL"),
+    row("LUM", "still frame"),
+    row("MOTION", "0.00 ░░░░░"),
+    row("GLITCH", "archived"),
+    row("iOS", "----"),
+    "+-----------------------------+",
+  ].join("\n");
+  renderMonitorWindow(findWindowById("monitor"), {
+    clip: file.replace(/\.[^.]+$/, ""),
+    filename: file,
+    location: item.label || "archive photo",
+    local_time: item.meta || "",
+    glitch_weight: item.meta?.includes("no GPS") ? 1 : 0.25,
+    altitude_m: null,
+    rgb: {},
+  });
 }
 
 function renderMonitorWindow(win, clip) {
@@ -4951,140 +7281,168 @@ function pulseCh02Fragment() {
 }
 
 function renderAltitudeRoute() {
-  dom.route.innerHTML = "";
+  if (dom.route) dom.route.innerHTML = "";
   dom.scale.innerHTML = "";
-  if (state.chapter !== "ch03") return;
+  if (state.chapter !== "ch04") return;
 
-  // Sequential altitude profile: X = clip index (0…N-1), Y = altitude
-  const clips = CHAPTERS.ch03.clips
-    .map((key) => state.signal[key])
-    .filter(Boolean);
+  renderSymbolicAltitudeRoute(dom.route);
+}
 
-  const SVG_W = 320;
-  const SVG_H = Math.max(500, window.innerHeight - 100);
-  const PAD_L = 52;
-  const PAD_R = 16;
-  const PAD_T = 36;
-  const PAD_B = 44;
-  const chartW = SVG_W - PAD_L - PAD_R;
-  const chartH = SVG_H - PAD_T - PAD_B;
-
-  dom.route.setAttribute("viewBox", `0 0 ${SVG_W} ${SVG_H}`);
-
+function renderSymbolicAltitudeRoute(svg) {
+  if (!svg) return;
+  svg.innerHTML = "";
   const ns = "http://www.w3.org/2000/svg";
   const el = (tag, attrs = {}) => {
     const node = document.createElementNS(ns, tag);
     Object.entries(attrs).forEach(([k, v]) => node.setAttribute(k, v));
     return node;
   };
-
-  const MIN_ALT = 1400;
+  const SVG_W = 360;
+  const SVG_H = Math.max(620, window.innerHeight - 110);
+  const PAD_L = 58;
+  const PAD_R = 22;
+  const PAD_T = 42;
+  const PAD_B = 54;
+  const chartW = SVG_W - PAD_L - PAD_R;
+  const chartH = SVG_H - PAD_T - PAD_B;
+  const activeKey = activeAltitudeKey();
+  const MIN_ALT = 0;
   const MAX_ALT = 4100;
-  const mapX = (i) => PAD_L + (clips.length < 2 ? chartW / 2 : (i / (clips.length - 1)) * chartW);
   const mapY = (alt) => PAD_T + chartH - ((alt - MIN_ALT) / (MAX_ALT - MIN_ALT)) * chartH;
 
-  // Chart title
-  const title = el("text", { x: PAD_L, y: 18, class: "route-title" });
-  title.textContent = "ALTITUDE PROFILE / CH03";
-  dom.route.appendChild(title);
+  svg.setAttribute("viewBox", `0 0 ${SVG_W} ${SVG_H}`);
 
-  // Horizontal grid lines + Y-axis labels
-  [1500, 2000, 2500, 3000, 3500, 4000].forEach((alt) => {
+  const title = el("text", { x: PAD_L, y: 18, class: "route-title" });
+  title.textContent = "ALTITUDE PROFILE / CH04";
+  svg.appendChild(title);
+
+  [0, 1500, 3000, 4100].forEach((alt) => {
     const y = mapY(alt);
-    dom.route.appendChild(el("line", {
+    svg.appendChild(el("line", {
       x1: PAD_L, y1: y, x2: PAD_L + chartW, y2: y,
       class: "route-grid-line"
     }));
     const lbl = el("text", { x: PAD_L - 6, y: y + 4, class: "route-axis-label", "text-anchor": "end" });
     lbl.textContent = `${alt}`;
-    dom.route.appendChild(lbl);
+    svg.appendChild(lbl);
   });
 
-  // Y-axis unit label
   const unitLbl = el("text", {
     x: 10, y: PAD_T + chartH / 2, class: "route-axis-label",
     "text-anchor": "middle",
     transform: `rotate(-90, 10, ${PAD_T + chartH / 2})`
   });
   unitLbl.textContent = "ALT (m)";
-  dom.route.appendChild(unitLbl);
+  svg.appendChild(unitLbl);
 
-  // Y axis line
-  dom.route.appendChild(el("line", {
+  svg.appendChild(el("line", {
     x1: PAD_L, y1: PAD_T, x2: PAD_L, y2: PAD_T + chartH,
     class: "route-axis-line"
   }));
 
-  // X axis line
-  dom.route.appendChild(el("line", {
+  svg.appendChild(el("line", {
     x1: PAD_L, y1: PAD_T + chartH, x2: PAD_L + chartW, y2: PAD_T + chartH,
     class: "route-axis-line"
   }));
 
-  if (clips.length === 0) return;
+  drawAltitudeSeries(svg, el, QINGHAI_ALTITUDE_POINTS, {
+    activeKey,
+    mapY,
+    xStart: PAD_L,
+    xEnd: PAD_L + chartW * 0.86,
+    labelEvery: 2,
+    lineClass: "route-line",
+    dotClass: "route-dot",
+    dotRadius: 4.5,
+    currentRadius: 7,
+    placeLabelIndexes: new Set([0, QINGHAI_ALTITUDE_POINTS.length - 1, 12]),
+    placeBaseY: PAD_T + chartH + 20,
+  });
 
-  const pts = clips.map((clip, i) => ({
-    clip,
+  drawAltitudeSeries(svg, el, TAI_ALTITUDE_POINTS, {
+    activeKey,
+    mapY,
+    xStart: PAD_L + chartW * 0.58,
+    xEnd: PAD_L + chartW,
+    labelEvery: 2,
+    lineClass: "route-line-tai",
+    dotClass: "route-dot route-dot-tai",
+    dotRadius: 3.6,
+    currentRadius: 5.8,
+    placeLabelIndexes: new Set([0, TAI_ALTITUDE_POINTS.length - 1]),
+    placeBaseY: mapY(0) - 8,
+  });
+}
+
+function drawAltitudeSeries(svg, el, points, config) {
+  const mapX = (i) => config.xStart + (points.length < 2 ? 0 : (i / (points.length - 1)) * (config.xEnd - config.xStart));
+  const pts = points.map((point, i) => ({
+    point,
     x: mapX(i),
-    y: mapY(Number(clip.altitude_m || clip.altitude || MIN_ALT)),
+    y: config.mapY(Number(point.altitude || 0)),
     i,
   }));
 
-  // Filled area under curve
-  const areaPoints =
-    `${PAD_L},${PAD_T + chartH} ` +
-    pts.map((p) => `${p.x},${p.y}`).join(" ") +
-    ` ${PAD_L + chartW},${PAD_T + chartH}`;
-  dom.route.appendChild(el("polygon", { points: areaPoints, class: "route-area" }));
-
-  // Polyline
-  dom.route.appendChild(el("polyline", {
+  svg.appendChild(el("polyline", {
     points: pts.map((p) => `${p.x},${p.y}`).join(" "),
-    class: "route-line"
+    class: config.lineClass,
   }));
 
-  // Dots + time labels (alternating above/below)
   pts.forEach((p, i) => {
-    const isCurrent = p.clip.clip === state.currentClip;
-    const dot = el("circle", {
-      cx: p.x, cy: p.y,
-      r: isCurrent ? "7" : "4",
-      class: `route-dot${isCurrent ? " is-current" : ""}`,
-      "data-clip": p.clip.clip,
-    });
-    dom.route.appendChild(dot);
+    const isCurrent = p.point.clip === config.activeKey;
+    svg.appendChild(el("circle", {
+      cx: p.x,
+      cy: p.y,
+      r: isCurrent ? config.currentRadius : config.dotRadius,
+      class: `${config.dotClass}${isCurrent ? " is-current" : ""}`,
+      "data-clip": p.point.clip,
+    }));
 
-    // Show time label every other point to avoid clutter
-    if (i % 2 === 0 || isCurrent || clips.length <= 6) {
-      const timeStr = clipDisplayLocalTime(p.clip)?.slice(11, 16) || "--:--";
-      const above = i % 2 === 0;
-      const lbl = el("text", {
-        x: p.x, y: p.y + (above ? -10 : 16),
+    if (i % config.labelEvery === 0 || isCurrent || points.length <= 5) {
+      const label = el("text", {
+        x: p.x,
+        y: p.y + (i % 2 === 0 ? -10 : 15),
         class: `route-label${isCurrent ? " route-label-current" : ""}`,
         "text-anchor": "middle",
       });
-      lbl.textContent = timeStr;
-      dom.route.appendChild(lbl);
+      label.textContent = p.point.time;
+      svg.appendChild(label);
+    }
+
+    if (config.placeLabelIndexes?.has(i) || isCurrent && p.point.place) {
+      const place = el("text", {
+        x: p.x,
+        y: config.placeBaseY + (i % 2) * 14,
+        class: `route-place-label${isCurrent ? " route-label-current" : ""}`,
+        "text-anchor": "middle",
+      });
+      place.textContent = p.point.place;
+      svg.appendChild(place);
     }
   });
 }
 
+function activeAltitudeKey() {
+  if (state.currentClip) return state.currentClip;
+  if (state.currentMediaItem?.key) return state.currentMediaItem.key;
+  return state.currentMediaItem?.file?.replace(/\.[^.]+$/, "") || "";
+}
+
 function updateRouteCurrent() {
-  if (state.chapter !== "ch03") return;
-  [...dom.route.querySelectorAll(".route-dot")].forEach((dot) => {
-    const current = dot.dataset.clip === state.currentClip;
+  if (state.chapter !== "ch04") return;
+  const activeKey = activeAltitudeKey();
+  [dom.route].filter(Boolean).forEach((svg) => [...svg.querySelectorAll(".route-dot")].forEach((dot) => {
+    const current = dot.dataset.clip === activeKey;
     dot.classList.toggle("is-current", current);
-    dot.setAttribute("r", current ? "6" : "5");
-  });
+    const base = dot.classList.contains("route-dot-tai") ? "3.6" : "4.5";
+    const currentRadius = dot.classList.contains("route-dot-tai") ? "5.8" : "7";
+    dot.setAttribute("r", current ? currentRadius : base);
+  }));
 }
 
 function maybeStartCh04InterruptTimer(chapter) {
   clearTimeout(state.intTimer);
-  if (chapter !== "ch04") return;
-  state.ch04EnteredAt = performance.now();
-  state.intTimer = setTimeout(() => {
-    if (state.chapter === "ch04") enterInterrupt();
-  }, 240000);
+  state.ch04EnteredAt = chapter === "ch05" ? performance.now() : 0;
 }
 
 function setupAudioUnlock() {
@@ -5340,7 +7698,7 @@ function updateAmbientGain(clip) {
     }, new Map());
     select.innerHTML = "";
     select.appendChild(optionNode("ALL", `ALL (${db.entries.length})`));
-    ["CH01", "CH02", "CH03", "CH04", "INT", "EYU", "BEISHANG"].forEach((chapter) => {
+    ["CH01", "CH02", "CH03", "CH04", "CH05", "CH06", "INT", "EYU", "BEISHANG"].forEach((chapter) => {
       if (counts.has(chapter)) select.appendChild(optionNode(chapter, `${chapter} (${counts.get(chapter)})`));
     });
   }

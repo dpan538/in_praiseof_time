@@ -4,14 +4,23 @@
   "method": "Web search enrichment plus cross-check against MANIFEST GPS/altitude values. Altitude is marked official only when an external source gave a published value; otherwise the MANIFEST iPhone altitude is retained as project metadata.",
   "GROUP_A_NORTHEAST_CHINA_TRAVERSE_JULY_2024": {
     "IMG_7948_DONGAN": {
-      "clips": ["IMG_7948"],
+      "clips": [
+        "IMG_7948"
+      ],
       "date_context": "2024-07-02 19:35 local",
       "full_name": "Dong'an, Daqing area, Heilongjiang Province, People's Republic of China",
       "coordinates_verified": {
-        "status": "partial_match_with_user_coordinate_mismatch",
-        "manifest": {"lat": 46.7443, "lon": 125.1233},
-        "requested": {"lat": 47.7443, "lon": 125.1233},
-        "note": "Longitude matches the request, but MANIFEST latitude is 46.7443, one degree south of the requested 47.7443. External gazetteer hits for Dong'an near Daqing are also around 46.6-46.8 N, so the request appears likely mistyped."
+        "status": "resolved_as_daqing_side_manifest_coordinate",
+        "manifest": {
+          "lat": 46.7443,
+          "lon": 125.1233
+        },
+        "requested": {
+          "lat": 47.7443,
+          "lon": 125.1233
+        },
+        "conclusion": "Use MANIFEST coordinate. Daqing official/geographic sources cluster around 46.58-46.60 N, 125.00-125.10 E; 47.7443 N points far north of the Daqing/Qiqihar route and did not resolve to the project Dong'an context.",
+        "note": "Treat 47.7443 as a one-degree latitude typo unless a later primary GPS source proves otherwise."
       },
       "altitude_verified": {
         "status": "manifest_only",
@@ -23,19 +32,32 @@
       "light_note": "Evening light is low and long, with flat summer haze over a petroleum-city plain.",
       "population_density": "medium",
       "signal_coverage": "good",
-      "one_fact": "The surrounding Daqing area is historically defined by the Daqing Oil Field, one of China's major petroleum bases, so this is not empty countryside even when the frame reads as transit.",
+      "one_fact": "Daqing sits on the Songnen Plain and its city identity is tied to the Daqing Oil Field, discovered in 1959.",
       "sources": [
-        "https://where-is.org/cn/dongan4"
-      ]
+        "https://where-is.org/cn/dongan4",
+        "https://mapcarta.com/Daqing",
+        "https://www.timeanddate.com/worldclock/china/daqing",
+        "https://www.mindat.org/feature-2037860.html"
+      ],
+      "chapter_relevance": "CH02",
+      "narrative_note": "The coordinate behaves like Daqing, not the first name written down. Oil country begins quietly, under ordinary summer light."
     },
     "IMG_8033_DAMIN": {
-      "clips": ["IMG_8033"],
+      "clips": [
+        "IMG_8033"
+      ],
       "date_context": "2024-07-03 12:23 local",
       "full_name": "Damin Town / Damin Subdistrict, Longsha District, Qiqihar, Heilongjiang Province, People's Republic of China",
       "coordinates_verified": {
         "status": "matched_to_qiqihar_damin_area",
-        "manifest": {"lat": 47.3103, "lon": 123.8932},
-        "requested": {"lat": 47.3103, "lon": 123.8932},
+        "manifest": {
+          "lat": 47.3103,
+          "lon": 123.8932
+        },
+        "requested": {
+          "lat": 47.3103,
+          "lon": 123.8932
+        },
         "note": "The coordinate sits just south-west of central Qiqihar, consistent with Damin and the airport-side urban edge."
       },
       "altitude_verified": {
@@ -52,10 +74,14 @@
       "sources": [
         "https://en.wikipedia.org/wiki/Qiqihar_Sanjiazi_Airport",
         "https://www.latlong.net/place/qiqihar-heilongjiang-china-23898.html"
-      ]
+      ],
+      "chapter_relevance": "CH02",
+      "narrative_note": "Damin sits at the city edge, close enough to Qiqihar for signal and roads, far enough for the journey to start thinning out."
     },
     "IMG_8084_QIQIHAR_ARXAN_ROAD_NO_GPS": {
-      "clips": ["IMG_8084"],
+      "clips": [
+        "IMG_8084"
+      ],
       "date_context": "2024-07-04 09:46 UTC-derived / no GPS",
       "full_name": "Qiqihar to Arxan National Forest Park road corridor, Heilongjiang to Xing'an League, Inner Mongolia, People's Republic of China",
       "coordinates_verified": {
@@ -73,27 +99,46 @@
       "climate_note": "July is the green, wet, cool-season travel window in Arxan, with forest humidity and sudden mountain weather.",
       "light_note": "Forest-edge light alternates between bright open grass and heavily absorbed conifer shade.",
       "population_density": "sparse",
-      "signal_coverage": "none",
+      "signal_coverage": "none / intermittent",
       "one_fact": "Arxan National Forest Park is known for volcanic landforms, primeval forest ecosystems, hot/mineral springs, wetlands, rivers, lakes, gorges, and peaks.",
       "sources": [
         "https://www.aesly.com/en/",
-        "https://www.travelchinaguide.com/cityguides/inner_mongolia/xingan/arxan-forest-park.htm"
-      ]
+        "https://www.travelchinaguide.com/cityguides/inner_mongolia/xingan/arxan-forest-park.htm",
+        "https://www.sina.cn/news/detail/5269800307656015.html",
+        "https://www.hualulv.com/14055.html",
+        "https://www.aes.gov.cn/aes/zjaes/index.html"
+      ],
+      "chapter_relevance": "CH02",
+      "narrative_note": "The road goes toward Arxan and the phone stops knowing where it is. Green arrives before certainty does.",
+      "signal_coverage_note": "A 2026 regional telecom report says China Unicom improved continuous coverage at Arxan National Forest Park core viewpoints, visitor centers, and roads, which implies previous or off-core forest road coverage could be patchy. Project clip IMG_8084 remains no-GPS and is preserved as signal lost."
     },
     "IMG_8191_8220_8224_DALAI_LAKE_HULUN_LAKE": {
-      "clips": ["IMG_8191", "IMG_8220", "IMG_8224"],
+      "clips": [
+        "IMG_8191",
+        "IMG_8220",
+        "IMG_8224"
+      ],
       "date_context": "2024-07-05 evening/night local",
       "full_name": "Dalai Lake National Nature Reserve / Hulun Lake, Hulunbuir, Inner Mongolia Autonomous Region, People's Republic of China",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": 48.9213, "lon": 117.113},
-        "requested": {"lat": 48.92, "lon": 117.11},
+        "manifest": {
+          "lat": 48.9213,
+          "lon": 117.113
+        },
+        "requested": {
+          "lat": 48.92,
+          "lon": 117.11
+        },
         "note": "MANIFEST points cluster within roughly 0.2 km of the requested Dalai/Hulun Lake coordinate."
       },
       "altitude_verified": {
         "status": "externally_supported_nearby_lake_level",
         "meters": 543,
-        "manifest_range_meters": [550.797, 561.653],
+        "manifest_range_meters": [
+          550.797,
+          561.653
+        ],
         "note": "IUCN/Ramsar material lists Hulun/Dalai Lake around 543 m; MANIFEST clip altitudes are slightly higher, plausible for shore/road level."
       },
       "terrain": "grassland / wetland / lake",
@@ -102,22 +147,33 @@
       "population_density": "sparse",
       "signal_coverage": "weak",
       "one_fact": "UNESCO describes Dalai Lake as a biosphere reserve and a prime site for wetland and bird-migration research; Hulun Lake is the largest freshwater lake in northern China.",
-      "wildfire_context": "NASA Earth Observatory reported intense smoky fires across eastern Russia in summer 2024, including Amur Oblast bordering Heilongjiang, with new fire groups flaring in June and July; this supports the project's Russian wildfire smoke context for the Hulunbuir/Dalai Lake segment, though it does not prove smoke at the exact clip coordinates and hour.",
+      "wildfire_context": "NASA Earth Observatory documented smoke streaming from intense fires around Amur Oblast near China's Heilongjiang border on July 9, 2024; Russia's Far East fire activity increased markedly in early July. This deepens but does not hour-match the Dalai/Hulun Lake clips from July 5, so the project should render this as regional smoke context rather than meteorological proof at the exact frame time.",
       "sources": [
         "https://www.unesco.org/en/mab/dalai-lake",
         "https://rsis.ramsar.org/ris/1146",
         "https://portals.iucn.org/library/sites/library/files/documents/1989-Scott-001.pdf",
-        "https://science.nasa.gov/earth/earth-observatory/a-smoky-summer-in-amur-153051/"
-      ]
+        "https://science.nasa.gov/earth/earth-observatory/a-smoky-summer-in-amur-153051/",
+        "https://earthobservatory.nasa.gov/images/153051/a-smoky-summer-in-amur"
+      ],
+      "chapter_relevance": "CH02",
+      "narrative_note": "Hulun Lake is large enough to make distance look simple. Smoke can make the far shore disappear without moving it."
     },
     "IMG_8284_YIRSHI": {
-      "clips": ["IMG_8284"],
+      "clips": [
+        "IMG_8284"
+      ],
       "date_context": "2024-07-06 23:37 local",
       "full_name": "Yirshi / Yiershi Town, Arxan City, Xing'an League, Inner Mongolia Autonomous Region, People's Republic of China",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": 47.2545, "lon": 119.856},
-        "requested": {"lat": 47.2545, "lon": 119.856},
+        "manifest": {
+          "lat": 47.2545,
+          "lon": 119.856
+        },
+        "requested": {
+          "lat": 47.2545,
+          "lon": 119.856
+        },
         "note": "MANIFEST exactly matches requested coordinate."
       },
       "altitude_verified": {
@@ -134,16 +190,26 @@
       "sources": [
         "https://www.trip.com/travel-guide/attraction/arxan/yiershi-town-56808664",
         "https://www.aesly.com/en/"
-      ]
+      ],
+      "chapter_relevance": "CH02",
+      "narrative_note": "Yirshi is a settlement light at the forest edge. After it, the map becomes less confident."
     },
     "IMG_8300_MOSITAI": {
-      "clips": ["IMG_8300"],
+      "clips": [
+        "IMG_8300"
+      ],
       "date_context": "2024-07-07 13:47 local",
-      "full_name": "Mositai area, Inner Mongolia Autonomous Region, People's Republic of China",
+      "full_name": "Mositai / 莫斯台 area, Inner Mongolia Autonomous Region, People's Republic of China",
       "coordinates_verified": {
-        "status": "matched_to_manifest_but_sparse_external_data",
-        "manifest": {"lat": 46.0986, "lon": 119.6295},
-        "requested": {"lat": 46.0986, "lon": 119.6295},
+        "status": "matched_to_manifest_but_name_remains_sparse",
+        "manifest": {
+          "lat": 46.0986,
+          "lon": 119.6295
+        },
+        "requested": {
+          "lat": 46.0986,
+          "lon": 119.6295
+        },
         "note": "Coordinate matches request; external English-language information for 'Mositai' itself was sparse."
       },
       "altitude_verified": {
@@ -156,21 +222,33 @@
       "light_note": "Open grassland produces high, unobstructed luminance with few built structures to interrupt horizon light.",
       "population_density": "sparse",
       "signal_coverage": "weak",
-      "one_fact": "The point falls in the same broader Inner Mongolia grassland-forest transition belt as the Arxan/Hulunbuir traverse rather than a dense urban district.",
+      "one_fact": "A gazetteer-style source glosses Mositai as a Mongolian-derived place name meaning “white stone,” but no strong official local page was found.",
       "sources": [
         "https://www.aesly.com/en/",
-        "https://www.unesco.org/en/mab/dalai-lake"
+        "https://www.unesco.org/en/mab/dalai-lake",
+        "https://www.wisdomlib.org/cities/mositai-5830",
+        "https://www.aes.gov.cn/aes/zjaes/index.html"
       ],
-      "data_quality": "sparse"
+      "data_quality": "sparse",
+      "chapter_relevance": "CH02",
+      "narrative_note": "Mositai is barely a searchable place. The name stays small while the grass around it keeps going."
     },
     "IMG_8722_JILIN_CITY": {
-      "clips": ["IMG_8722"],
+      "clips": [
+        "IMG_8722"
+      ],
       "date_context": "2024-07-13 19:11 local",
       "full_name": "Jilin City, Jilin Province, People's Republic of China",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": 43.767, "lon": 126.6668},
-        "requested": {"lat": 43.767, "lon": 126.6668},
+        "manifest": {
+          "lat": 43.767,
+          "lon": 126.6668
+        },
+        "requested": {
+          "lat": 43.767,
+          "lon": 126.6668
+        },
         "note": "MANIFEST exactly matches requested coordinate."
       },
       "altitude_verified": {
@@ -187,18 +265,28 @@
       "sources": [
         "https://www.china.org.cn/english/TCC/41590.htm",
         "https://en.wikipedia.org/wiki/Jilin_City"
-      ]
+      ],
+      "chapter_relevance": "CH02",
+      "narrative_note": "Jilin folds river, city, and hills together. Evening makes the Songhua side of the city feel briefly held."
     }
   },
   "GROUP_B_GANSU_QINGHAI_TRAVERSE_JULY_2025": {
     "IMG_3484_BAIYIN_RENMINLU": {
-      "clips": ["IMG_3484"],
+      "clips": [
+        "IMG_3484"
+      ],
       "date_context": "2025-07-04 17:57 local",
       "full_name": "Renminlu area, Baiyin City, Gansu Province, People's Republic of China",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": 36.5483, "lon": 104.1408},
-        "requested": {"lat": 36.5483, "lon": 104.1408},
+        "manifest": {
+          "lat": 36.5483,
+          "lon": 104.1408
+        },
+        "requested": {
+          "lat": 36.5483,
+          "lon": 104.1408
+        },
         "note": "MANIFEST exactly matches requested coordinate."
       },
       "altitude_verified": {
@@ -216,22 +304,36 @@
       "sources": [
         "https://meteoatlas.it/cina/baiyin-12431/meteo-a-luglio",
         "https://weatherspark.com/m/115444/7/Average-Weather-in-July-in-Baiyin-China"
-      ]
+      ],
+      "chapter_relevance": "CH03",
+      "narrative_note": "Baiyin begins the ascent with an urban street and a mining city name. The altitude is already there, before the mountain appears."
     },
     "IMG_3549_3551_GULANG": {
-      "clips": ["IMG_3549", "IMG_3551"],
+      "clips": [
+        "IMG_3549",
+        "IMG_3551"
+      ],
       "date_context": "2025-07-05 evening local",
       "full_name": "Gulang County, Wuwei City, Gansu Province, People's Republic of China",
       "coordinates_verified": {
         "status": "matched_to_county_area",
-        "manifest": {"lat": 37.5732, "lon": 102.8718},
-        "requested": {"lat": 37.5732, "lon": 102.8718},
+        "manifest": {
+          "lat": 37.5732,
+          "lon": 102.8718
+        },
+        "requested": {
+          "lat": 37.5732,
+          "lon": 102.8718
+        },
         "note": "MANIFEST point lies within the Gulang county area, north of the county seat coordinate listed by gazetteers."
       },
       "altitude_verified": {
         "status": "manifest_with_county_range_support",
         "meters": 1908.817,
-        "manifest_range_meters": [1860.0, 1908.817],
+        "manifest_range_meters": [
+          1860,
+          1908.817
+        ],
         "note": "Published county elevation ranges run from about 1550 m to 3469 m; MANIFEST altitudes fit inside this range."
       },
       "terrain": "desert / mountain corridor / rural town",
@@ -242,22 +344,37 @@
       "one_fact": "Gulang County lies at the eastern end of the Hexi Corridor and south of the Tengger Desert.",
       "sources": [
         "https://en.wikipedia.org/wiki/Gulang_County"
-      ]
+      ],
+      "chapter_relevance": "CH03",
+      "narrative_note": "Gulang is the dry corridor before the high road. The evening light looks as if dust has been mixed into it."
     },
     "IMG_3567_3612_3618_YANGXIANG_AREA": {
-      "clips": ["IMG_3567", "IMG_3612", "IMG_3618"],
+      "clips": [
+        "IMG_3567",
+        "IMG_3612",
+        "IMG_3618"
+      ],
       "date_context": "2025-07-06 morning/afternoon local",
-      "full_name": "Yangxiang area, Gansu-Qinghai border highland road corridor, People's Republic of China",
+      "full_name": "Yangxiang locality / 杨乡 area, Zhangye-Gansu to northern Qinghai highland corridor, People's Republic of China",
       "coordinates_verified": {
         "status": "matched_to_requested_area",
-        "manifest": {"lat": 37.9304, "lon": 102.2659},
-        "requested": {"lat": 37.93, "lon": 102.26},
-        "note": "Representative MANIFEST point is within roughly 0.5 km of requested Yangxiang-area coordinate; later clips climb to 3119 m and descend to 2269 m."
+        "manifest": {
+          "lat": 37.9304,
+          "lon": 102.2659
+        },
+        "requested": {
+          "lat": 37.93,
+          "lon": 102.26
+        },
+        "note": "Mapcarta resolves Yangxiang as a locality in Zhangye, Gansu at about 37.98977 N with elevation around 2605 m. MANIFEST clips form a nearby road corridor rather than a single town center."
       },
       "altitude_verified": {
         "status": "manifest_only",
         "meters": 1952.84,
-        "manifest_range_meters": [1952.84, 3119.302],
+        "manifest_range_meters": [
+          1952.84,
+          3119.302
+        ],
         "note": "No official point altitude found; MANIFEST shows the road segment rising sharply into mountain terrain."
       },
       "terrain": "mountain / grassland road",
@@ -265,27 +382,43 @@
       "light_note": "Light is high-UV and exposed; cloud shadows can move quickly across road, slope, and grass.",
       "population_density": "sparse",
       "signal_coverage": "weak",
-      "one_fact": "The clip sequence records a sharp altitude change from about 1953 m to above 3100 m in less than two hours of local time.",
+      "one_fact": "The Yangxiang sequence crosses from settled corridor country into a highland zone where the same day's clips jump from about 1953 m to above 3119 m.",
       "sources": [
         "https://www.britannica.com/place/Qilian-Mountains",
-        "https://www.mdpi.com/1999-4907/14/10/1951"
+        "https://www.mdpi.com/1999-4907/14/10/1951",
+        "https://mapcarta.com/29488992"
       ],
-      "data_quality": "sparse"
+      "data_quality": "sparse",
+      "chapter_relevance": "CH03",
+      "narrative_note": "Yangxiang is not one exact place here, but a climb. The road keeps changing altitude faster than language can name it."
     },
     "IMG_3773_3798_3810_QILIAN_MOUNTAIN_PASS": {
-      "clips": ["IMG_3773", "IMG_3798", "IMG_3810"],
+      "clips": [
+        "IMG_3773",
+        "IMG_3798",
+        "IMG_3810"
+      ],
       "date_context": "2025-07-07 evening local",
       "full_name": "Qilian Mountains pass area near Qingshizui / Menyuan, Qinghai Province, People's Republic of China",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": 37.3784, "lon": 101.4117},
-        "requested": {"lat": 37.37, "lon": 101.41},
+        "manifest": {
+          "lat": 37.3784,
+          "lon": 101.4117
+        },
+        "requested": {
+          "lat": 37.37,
+          "lon": 101.41
+        },
         "note": "Representative MANIFEST point is within roughly 1 km of the requested pass coordinate; IMG_3810 reaches the project maximum altitude."
       },
       "altitude_verified": {
         "status": "manifest_with_regional_range_support",
         "meters": 3752.9,
-        "manifest_range_meters": [3408.378, 3752.9],
+        "manifest_range_meters": [
+          3408.378,
+          3752.9
+        ],
         "note": "Published Qilian Mountains regional sources place much of the range around 3500-5000 m; MANIFEST values are plausible for a road/pass rather than a summit."
       },
       "terrain": "mountain / alpine grassland",
@@ -296,43 +429,73 @@
       "one_fact": "Britannica describes the Qilian Mountains' ice reservoir as a crucial water source for the Hexi Corridor and Qaidam Basin.",
       "sources": [
         "https://www.britannica.com/place/Qilian-Mountains",
-        "https://www.mdpi.com/1999-4907/14/10/1951"
-      ]
+        "https://www.mdpi.com/1999-4907/14/10/1951",
+        "https://zh.wikipedia.org/wiki/%E7%A5%81%E8%BF%9E%E5%B1%B1%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%9B%AD",
+        "https://www.qunar.com/zt/28034"
+      ],
+      "chapter_relevance": "CH03",
+      "narrative_note": "The highest point is not a summit, just a road becoming thin. The route line has already decided what the body must accept.",
+      "history_culture": {
+        "protected_status": "Qilian Mountain National Park pilot/protected-area system overlaps the broader Qilian ecological region, but the road clip itself is not a named protected site.",
+        "local_admin_context": "Near Qingshizui / Menyuan Hui Autonomous County, Haibei Tibetan Autonomous Prefecture, Qinghai Province.",
+        "watershed_context": "The Qilian Mountains feed the Hexi Corridor and Qaidam Basin through glaciers, snowmelt, alpine meadows, and mountain rivers."
+      }
     },
     "IMG_3840_DONGXIA": {
-      "clips": ["IMG_3840"],
+      "clips": [
+        "IMG_3840"
+      ],
       "date_context": "2025-07-08 13:56 local",
-      "full_name": "Dongxia area, Qinghai Province, People's Republic of China",
+      "full_name": "Dongxia Town / 东峡镇 area, Datong Hui and Tu Autonomous County or Huangyuan-Datong eastern Xining mountain corridor, Qinghai Province",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": 36.753, "lon": 101.3072},
-        "requested": {"lat": 36.753, "lon": 101.307},
-        "note": "MANIFEST matches requested coordinate within rounding."
+        "manifest": {
+          "lat": 36.753,
+          "lon": 101.3072
+        },
+        "requested": {
+          "lat": 36.753,
+          "lon": 101.307
+        },
+        "note": "Search resolves multiple Dongxia/Dongxiaxiang references near Xining. The MANIFEST coordinate is kept as the clip truth; official Dongxia-town context is used for environment only."
       },
       "altitude_verified": {
         "status": "manifest_only",
         "meters": 3167.801,
         "note": "No official altitude located for this exact point."
       },
-      "terrain": "mountain / plateau valley",
+      "terrain": "mountain / forested watershed / plateau valley",
       "climate_note": "July at 3167 m is cool by season, with strong sun and colder air when cloud covers the plateau.",
       "light_note": "Midday light is intense and high-contrast, but plateau haze reduces distant saturation.",
       "population_density": "sparse",
       "signal_coverage": "weak",
-      "one_fact": "This point remains over 3000 m after the Qilian peak sequence, so the chapter's descent is relative rather than a return to lowland altitude.",
+      "one_fact": "Datong County sources describe Dongxia river/forest areas as part of the Beichuan/Huangshui watershed, with forested recreation areas around 2600-3300 m.",
       "sources": [
-        "https://www.mdpi.com/1999-4907/14/10/1951"
+        "https://www.mdpi.com/1999-4907/14/10/1951",
+        "https://www.moa.gov.cn/ztzl/2023_dnq/202312/t20231208_6442341.htm",
+        "https://www.xzqh.org/html/show/qh/34784.html",
+        "https://www.moa.gov.cn/ztzl/xdnysfq/fzgh/201301/t20130121_3204303.htm"
       ],
-      "data_quality": "sparse"
+      "data_quality": "sparse",
+      "chapter_relevance": "CH03",
+      "narrative_note": "Dongxia holds the descent above three thousand meters. Nothing has returned to lowland height yet."
     },
     "IMG_3940_GANDI_XINING_OUTSKIRTS": {
-      "clips": ["IMG_3940"],
+      "clips": [
+        "IMG_3940"
+      ],
       "date_context": "2025-07-09 05:47 local",
       "full_name": "Gandi / Xining outskirts, Qinghai Province, People's Republic of China",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": 36.5703, "lon": 100.5159},
-        "requested": {"lat": 36.5703, "lon": 100.5159},
+        "manifest": {
+          "lat": 36.5703,
+          "lon": 100.5159
+        },
+        "requested": {
+          "lat": 36.5703,
+          "lon": 100.5159
+        },
         "note": "MANIFEST exactly matches requested coordinate."
       },
       "altitude_verified": {
@@ -348,18 +511,100 @@
       "one_fact": "Xining lies in the Huangshui River Valley on the eastern edge of the Qinghai-Tibet Plateau and has been a northern Silk Road commercial hub for over 2000 years.",
       "sources": [
         "https://en.wikipedia.org/wiki/Xining"
+      ],
+      "chapter_relevance": "CH03",
+      "narrative_note": "Near Xining, dawn does not feel like arrival. The plateau keeps its altitude under the road."
+    },
+    "IMG_3682_DONGTAN": {
+      "clips": [
+        "IMG_3682"
+      ],
+      "chapter_relevance": "CH03",
+      "date_context": "2025-07-06 20:03 local",
+      "full_name": "Dongtan / 东滩 area, Qilian-Menyuan highland corridor, Qinghai Province, People's Republic of China",
+      "coordinates_verified": {
+        "status": "matched_manifest_only",
+        "manifest": {
+          "lat": 37.8725,
+          "lon": 101.8
+        },
+        "note": "Exact official locality was not strongly verified; MANIFEST coordinate places the clip in the northern Qinghai highland corridor."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 2635.293
+      },
+      "terrain": "mountain / plateau grassland / agricultural basin edge",
+      "climate_note": "July evening is cool at 2635 m, with rapid loss of warmth after sunset.",
+      "light_note": "The light drops behind ridges and leaves grass, road, and settlement edges in a blue-green aftertone.",
+      "population_density": "sparse",
+      "signal_coverage": "weak",
+      "one_fact": "The clip sits between the lower Yangxiang segment and the later Qingshizui high pass, making it a middle-altitude hinge in the ascent route.",
+      "narrative_note": "Dongtan is the route catching its breath. The altitude is already higher than a city, but not yet dramatic enough to announce itself.",
+      "sources": [
+        "https://www.qunar.com/zt/28034",
+        "https://zh.wikipedia.org/wiki/%E7%A5%81%E8%BF%9E%E5%B1%B1"
+      ]
+    },
+    "IMG_3727_NANFENG": {
+      "clips": [
+        "IMG_3727"
+      ],
+      "chapter_relevance": "CH03",
+      "date_context": "2025-07-07 12:15 local",
+      "full_name": "Nanfeng / 南丰 area, Qilian highland road corridor, Qinghai-Gansu border region, People's Republic of China",
+      "coordinates_verified": {
+        "status": "matched_manifest_but_official_name_unresolved",
+        "manifest": {
+          "lat": 38.2264,
+          "lon": 100.9571
+        },
+        "note": "Search for 南丰 in Qinghai returns weak or conflicting results; coordinate remains primary."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 2800.85
+      },
+      "terrain": "mountain / highland grassland",
+      "climate_note": "July noon at about 2800 m is bright but not lowland-hot; wind and UV are the main weather facts.",
+      "light_note": "Light is overhead and unprotected, making the ground read flatter than its elevation.",
+      "population_density": "sparse",
+      "signal_coverage": "weak",
+      "one_fact": "This clip is the last mid-altitude point before the Qingshizui cluster climbs above 3400 m.",
+      "narrative_note": "Nanfeng is a name the map gives reluctantly. The road is more legible than the settlement.",
+      "sources": [
+        "https://www.britannica.com/place/Qilian-Mountains",
+        "https://zh.wikipedia.org/wiki/%E7%A5%81%E8%BF%9E%E5%B1%B1"
       ]
     }
   },
   "GROUP_C_NEW_YORK_CITY_AREA_2024_2025": {
     "IMG_1401_LES_CLUSTER": {
-      "clips": ["IMG_0945", "IMG_3212", "IMG_1401", "IMG_1410", "IMG_2140", "IMG_2361", "IMG_4700", "IMG_5811", "IMG_1448", "IMG_1565", "IMG_1627"],
+      "clips": [
+        "IMG_0945",
+        "IMG_3212",
+        "IMG_1401",
+        "IMG_1410",
+        "IMG_2140",
+        "IMG_2361",
+        "IMG_4700",
+        "IMG_5811",
+        "IMG_1448",
+        "IMG_1565",
+        "IMG_1627"
+      ],
       "date_context": "2024-02 to 2025-05, especially night clips September-May",
       "full_name": "Lower East Side, Manhattan, New York City, specifically Ludlow Street between Stanton Street and Rivington Street",
       "coordinates_verified": {
         "status": "cluster_match",
-        "manifest_representative": {"lat": 40.7141, "lon": -73.9735},
-        "requested": {"lat": 40.7194, "lon": -73.9896},
+        "manifest_representative": {
+          "lat": 40.7141,
+          "lon": -73.9735
+        },
+        "requested": {
+          "lat": 40.7194,
+          "lon": -73.9896
+        },
         "note": "MANIFEST representative printed here is from IMG_1401 and sits east of the stated Ludlow coordinate; other project context fixes CH01 at 40.7194,-73.9896. Treat as a chapter location cluster, not one precise GPS point."
       },
       "altitude_verified": {
@@ -378,16 +623,26 @@
         "https://portal.311.nyc.gov/article/?kanumber=KA-01085",
         "https://www.dnainfo.com/new-york/20131004/lower-east-side/embattled-les-lounge-agrees-close-windows-roof-after-complaints",
         "https://www.furmancenter.org/neighborhoods/lower-east-side-chinatown/"
-      ]
+      ],
+      "chapter_relevance": "CH01",
+      "narrative_note": "Ludlow between Stanton and Rivington does not sleep cleanly. The window is closed, then cracked, then still not enough."
     },
     "IMG_0902_BENSONHURST": {
-      "clips": ["IMG_0902"],
+      "clips": [
+        "IMG_0902"
+      ],
       "date_context": "2024-02-10 00:14 local",
       "full_name": "Bensonhurst, Brooklyn, New York City, New York, United States",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": 40.6274, "lon": -74.0014},
-        "requested": {"lat": 40.6274, "lon": -74.0014},
+        "manifest": {
+          "lat": 40.6274,
+          "lon": -74.0014
+        },
+        "requested": {
+          "lat": 40.6274,
+          "lon": -74.0014
+        },
         "note": "MANIFEST exactly matches requested coordinate."
       },
       "altitude_verified": {
@@ -403,16 +658,26 @@
       "one_fact": "Bensonhurst is noted for major ethnic enclaves and is described as home to Brooklyn's second Chinatown.",
       "sources": [
         "https://en.wikipedia.org/wiki/Bensonhurst,_Brooklyn"
-      ]
+      ],
+      "chapter_relevance": "CH01",
+      "narrative_note": "Bensonhurst is a winter edge of New York, residential and awake in small pieces. The city is quieter but not absent."
     },
     "IMG_1113_JERSEY_CITY": {
-      "clips": ["IMG_1113"],
+      "clips": [
+        "IMG_1113"
+      ],
       "date_context": "2024-02-13 10:12 local",
       "full_name": "Jersey City, Hudson County, New Jersey, United States",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": 40.7324, "lon": -74.0607},
-        "requested": {"lat": 40.7324, "lon": -74.0607},
+        "manifest": {
+          "lat": 40.7324,
+          "lon": -74.0607
+        },
+        "requested": {
+          "lat": 40.7324,
+          "lon": -74.0607
+        },
         "note": "MANIFEST exactly matches requested coordinate."
       },
       "altitude_verified": {
@@ -429,16 +694,26 @@
       "sources": [
         "https://www.jerseycitynj.gov/"
       ],
-      "data_quality": "moderate"
+      "data_quality": "moderate",
+      "chapter_relevance": "CH01",
+      "narrative_note": "Jersey City sits across the river like a room with the same weather. The skyline makes distance look administrative."
     },
     "IMG_2719_COLD_SPRING": {
-      "clips": ["IMG_2719"],
+      "clips": [
+        "IMG_2719"
+      ],
       "date_context": "2024-03-17 10:23 local",
       "full_name": "Village of Cold Spring, Putnam County, New York, United States",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": 41.446, "lon": -73.9643},
-        "requested": {"lat": 41.446, "lon": -73.9643},
+        "manifest": {
+          "lat": 41.446,
+          "lon": -73.9643
+        },
+        "requested": {
+          "lat": 41.446,
+          "lon": -73.9643
+        },
         "note": "MANIFEST exactly matches requested coordinate."
       },
       "altitude_verified": {
@@ -454,16 +729,26 @@
       "one_fact": "Cold Spring's official village page ties its 19th-century growth to the West Point Foundry and its location on the Hudson River.",
       "sources": [
         "https://www.coldspringny.gov/211/About"
-      ]
+      ],
+      "chapter_relevance": "CH01",
+      "narrative_note": "Cold Spring has the Hudson and the hill in the same breath. March keeps the trees undecided."
     },
     "IMG_2685_FORT_MONTGOMERY": {
-      "clips": ["IMG_2685"],
+      "clips": [
+        "IMG_2685"
+      ],
       "date_context": "2024-03-17 11:07 local",
       "full_name": "Fort Montgomery, Town of Highlands, Orange County, New York, United States",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": 41.3301, "lon": -73.9731},
-        "requested": {"lat": 41.3301, "lon": -73.9731},
+        "manifest": {
+          "lat": 41.3301,
+          "lon": -73.9731
+        },
+        "requested": {
+          "lat": 41.3301,
+          "lon": -73.9731
+        },
         "note": "MANIFEST exactly matches requested coordinate."
       },
       "altitude_verified": {
@@ -479,16 +764,26 @@
       "one_fact": "New York State Parks identifies Fort Montgomery as the site of a fierce Revolutionary War battle for control of the Hudson River on October 6, 1777.",
       "sources": [
         "https://parks.ny.gov/visit/historic-sites/fort-montgomery-state-historic-site"
-      ]
+      ],
+      "chapter_relevance": "CH01",
+      "narrative_note": "Fort Montgomery is history beside the river, but the clip reads first as cold air and stone."
     },
     "IMG_8669_PITTSBURGH": {
-      "clips": ["IMG_8669"],
+      "clips": [
+        "IMG_8669"
+      ],
       "date_context": "2025-03-03 16:42 local",
       "full_name": "Pittsburgh, Allegheny County, Pennsylvania, United States",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": 40.4317, "lon": -80.0065},
-        "requested": {"lat": 40.4317, "lon": -80.0065},
+        "manifest": {
+          "lat": 40.4317,
+          "lon": -80.0065
+        },
+        "requested": {
+          "lat": 40.4317,
+          "lon": -80.0065
+        },
         "note": "MANIFEST exactly matches requested coordinate."
       },
       "altitude_verified": {
@@ -504,18 +799,62 @@
       "one_fact": "Pittsburgh sits at the confluence where the Allegheny and Monongahela rivers form the Ohio River.",
       "sources": [
         "https://geographyworlds.com/blog/pittsburgh-geography-guide"
+      ],
+      "chapter_relevance": "CH01",
+      "narrative_note": "Pittsburgh gathers at the rivers. The city folds downward into bridges before it opens again."
+    },
+    "IMG_1043_LONG_ISLAND_CITY_COORDINATE_CHECK": {
+      "clips": [
+        "IMG_1043"
+      ],
+      "chapter_relevance": "CH01",
+      "date_context": "2024-02-11 13:44 local",
+      "full_name": "Long Island City, Queens, New York City, with MANIFEST coordinate check against Midtown Manhattan",
+      "coordinates_verified": {
+        "status": "manifest_coordinate_conflict",
+        "manifest": {
+          "lat": 40.7476,
+          "lon": -73.9863
+        },
+        "note": "The reverse-geocoder label says Long Island City, but the MANIFEST coordinate plots in Midtown Manhattan near the Madison Square Garden / Koreatown area, not across the East River in Queens. Treat the place name as uncertain."
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 17.745
+      },
+      "terrain": "urban / river-adjacent metropolitan context",
+      "climate_note": "February afternoon in New York is winter-bright, often cold and clear between buildings.",
+      "light_note": "If read as Long Island City, the light is East River skyline glare; if read as MANIFEST coordinate, it is Midtown street-canyon light.",
+      "population_density": "dense",
+      "signal_coverage": "good",
+      "one_fact": "Gantry Plaza State Park in Long Island City preserves industrial gantries once used to load and unload railcar floats and barges on the East River waterfront.",
+      "narrative_note": "The file says Long Island City, but the coordinate leans back into Manhattan. Even the label crosses the river incorrectly.",
+      "sources": [
+        "https://parks.ny.gov/parks/gantryplaza/",
+        "https://longislandcity.org/about/",
+        "https://latlong.info/united-states/new-york/long-island-city"
       ]
     }
   },
   "GROUP_D_BRISBANE_AUSTRALIA_2025_2026": {
     "IMG_5523_ASCOT": {
-      "clips": ["IMG_5523", "IMG_5521", "IMG_5671"],
+      "clips": [
+        "IMG_5523",
+        "IMG_5521",
+        "IMG_5671"
+      ],
       "date_context": "2025-08-22 evening, 2025-08-23 morning, 2026-05-14 night",
       "full_name": "Ascot, City of Brisbane, Queensland, Australia",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": -27.4431, "lon": 153.0639},
-        "requested": {"lat": -27.443, "lon": 153.064},
+        "manifest": {
+          "lat": -27.4431,
+          "lon": 153.0639
+        },
+        "requested": {
+          "lat": -27.443,
+          "lon": 153.064
+        },
         "note": "MANIFEST representative point matches requested coordinate within rounding."
       },
       "altitude_verified": {
@@ -532,16 +871,26 @@
       "sources": [
         "https://en.wikipedia.org/wiki/Ascot,_Queensland",
         "https://www.weather-atlas.com/en/australia/brisbane-weather-august"
-      ]
+      ],
+      "chapter_relevance": "CH04",
+      "narrative_note": "Ascot is close to water and still not soft. The commute begins before the day does."
     },
     "IMG_6010_BALMORAL": {
-      "clips": ["IMG_6010"],
+      "clips": [
+        "IMG_6010"
+      ],
       "date_context": "2026-05-14 00:23 local",
       "full_name": "Balmoral, City of Brisbane, Queensland, Australia",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": -27.4622, "lon": 153.0513},
-        "requested": {"lat": -27.462, "lon": 153.051},
+        "manifest": {
+          "lat": -27.4622,
+          "lon": 153.0513
+        },
+        "requested": {
+          "lat": -27.462,
+          "lon": 153.051
+        },
         "note": "MANIFEST matches requested coordinate within rounding."
       },
       "altitude_verified": {
@@ -558,16 +907,26 @@
       "sources": [
         "https://www.inthesuburbs.com.au/suburb/balmoral-qld-4171.html",
         "https://www.timeanddate.com/weather/australia/brisbane/climate"
-      ]
+      ],
+      "chapter_relevance": "CH04",
+      "narrative_note": "Balmoral moves even at night. The river keeps reflecting after the rest of the suburb has gone flat."
     },
     "IMG_3483_MORNINGSIDE": {
-      "clips": ["IMG_3483"],
+      "clips": [
+        "IMG_3483"
+      ],
       "date_context": "2026-05-14 08:57 local",
       "full_name": "Morningside, City of Brisbane, Queensland, Australia",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": -27.4434, "lon": 153.0853},
-        "requested": {"lat": -27.443, "lon": 153.085},
+        "manifest": {
+          "lat": -27.4434,
+          "lon": 153.0853
+        },
+        "requested": {
+          "lat": -27.443,
+          "lon": 153.085
+        },
         "note": "MANIFEST matches requested coordinate within rounding."
       },
       "altitude_verified": {
@@ -584,7 +943,9 @@
       "sources": [
         "https://www.somners.com/suburbs/morningside",
         "https://en.wikipedia.org/wiki/Morningside,_Queensland"
-      ]
+      ],
+      "chapter_relevance": "CH04",
+      "narrative_note": "Morningside starts too early and too bright. Morning is not relief here."
     },
     "BRISBANE_CITYCAT_ROUTE_ASCOT_HAMILTON_TO_UQ_ST_LUCIA": {
       "clips": [],
@@ -608,32 +969,72 @@
       "signal_coverage": "good",
       "one_fact": "Brisbane City Council describes CityCat/ferry services as stretching from UQ St Lucia to Northshore Hamilton, and the 2024 timetable shows Northshore Hamilton to UQ St Lucia all-stops trips of about 82-83 minutes.",
       "ferry_data": {
-        "route": "F1 CityCat Northshore Hamilton - UQ St Lucia",
-        "official_operator_context": "Brisbane City Council ferry services / TransLink timetable",
-        "terminal_span": "Northshore Hamilton to UQ St Lucia",
-        "published_trip_duration_examples_minutes": [
-          {"from": "Northshore Hamilton", "to": "UQ St Lucia", "example": "17:45 -> 19:08", "duration": 83},
-          {"from": "UQ St Lucia", "to": "Northshore Hamilton", "example": "17:45 -> 19:07", "duration": 82},
-          {"from": "Apollo Road", "to": "UQ St Lucia", "example": "17:50 -> 19:08", "duration": 78}
+        "vessel_type": "High-speed, low-wash aluminium catamaran CityCat; Brisbane City Council fleet operated by RiverCity Ferries.",
+        "exact_stops_northshore_to_uq": [
+          "Northshore Hamilton",
+          "Apollo Road",
+          "Teneriffe",
+          "Bulimba",
+          "Hawthorne",
+          "New Farm Park",
+          "Mowbray Park",
+          "Sydney Street",
+          "Howard Smith Wharves",
+          "Riverside",
+          "QUT Gardens Point",
+          "South Bank",
+          "North Quay",
+          "Regatta",
+          "Guyatt Park",
+          "West End",
+          "UQ St Lucia"
         ],
-        "project_note": "User-reported 1.5 hour journey is consistent when walking, waiting, transfer, and terminal access time are included."
+        "stop_count": 17,
+        "intermediate_stops": 15,
+        "timed_journey_examples": [
+          {
+            "from": "Northshore Hamilton",
+            "to": "UQ St Lucia",
+            "depart": "17:45",
+            "arrive": "19:08",
+            "duration_minutes": 83
+          },
+          {
+            "from": "UQ St Lucia",
+            "to": "Northshore Hamilton",
+            "depart": "17:45",
+            "arrive": "19:07",
+            "duration_minutes": 82
+          }
+        ],
+        "project_commute_note": "User-reported 1.5 hours is consistent after walking/waiting/access time."
       },
       "sources": [
         "https://www.brisbane.qld.gov.au/about-council/your-brisbane/things-to-do-and-see/lifestyle/brisbane-citycat-and-ferry-services-getting-around-brisbane",
         "https://assets-global.website-files.com/5f7e5c84a8e6b464ca3bfeca/6606c139bf6c18c8e9989f94_24050_RCF_citycat_timetable_web_v3_Accessibility.pdf",
         "https://www.rivercityferries.com.au/customer-information"
-      ]
+      ],
+      "chapter_relevance": "CH04",
+      "narrative_note": "The CityCat takes about eighty minutes from Hamilton to UQ. There is nothing to do but remain on the river."
     }
   },
   "GROUP_E_ISOLATED_LOCATIONS": {
     "IMG_0196_NANXIANG_SHANGHAI": {
-      "clips": ["IMG_0196"],
+      "clips": [
+        "IMG_0196"
+      ],
       "date_context": "2024-01-12 20:55 local",
       "full_name": "Nanxiang Ancient Town, Jiading District, Shanghai Municipality, People's Republic of China",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": 31.2869, "lon": 121.3215},
-        "requested": {"lat": 31.2869, "lon": 121.3215},
+        "manifest": {
+          "lat": 31.2869,
+          "lon": 121.3215
+        },
+        "requested": {
+          "lat": 31.2869,
+          "lon": 121.3215
+        },
         "note": "MANIFEST exactly matches requested coordinate."
       },
       "altitude_verified": {
@@ -650,16 +1051,26 @@
       "sources": [
         "https://english.shanghai.gov.cn/en-ScenicSpots/20240318/d27e0a0fd8a647f38e8da351b13cfeec.html",
         "https://english.shanghai.gov.cn/en-Parks/20231220/0e7be85fb98442c38275d3515155c39d.html"
-      ]
+      ],
+      "chapter_relevance": "CH02",
+      "narrative_note": "Nanxiang is before departure, but not innocent. The place is still there, which is not the same as return."
     },
     "IMG_8863_TAIAN_MT_TAI_BASE": {
-      "clips": ["IMG_8863"],
+      "clips": [
+        "IMG_8863"
+      ],
       "date_context": "2025-12-23 22:02 local",
       "full_name": "Tai'an / Mount Tai base area, Shandong Province, People's Republic of China",
       "coordinates_verified": {
         "status": "matched",
-        "manifest": {"lat": 36.2043, "lon": 117.0843},
-        "requested": {"lat": 36.2043, "lon": 117.0843},
+        "manifest": {
+          "lat": 36.2043,
+          "lon": 117.0843
+        },
+        "requested": {
+          "lat": 36.2043,
+          "lon": 117.0843
+        },
         "note": "MANIFEST exactly matches requested coordinate."
       },
       "altitude_verified": {
@@ -678,7 +1089,9 @@
         "https://en.wikipedia.org/wiki/Mount_Tai",
         "https://whc.unesco.org/en/list/437/"
       ],
-      "data_quality": "moderate"
+      "data_quality": "moderate",
+      "chapter_relevance": "INT",
+      "narrative_note": "Mount Tai starts low enough to seem reasonable. At night the stairs remove that illusion one step at a time."
     }
   },
   "sparse_or_unverifiable": [
@@ -710,5 +1123,655 @@
       "key": "IMG_8863_TAIAN_MT_TAI_BASE",
       "reason": "Summit/night-climb climate was contextualized from Mount Tai's altitude and mountain-climate sources; no December 2025 event-specific weather record was retrieved."
     }
-  ]
+  ],
+  "GROUP_F_STREETS_AND_VENUES": {
+    "LES_LUDLOW_STANTON_RIVINGTON_BLOCK": {
+      "chapter_relevance": "CH01",
+      "entity_type": "street_block / nightlife zone",
+      "full_name": "Ludlow Street between Stanton Street and Rivington Street, Lower East Side, Manhattan, New York City",
+      "coordinates_verified": {
+        "status": "chapter_coordinate_context",
+        "chapter_coordinate": {
+          "lat": 40.7194,
+          "lon": -73.9896
+        },
+        "note": "Project coordinate sits within the Lower East Side Ludlow/Stanton/Rivington nightlife cluster."
+      },
+      "altitude_verified": {
+        "status": "low_elevation_urban_context",
+        "meters": 8
+      },
+      "terrain": "urban",
+      "population_density": "dense",
+      "signal_coverage": "good",
+      "geography_environment": {
+        "dominant_surface": "asphalt, brick, glass, narrow sidewalks, high-density mixed-use blocks",
+        "climate": "Humid summer nights and cold winter street canyons; building heat and bar traffic extend the day into early morning."
+      },
+      "history_culture": {
+        "local_admin_name": "Lower East Side, Manhattan Community District 3",
+        "historical_origin": "Immigrant and tenement district that became a nightlife and music corridor through late 20th-century and 2000s redevelopment."
+      },
+      "sensory_atmospheric": {
+        "light": "bar light, traffic reflection, apartment windows, sign glow",
+        "sound": "crowds, amplified music, closing-time shouting, glass, delivery traffic",
+        "smell": "beer, smoke, fried food, trash bags, wet pavement",
+        "crowd_density": "high at night"
+      },
+      "transport_infrastructure": {
+        "access": [
+          "NYC Subway nearby at Delancey St-Essex St",
+          "walkable LES street grid"
+        ],
+        "notes": "Noise conflicts are tied to the density of liquor licenses and late-night crowding rather than a single venue."
+      },
+      "one_fact": "Community Board reporting cited 21 liquor licenses on a three-block stretch of Ludlow Street between Houston and Delancey, and local coverage describes Ludlow/Orchard/Rivington/Essex nightlife density as “Hell Square.”",
+      "noise_context": "NYC 311 has a dedicated bar/club/restaurant noise complaint category. Local reporting describes Ludlow between Stanton and Rivington as one of the Lower East Side blocks where residents expect late-night bar noise.",
+      "narrative_note": "Ludlow has too many places to be awake. The street keeps talking after the room has stopped answering.",
+      "sources": [
+        "https://portal.311.nyc.gov/article/?kanumber=KA-01085",
+        "https://www.dnainfo.com/new-york/20100817/lower-east-side-east-village/no-more-booze-on-ludlow-street-says-community-board/",
+        "https://www.stratotel.com/this-lower-east-side-neighborhood-is-plagued/95717910/",
+        "https://www.streetadvisor.com/ludlow-st-lower-east-side-manhattan-new-york-city-new-york"
+      ]
+    },
+    "STANTON_STREET": {
+      "chapter_relevance": "EYU",
+      "entity_type": "street",
+      "full_name": "Stanton Street, Lower East Side, Manhattan, New York City",
+      "coordinates_verified": {
+        "status": "street_context",
+        "note": "Referenced in eyu_articles.js snow essay; crosses Ludlow and sits within the CH01 neighborhood field."
+      },
+      "terrain": "urban",
+      "population_density": "dense",
+      "signal_coverage": "good",
+      "one_fact": "The site of New York's second African burial ground is recorded between Stanton and Rivington Streets, now within Sara D. Roosevelt Park.",
+      "narrative_note": "Stanton appears first as a winter street. Bare branches, brick, and the phone call continuing anyway.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Stanton_Street"
+      ]
+    },
+    "RIVINGTON_STREET": {
+      "chapter_relevance": "CH01",
+      "entity_type": "street",
+      "full_name": "Rivington Street, Lower East Side, Manhattan, New York City",
+      "coordinates_verified": {
+        "status": "street_context",
+        "note": "Rivington crosses Ludlow one block south of Stanton in the CH01 field."
+      },
+      "terrain": "urban",
+      "population_density": "dense",
+      "signal_coverage": "good",
+      "one_fact": "The intersection of Rivington and Ludlow was renamed Beastie Boys Square in 2023.",
+      "narrative_note": "Rivington is one block down, close enough that sound does not need directions.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Rivington_Street"
+      ]
+    },
+    "JIA_JIA_99_CENTS": {
+      "chapter_relevance": "EYU",
+      "entity_type": "venue / storefront",
+      "full_name": "JIA JIA 99¢ storefront, Lower East Side, Manhattan, New York City",
+      "coordinates_verified": {
+        "status": "text_reference_only",
+        "note": "Named in eyu_articles.js; exact address not verified in this pass."
+      },
+      "terrain": "urban storefront",
+      "population_density": "dense",
+      "signal_coverage": "good",
+      "one_fact": "The project text identifies the venue by its half-obscured sign, lottery ads, ATM light, and high-chroma yellow-green window glow rather than by an address.",
+      "narrative_note": "JIA JIA 99¢ is not found by address here. It is found by the green light and the cold getting worse.",
+      "sources": [],
+      "data_quality": "unresolved_exact_address"
+    },
+    "MADISON_SQUARE_GARDEN_CLOCK_TOWER": {
+      "chapter_relevance": "EYU",
+      "entity_type": "venue / absent photo reference",
+      "full_name": "Madison Square Garden / Penn Station area clock tower reference, Midtown Manhattan, New York City",
+      "coordinates_verified": {
+        "status": "text_reference_only",
+        "note": "Mentioned as a struck absent-photo text in eyu_articles.js; exact clock tower identity not verified."
+      },
+      "terrain": "urban transit / arena district",
+      "population_density": "dense",
+      "signal_coverage": "good",
+      "one_fact": "The reference is embedded in a paragraph about walking toward trains back to New Jersey, so its project function is transit memory more than landmark documentation.",
+      "narrative_note": "The clock tower is crossed out. The route to New Jersey remains.",
+      "sources": [],
+      "data_quality": "unresolved_exact_landmark"
+    }
+  },
+  "GROUP_G_CULTURAL_LANDMARKS": {
+    "GENGHIS_KHAN_TETHERING_POST": {
+      "chapter_relevance": "CH02",
+      "entity_type": "natural-cultural scenic landmark",
+      "full_name": "Genghis Khan's Tethering Post / 成吉思汗拴马桩, west shore of Hulun Lake, New Barag Right Banner, Hulunbuir, Inner Mongolia",
+      "coordinates_verified": {
+        "status": "approximate_only",
+        "note": "Search results place it on the west shore of Hulun Lake, 38 km northeast of A'zhen and 88 km from Manzhouli; exact authoritative coordinates were not found. Mapcarta lists it as a Hulunbuir scenic viewpoint."
+      },
+      "altitude_verified": {
+        "status": "not_verified",
+        "meters": null,
+        "note": "Use nearby Hulun Lake level context around 543-560 m, not a verified site altitude."
+      },
+      "terrain": "grassland / lake cliff / wetland edge",
+      "population_density": "sparse",
+      "signal_coverage": "weak",
+      "geography_environment": {
+        "watershed": "Hulun Lake wetland system",
+        "vegetation": "steppe grassland and wetland edge",
+        "climate": "Short warm continental summer; winter is severe and dry."
+      },
+      "history_culture": {
+        "local_admin_name": "新巴尔虎右旗 / New Barag Right Banner, Hulunbuir",
+        "historical_origin": "Tourism site based on the legend that Genghis Khan stationed and tethered horses here.",
+        "protected_status": "Part of broader Hulun Lake / Dalai Lake tourism and wetland context, not confirmed as an independent protected unit."
+      },
+      "sensory_atmospheric": {
+        "light": "open lake-steppe glare, horizon-heavy",
+        "sound": "wind, insects, tourist vehicles when present",
+        "smell": "lake water, grass, dust",
+        "crowd_density": "low except tourist peak times"
+      },
+      "transport_infrastructure": {
+        "distance_from_arxan": "not directly verified; site is on Hulun Lake west shore, closer to Manzhouli/New Barag Right Banner than Arxan city",
+        "tourism_infrastructure": "scenic viewpoint / tourism point, local guides and parking likely but exact facilities vary"
+      },
+      "one_fact": "Chinese encyclopedia entries describe the site as a three-sided-water cliff on the west shore of Hulun Lake, 38 km northeast of A'zhen and 88 km from Manzhouli, with a scenic area of about 17.5 square km including water surface.",
+      "narrative_note": "The tethering post stands by the lake because a story says a horse once had to stop there. The grass around it does not explain the story.",
+      "sources": [
+        "https://www.baike.com/wikiid/1510520084302443653",
+        "https://baike.so.com/doc/7905739-8179834.html",
+        "https://mapcarta.com/N12061711175"
+      ]
+    },
+    "LANGSHAN_SCENIC_AREA_NANTONG": {
+      "chapter_relevance": "EYU",
+      "entity_type": "mountain scenic area",
+      "full_name": "Langshan Scenic Area / 狼山风景区, Nantong, Jiangsu Province",
+      "coordinates_verified": {
+        "status": "landmark_context",
+        "note": "Referenced in eyu_articles.js Langshan article; not tied to MANIFEST GPS."
+      },
+      "altitude_verified": {
+        "status": "externally_supported",
+        "meters": 106
+      },
+      "terrain": "low mountain / Yangtze River edge / urban scenic forest",
+      "population_density": "high nearby / medium on mountain paths",
+      "signal_coverage": "good",
+      "geography_environment": {
+        "dominant_vegetation": "managed temple mountain vegetation, maple, ginkgo, evergreen plantings",
+        "climate": "Late autumn is mild to cool in Nantong, with clear yellow light and river humidity."
+      },
+      "history_culture": {
+        "local_admin_name": "江苏省南通市崇川区狼山",
+        "historical_origin": "One of Nantong's Five Mountains and a long-standing Buddhist scenic site.",
+        "protected_status": "Nantong Five Mountains / Langshan scenic tourism area; broader Nantong records note Wushan area as national forest park context."
+      },
+      "sensory_atmospheric": {
+        "light": "yellow late-autumn sun through maple and ginkgo",
+        "sound": "steps, temple visitors, river wind, tour groups",
+        "smell": "incense, leaves, river humidity, snack stalls",
+        "crowd_density": "medium to high in good autumn weather"
+      },
+      "transport_infrastructure": {
+        "access": "Urban Nantong scenic area, reached by local roads and city transit; walking route climbs by steps through temple/scenic points.",
+        "trail_distance": "not confidently verified; visitor accounts describe short but slow stepped routes because of stops and viewpoints."
+      },
+      "one_fact": "Local tourism summaries list Langshan at about 106 m elevation, with Guangjiao Temple, Luobinwang Tomb, Zhiyun Pagoda, and other historic sites on the mountain.",
+      "narrative_note": "Langshan is 106 meters. It still manages to make people pay attention to their breathing.",
+      "sources": [
+        "https://nt.bendibao.com/jingdian/nantonglangshan/content/",
+        "https://daj.nantong.gov.cn/ntsdaj/dfwh/content/0429ef24-2ba8-4ecd-8b23-d6d508fd01ef.html",
+        "https://www.nantong.gov.cn/govdiropen/nj/2019.pdf"
+      ]
+    },
+    "GUANGJIAO_TEMPLE_NANTONG": {
+      "chapter_relevance": "EYU",
+      "entity_type": "Buddhist temple",
+      "full_name": "Guangjiao Temple / 广教寺 / 广教禅寺, Langshan, Nantong, Jiangsu Province",
+      "coordinates_verified": {
+        "status": "landmark_context",
+        "note": "On Langshan; not tied to MANIFEST GPS."
+      },
+      "altitude_verified": {
+        "status": "mountain_context",
+        "meters": 106,
+        "note": "Temple is on/near Langshan summit area; precise temple-platform altitude not separately verified."
+      },
+      "terrain": "temple mountain",
+      "population_density": "medium to high during temple/scenic visits",
+      "signal_coverage": "good",
+      "history_culture": {
+        "founding_date": "Tang Zongzhang 2, 669 CE",
+        "local_admin_name": "南通市崇川区狼山广教寺",
+        "protected_status": "A nationally recognized key Buddhist temple in Han Chinese areas; Nantong yearbook records Guangjiao Temple as selected in 2013 into the seventh batch of national key cultural relics protection units as part of historic architecture."
+      },
+      "one_fact": "Guangjiao Temple is associated with Dashizhi Bodhisattva and is described as foremost among China's “Eight Lesser Buddhist Mountains.”",
+      "narrative_note": "Guangjiao Temple began in 669. The steps are newer than that, but they still ask the body to agree.",
+      "sources": [
+        "https://www.ntfjw.com/nd.jsp?id=310",
+        "https://www.maigoo.com/citiao/80151.html",
+        "https://www.nantong.gov.cn/govdiropen/nj/2019.pdf"
+      ]
+    },
+    "HUAN_GONG_PAGODA": {
+      "chapter_relevance": "EYU",
+      "entity_type": "pagoda / memorial tower",
+      "full_name": "Huan Gong Pagoda / 幻公塔, Guangjiao Temple, Langshan, Nantong",
+      "coordinates_verified": {
+        "status": "landmark_context",
+        "note": "Within Guangjiao Temple / Zilang Chanyuan area on Langshan."
+      },
+      "altitude_verified": {
+        "status": "mountain_context",
+        "meters": 106
+      },
+      "terrain": "temple mountain / brick pagoda site",
+      "population_density": "medium",
+      "signal_coverage": "good",
+      "history_culture": {
+        "founding_date": "Ming Jiajing 45, 1566 CE",
+        "historical_origin": "Built to commemorate Zhihuan, the Song-period monk associated with reviving Guangjiao Temple."
+      },
+      "one_fact": "Nantong Buddhist sources describe Huan Gong Pagoda as a seven-storey, four-sided solid brick pagoda northwest of Zilang Chanyuan.",
+      "narrative_note": "Huan Gong Pagoda is the tower found first in the photograph. The tower itself stays less dramatic than the light around it.",
+      "sources": [
+        "https://www.ntfjw.com/nd.jsp?id=310",
+        "https://daj.nantong.gov.cn/ntsdaj/dfwh/content/0429ef24-2ba8-4ecd-8b23-d6d508fd01ef.html"
+      ]
+    },
+    "BEILU_GARDEN_NANTONG": {
+      "chapter_relevance": "EYU",
+      "entity_type": "garden / scenic subsite",
+      "full_name": "Beilu Garden / 北麓园, Langshan area, Nantong",
+      "coordinates_verified": {
+        "status": "unverified_name_context",
+        "note": "Requested as a Langshan cultural site, but strong official English/Chinese web detail was not found in this pass."
+      },
+      "altitude_verified": {
+        "status": "not_verified",
+        "meters": null
+      },
+      "terrain": "urban scenic garden / mountain foot context",
+      "population_density": "medium",
+      "signal_coverage": "good",
+      "one_fact": "The name indicates a garden/site at the northern foot of Langshan, but its official description remains unresolved after search.",
+      "narrative_note": "Beilu Garden is still mostly a name. It sits at the foot of the mountain and waits for a better source.",
+      "sources": [],
+      "data_quality": "sparse_after_deep_search"
+    },
+    "MOUNT_TAI_NIGHT_CLIMB_ROUTE": {
+      "chapter_relevance": "INT",
+      "entity_type": "mountain route",
+      "full_name": "Mount Tai night climb, classic Red Gate - Zhongtianmen - Nantianmen - Tianjie - Jade Emperor Peak route, Tai'an, Shandong",
+      "coordinates_verified": {
+        "status": "manifest_base_and_route_context",
+        "manifest_base": {
+          "lat": 36.2043,
+          "lon": 117.0843
+        },
+        "note": "MANIFEST point is base/Tai'an approach. Route climbs toward Nantianmen and Jade Emperor Peak."
+      },
+      "altitude_verified": {
+        "status": "base_manifest_peak_external",
+        "base_meters": 196.576,
+        "zhongtianmen_meters": 847,
+        "nantianmen_meters": 1460,
+        "summit_meters": 1532.7
+      },
+      "terrain": "mountain / stone stair route / urban base",
+      "population_density": "medium / high on sunrise nights",
+      "signal_coverage": "good on main route / weaker in mountain pockets",
+      "geography_environment": {
+        "climate": "December night conditions are cold, with possible ice and a summit substantially colder than Tai'an city.",
+        "vegetation": "Lower mountain mixed forest and exposed stone stair sections near the upper route."
+      },
+      "history_culture": {
+        "protected_status": "UNESCO World Heritage Site; one of China's Five Great Mountains.",
+        "historical_origin": "Imperial rites of fengshan sacrifice linked summit and base ritual geography."
+      },
+      "sensory_atmospheric": {
+        "light": "headlamps, vendor bulbs, stair lamps, black mountain mass",
+        "sound": "steps, breathing, vendor calls, wind near Nantianmen",
+        "smell": "cold stone, instant noodles, sweat under rented coats",
+        "crowd_density": "can be high before sunrise"
+      },
+      "transport_infrastructure": {
+        "route": [
+          "Red Gate / 红门",
+          "Wanxianlou / 万仙楼",
+          "Doumu Palace / 斗母宫",
+          "Zhongtianmen / 中天门",
+          "Eighteen Bends / 十八盘",
+          "Nantianmen / 南天门",
+          "Tianjie / 天街",
+          "Bixia Temple / 碧霞祠",
+          "Jade Emperor Peak / 玉皇顶"
+        ],
+        "distance": "about 9-10.5 km depending source and start point",
+        "stairs": "about 6290 steps in common guide summaries",
+        "walking_time": "about 4-6 hours for night climb on foot"
+      },
+      "one_fact": "The classic night route is the Red Gate line; guides describe Zhongtianmen at 847 m, Nantianmen at about 1460 m, and Jade Emperor Peak at 1532.7 m.",
+      "narrative_note": "The base is 196 meters. The summit is 1532.7. At night, the difference is counted by knees.",
+      "sources": [
+        "https://whc.unesco.org/en/list/437/",
+        "https://zh.wikipedia.org/wiki/%E6%B3%B0%E5%B1%B1",
+        "https://www.loongwander.com/zh-CN/article/mount-tai-scenic-area",
+        "https://mounttaitravel.com/pa-taishan-gong-lue/"
+      ]
+    },
+    "NANTONG_SPORTS_PARK_HAO_RIVER": {
+      "chapter_relevance": "EYU",
+      "entity_type": "urban park / ancient moat context",
+      "full_name": "Nantong Sports Park / 体育公园 and Hao River / 濠河 scenic moat, Nantong, Jiangsu Province",
+      "coordinates_verified": {
+        "status": "text_context",
+        "note": "Referenced in eyu_articles.js as a Nantong walking route via subway to Sports Park and around Hao River."
+      },
+      "altitude_verified": {
+        "status": "not_applicable_lowland_city",
+        "meters": null
+      },
+      "terrain": "urban river / ancient moat / park",
+      "population_density": "high urban / medium along park walks",
+      "signal_coverage": "good",
+      "history_culture": {
+        "founding_origin": "Hao River moat dates to Later Zhou Xiande 5, 958 CE, according to Nantong history sources.",
+        "protected_status": "Hao River Scenic Area is a national 5A tourist attraction and one of China's best-preserved ancient moats."
+      },
+      "transport_infrastructure": {
+        "metro": "Nantong Rail Transit Line 2 Sports Park Station opened on 2023-12-27 at Haoxi Road / Qingnian Middle Road, inside the Sports Park block."
+      },
+      "one_fact": "Nantong history sources describe Hao River as about 10 km long, surrounding the old city in an inverted gourd shape and known as the city's “emerald necklace.”",
+      "narrative_note": "Sports Park has a subway station now. The old moat keeps making the walk look older than the city around it.",
+      "sources": [
+        "https://www.ntszw.gov.cn/?a=show&c=index&id=1845",
+        "https://en.nantong.gov.cn/2023-03/02/c_860297.htm",
+        "https://zh.wikipedia.org/wiki/%E4%BD%93%E8%82%B2%E5%85%AC%E5%9B%AD%E7%AB%99_%28%E5%8D%97%E9%80%9A%E5%B8%82%29",
+        "https://www.nantong.gov.cn/ntsrmzf/ntxw/content/e0593425-73b8-452a-8ebe-ecf125936d89.html"
+      ]
+    },
+    "NANXIANG_ANCIENT_TOWN_DEEPENED": {
+      "chapter_relevance": "CH02",
+      "entity_type": "ancient town / origin context",
+      "full_name": "Nanxiang Ancient Town / 南翔古镇, Jiading District, Shanghai",
+      "coordinates_verified": {
+        "status": "matched_manifest",
+        "manifest": {
+          "lat": 31.2869,
+          "lon": 121.3215
+        }
+      },
+      "altitude_verified": {
+        "status": "manifest_only",
+        "meters": 11.671
+      },
+      "terrain": "urban historic water-town suburb",
+      "population_density": "high",
+      "signal_coverage": "good",
+      "history_culture": {
+        "founding_origin": "Shanghai official page describes Nanxiang as over 1500 years old and named after Baihe Nanxiang Temple, built in 505 CE.",
+        "protected_status": "Guyi Garden is a major classical garden site in Nanxiang."
+      },
+      "one_fact": "Nanxiang is associated with Guyi Garden and Nanxiang xiaolongbao as well as its older temple-town origin.",
+      "narrative_note": "Nanxiang is before New York in the timeline. It is not departure, only proof that a place can remain without helping.",
+      "sources": [
+        "https://english.shanghai.gov.cn/en-ScenicSpots/20240318/d27e0a0fd8a647f38e8da351b13cfeec.html",
+        "https://english.shanghai.gov.cn/en-Parks/20231220/0e7be85fb98442c38275d3515155c39d.html"
+      ]
+    }
+  },
+  "GROUP_H_INSTITUTIONS": {
+    "SCHOOL_OF_VISUAL_ARTS": {
+      "chapter_relevance": "CH01",
+      "entity_type": "institution",
+      "full_name": "School of Visual Arts / SVA NYC, Manhattan, New York City",
+      "coordinates_verified": {
+        "status": "institution_context",
+        "note": "Referenced by project documents and eyu_articles.js; not tied to one clip coordinate."
+      },
+      "terrain": "urban campus / distributed Manhattan buildings",
+      "population_density": "dense",
+      "signal_coverage": "good",
+      "one_fact": "SVA was founded in 1947 as the Cartoonists and Illustrators School and later became the School of Visual Arts.",
+      "narrative_note": "SVA is not a backdrop here. It is the system that kept producing addresses, semesters, and reasons to stay.",
+      "sources": [
+        "https://qa.sva.edu/about/about-sva/history",
+        "https://www.aicad.org/schools/school-of-visual-arts/"
+      ]
+    },
+    "UNIVERSITY_OF_QUEENSLAND_ST_LUCIA": {
+      "chapter_relevance": "CH04",
+      "entity_type": "institution / campus",
+      "full_name": "The University of Queensland, St Lucia campus, Brisbane, Queensland, Australia",
+      "coordinates_verified": {
+        "status": "campus_context",
+        "note": "Connected to CH04 ferry commute; not a clip point."
+      },
+      "terrain": "river-bound campus / subtropical landscaped grounds",
+      "population_density": "high during semester",
+      "signal_coverage": "good",
+      "one_fact": "UQ describes St Lucia as a 114-hectare campus on Brisbane River-bound land, with sandstone buildings, gardens, lakes, and a CityCat ferry terminal.",
+      "narrative_note": "UQ is across the river at the end of the ferry. The campus is green, which does not make the trip shorter.",
+      "sources": [
+        "https://campuses.uq.edu.au/st-lucia",
+        "https://about.uq.edu.au/files/5659/St-Lucia_Campus_Master_Plan_Final_Dec2017.pdf"
+      ]
+    }
+  },
+  "GROUP_I_TRANSPORT_INFRASTRUCTURE": {
+    "BRISBANE_CITYCAT_HAMILTON_TO_UQ_ST_LUCIA_DEEPENED": {
+      "chapter_relevance": "CH04",
+      "entity_type": "ferry route",
+      "full_name": "F1 CityCat Northshore Hamilton - UQ St Lucia, Brisbane River, Queensland",
+      "coordinates_verified": {
+        "status": "route_context",
+        "note": "Route connects Northshore Hamilton through inner Brisbane river wharves to UQ St Lucia."
+      },
+      "altitude_verified": {
+        "status": "not_applicable",
+        "meters": null
+      },
+      "terrain": "tidal urban river",
+      "population_density": "high corridor / medium on vessel depending time",
+      "signal_coverage": "good",
+      "geography_environment": {
+        "watershed": "Brisbane River tidal estuary",
+        "river_note": "Tide tables for Brisbane Port are suitable for estimating river tide timing but not exact surface behavior at Balmoral/UQ."
+      },
+      "transport_infrastructure": {
+        "vessel_type": "High-speed, low-wash aluminium catamaran CityCat; Brisbane City Council fleet operated by RiverCity Ferries.",
+        "exact_stops_northshore_to_uq": [
+          "Northshore Hamilton",
+          "Apollo Road",
+          "Teneriffe",
+          "Bulimba",
+          "Hawthorne",
+          "New Farm Park",
+          "Mowbray Park",
+          "Sydney Street",
+          "Howard Smith Wharves",
+          "Riverside",
+          "QUT Gardens Point",
+          "South Bank",
+          "North Quay",
+          "Regatta",
+          "Guyatt Park",
+          "West End",
+          "UQ St Lucia"
+        ],
+        "stop_count": 17,
+        "intermediate_stops": 15,
+        "timed_journey_examples": [
+          {
+            "from": "Northshore Hamilton",
+            "to": "UQ St Lucia",
+            "depart": "17:45",
+            "arrive": "19:08",
+            "duration_minutes": 83
+          },
+          {
+            "from": "UQ St Lucia",
+            "to": "Northshore Hamilton",
+            "depart": "17:45",
+            "arrive": "19:07",
+            "duration_minutes": 82
+          }
+        ],
+        "project_commute_note": "User-reported 1.5 hours is consistent after walking/waiting/access time."
+      },
+      "seasonal_light": {
+        "ascot_august_2025": "Brisbane August sunset is around 17:22-17:35 depending date; IMG_5523 at 17:20 sits at the edge of sunset light."
+      },
+      "one_fact": "The official/all-stops F1 service runs daily between UQ St Lucia and Northshore Hamilton; one schedule example gives Northshore Hamilton 17:45 to UQ St Lucia 19:08, 83 minutes.",
+      "narrative_note": "Seventeen stops. Eighty-three minutes. The river does not care that this is a commute.",
+      "sources": [
+        "https://www.brisbane.qld.gov.au/traffic-and-transport/public-transport/citycat-and-ferry-services/kittycat-services",
+        "https://assets-global.website-files.com/5f7e5c84a8e6b464ca3bfeca/6606c139bf6c18c8e9989f94_24050_RCF_citycat_timetable_web_v3_Accessibility.pdf",
+        "https://www.rivercityferries.com.au/our-fleet",
+        "https://www.sunrise-and-sunset.com/en/sun/australia/brisbane/2025/august",
+        "https://www.tidetime.org/australia-pacific/australia/brisbane-calendar-may.htm",
+        "https://campuses.uq.edu.au/st-lucia"
+      ]
+    },
+    "COPENHAGEN_KASTRUP_AIRPORT_TRANSIT": {
+      "chapter_relevance": "EYU",
+      "entity_type": "airport / transit",
+      "full_name": "Copenhagen Airport, Kastrup / Københavns Lufthavn, Kastrup, Denmark",
+      "coordinates_verified": {
+        "status": "text_reference_only",
+        "note": "Referenced in eyu_articles.js as a Copenhagen transfer; not tied to MANIFEST GPS."
+      },
+      "altitude_verified": {
+        "status": "not_researched",
+        "meters": null
+      },
+      "terrain": "airport / coastal urban infrastructure on Amager",
+      "population_density": "high in operating hours / sparse overnight pockets",
+      "signal_coverage": "good",
+      "history_culture": {
+        "founding_date": "Opened 20 April 1925",
+        "one_historical_event": "CPH celebrated its 100th anniversary in 2025."
+      },
+      "transport_infrastructure": {
+        "metro": "M2 metro connects airport to central Copenhagen in about 14-15 minutes.",
+        "rail": "Mainline trains connect the airport with Copenhagen Central and regional/Øresund services."
+      },
+      "one_fact": "ICAO material describes Kastrup Airport as opening in 1925 and as one of the first airports designed exclusively for civil traffic.",
+      "narrative_note": "Two hours in Copenhagen Airport. Enough time for the chairs to become a landscape.",
+      "sources": [
+        "https://www.icao.int/sites/default/files/2025-02/6406_en.pdf",
+        "https://m.dk/en/plan-your-trip/koebenhavns-lufthavn/",
+        "https://www.cph.dk/494433/globalassets/8.-om-cph/04_investor/arsrapporter/2025/copenhagen%20airports%20as%20group%20annual%20report%202025.pdf"
+      ]
+    },
+    "BEISHANG_TEXT_ROUTE": {
+      "chapter_relevance": "BEISHANG",
+      "entity_type": "text route / no video",
+      "full_name": "北上 text route: Huainan - Zhengzhou - Anyang - Jinzhong - Fenyang - Linfen - Yuncheng - Weinan - Qingyang - Pingliang - Tianshui - Mianyang - Chengdu - Chongqing",
+      "coordinates_verified": {
+        "status": "not_applicable_text_route",
+        "note": "No video/GPS from this route; the route exists as text in beishang.txt."
+      },
+      "altitude_verified": {
+        "status": "not_applicable_route_varies",
+        "meters": null
+      },
+      "terrain": "plain / loess plateau / river valleys / Qinling-Daba mountain crossings / Sichuan Basin",
+      "population_density": "varies from dense cities to sparse plateau/rural corridors",
+      "signal_coverage": "good in cities / variable on mountain roads",
+      "geography_environment": {
+        "landscape_sequence": "Huai River/North China plain context into Yellow River basin cities, then Shanxi-Shaanxi loess country, Gansu corridor and Qinling-Daba transition, ending in the Chengdu-Chongqing basin.",
+        "watershed": "Crosses or references the Huai, Yellow, Wei/Fen, and upper Yangtze cultural-geographic systems."
+      },
+      "history_culture": {
+        "route_type": "personal retrospective route, not a named official itinerary",
+        "cultural_context": "Touches the north-south divide made by Qinling-Huaihe and the ancient Qin-Shu road logic connecting Guanzhong/Shaanxi and Sichuan."
+      },
+      "one_fact": "Britannica describes the Qin Mountains as a sharp climatic and topographic divide between dry loess lands to the north and greener subtropical hills to the south.",
+      "narrative_note": "北上 names fourteen cities and then changes direction. The route is too long to become a memory cleanly.",
+      "sources": [
+        "https://www.britannica.com/place/Loess-Plateau",
+        "https://www.britannica.com/place/Qin-Mountains",
+        "https://qinshuroads.org/docs/html/Shu_Roads_Introduction.htm",
+        "https://www.nature.com/articles/s40494-022-00840-0"
+      ]
+    },
+    "NYC_SUBWAY_PATH_NJ_TRANSIT_CLUSTER": {
+      "chapter_relevance": "EYU",
+      "entity_type": "transit cluster",
+      "full_name": "NYC Subway / PATH train / NJ Transit memory cluster between Lower Manhattan, New Jersey, and airport routes",
+      "coordinates_verified": {
+        "status": "text_context",
+        "note": "Extracted from eyu_articles.js and project context; not one coordinate."
+      },
+      "altitude_verified": {
+        "status": "not_applicable",
+        "meters": null
+      },
+      "terrain": "urban rail / tunnel / station infrastructure",
+      "population_density": "dense",
+      "signal_coverage": "good aboveground / variable underground",
+      "one_fact": "The project text uses transit as bodily memory: subway entrance, train back to New Jersey, airport transfer, and the 24-hour return route.",
+      "narrative_note": "The train is named after where it goes. The body remembers only the waiting area.",
+      "sources": []
+    }
+  },
+  "sparse_or_unverifiable_after_deep_search": [
+    {
+      "key": "BEILU_GARDEN_NANTONG",
+      "reason": "Official/detail source not found in this pass; retained as Langshan context but marked sparse."
+    },
+    {
+      "key": "JIA_JIA_99_CENTS",
+      "reason": "Exact address could not be verified from search; kept as textual storefront reference."
+    },
+    {
+      "key": "MADISON_SQUARE_GARDEN_CLOCK_TOWER",
+      "reason": "Exact clock tower identity remains unresolved; kept as struck absent-photo reference."
+    },
+    {
+      "key": "IMG_8300_MOSITAI",
+      "reason": "Name found in gazetteer-style sources, but official local documentation remains sparse."
+    },
+    {
+      "key": "IMG_3727_NANFENG",
+      "reason": "Coordinate retained from MANIFEST; official local identity remains unresolved."
+    },
+    {
+      "key": "IMG_1043_LONG_ISLAND_CITY_COORDINATE_CHECK",
+      "reason": "Reverse-geocoder name conflicts with MANIFEST coordinate near Midtown Manhattan."
+    }
+  ],
+  "deep_search_sources_used": [
+    "https://www.baike.com/wikiid/1510520084302443653",
+    "https://baike.so.com/doc/7905739-8179834.html",
+    "https://www.ntfjw.com/nd.jsp?id=310",
+    "https://nt.bendibao.com/jingdian/nantonglangshan/content/",
+    "https://daj.nantong.gov.cn/ntsdaj/dfwh/content/0429ef24-2ba8-4ecd-8b23-d6d508fd01ef.html",
+    "https://whc.unesco.org/en/list/437/",
+    "https://www.loongwander.com/zh-CN/article/mount-tai-scenic-area",
+    "https://mounttaitravel.com/pa-taishan-gong-lue/",
+    "https://www.brisbane.qld.gov.au/traffic-and-transport/public-transport/citycat-and-ferry-services/kittycat-services",
+    "https://assets-global.website-files.com/5f7e5c84a8e6b464ca3bfeca/6606c139bf6c18c8e9989f94_24050_RCF_citycat_timetable_web_v3_Accessibility.pdf",
+    "https://www.rivercityferries.com.au/our-fleet",
+    "https://portal.311.nyc.gov/article/?kanumber=KA-01085",
+    "https://www.dnainfo.com/new-york/20100817/lower-east-side-east-village/no-more-booze-on-ludlow-street-says-community-board/",
+    "https://earthobservatory.nasa.gov/images/153051/a-smoky-summer-in-amur",
+    "https://parks.ny.gov/parks/gantryplaza/",
+    "https://www.moa.gov.cn/ztzl/2023_dnq/202312/t20231208_6442341.htm",
+    "https://mapcarta.com/29488992",
+    "https://www.britannica.com/place/Qilian-Mountains",
+    "https://www.britannica.com/place/Loess-Plateau",
+    "https://www.britannica.com/place/Qin-Mountains",
+    "https://m.dk/en/plan-your-trip/koebenhavns-lufthavn/",
+    "https://campuses.uq.edu.au/st-lucia",
+    "https://qa.sva.edu/about/about-sva/history"
+  ],
+  "last_deep_search_updated_at": "2026-05-14"
 }
