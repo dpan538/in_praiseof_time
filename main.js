@@ -1,6 +1,9 @@
 const MANIFEST_URL = "signal_data/MANIFEST.json";
 const MEDIA_ARCHIVE_URL = "signal_data/media_archive_index.json";
 const ARCHIVE_VIDEO_RE = /\.(mov|mp4|m4v|webm)$/i;
+const MEDIA_PRELOAD_KEEPALIVE_LIMIT = 24;
+const mediaPreloadCache = new Set();
+const mediaPreloadKeepalive = [];
 
 function archiveMediaSrc(file) {
   if (!file || typeof file !== "string") return file;
@@ -309,36 +312,96 @@ const MONOLOGUE_TEXTS = {
     "The room is not lonely.\nIt is just measured by one body.",
     "纽约没有回答。\n它只把光放在玻璃上，然后继续。",
     "A window can become a calendar\nwhen nothing else agrees to begin.",
+    "I kept checking the same street.\n不是为了发现什么，只是确认它还在那里。",
+    "有时候我很烦这些照片。\n它们太安静，好像什么责任都推给我。",
+    "The city is expensive even when you do nothing.\n连发呆都像在付租金。",
+    "我没有很悲伤。\n只是室内太亮，外面太冷，中间隔着一层玻璃。",
+    "New Year arrived without asking.\n我也没有准备好拒绝它。",
+    "I remember the radiator sound.\n比我更稳定，比我更像一个住在这里的人。",
+    "圣诞夜的灯很多。\n我看了很久，最后只记得自己站得很直。",
+    "Some nights are not memories yet.\n它们只是文件夹里一串还没有命名的时间。",
+    "我也想过把相机放下。\n可是手里空出来以后，更不知道该拿什么。",
+    "The room kept me.\n不是温柔地，是像一张还没退掉的收据。",
   ],
   ch02: [
     "地图缩小以后，草原看起来很好理解。\n身体不是这样。",
     "No signal is not silence.\nIt is the phone admitting distance.",
     "北方把名字拉长。\n城市、油田、边境，都慢慢变成风。",
     "我不想把辽阔写成浪漫。\n辽阔有时候只是无法求助。",
+    "The road kept going.\n我开始有点生气，因为它没有给人一个停下来的理由。",
+    "绿色太多的时候，眼睛也会累。\n不是美的问题，是没有墙可以靠一下。",
+    "I was not brave there.\nI was just sitting in a moving car.",
+    "有些地方让人变小。\n小到连害怕都不好意思说出口。",
+    "The border is a word on paper.\n风吹过来时，它一点也不尊重这件事。",
+    "我记得牛站在路中间。\n那一秒，所有导航都显得很可笑。",
+    "Maybe distance is not far away.\nMaybe distance is when nobody knows how to call you back.",
+    "车窗很脏。\n我反而放心，世界终于没有那么高清。",
+    "北上的路没有高潮。\n只有一段一段被拉长的下午。",
+    "I wanted a sign.\n后来发现没有信号本身就是 sign。",
   ],
   ch03: [
     "回来不是事件。\n回来只是把杯子放回桌上。",
     "Hometown is a low sound.\n不需要证明，也很难描述。",
     "水汽、白墙、晚饭。\n生活用很小的东西保存人。",
     "不是寻找过去。\n只是让今天靠近一点。",
+    "我在这里不需要解释路线。\n但这并不代表我知道自己在哪里。",
+    "The table knows more than the map.\n它知道谁坐过，谁没回来吃饭。",
+    "故乡有时候很吵。\n亲切、尴尬、方便、疲惫，全部挤在同一盏灯下面。",
+    "我不想把这里拍得很美。\n美会把很多真正的东西擦掉。",
+    "A bowl, a wall, a wet floor.\n这些比“回家”更诚实。",
+    "我回来一下。\n这句话很轻，但里面有很多没有说完的事。",
+    "The air is familiar.\n所以更容易突然难过。",
+    "没有 GPS 的照片反而很像这里。\n知道怎么到，但说不清。",
+    "下午很慢。\n慢到我开始怀疑生活是不是一直都这样，只是我以前没有看。",
+    "Hometown is not soft.\nIt only lowers the volume.",
   ],
   ch04: [
     "上升不是胜利。\n只是呼吸被迫变得诚实。",
     "High place, small voice.\n海拔把身体里的废话拿走。",
     "路的尽头没有答案。\n只有更薄的空气和更清楚的脚步。",
     "山不是象征。\n山只是很重，所以期待也变重。",
+    "我以为到高处会更明白。\n结果只是更冷、更累、更不想说话。",
+    "Salary became ticket.\nTicket became road.\nRoad became a very quiet body.",
+    "有一段路我真的不喜欢。\n太长，太亮，太像必须完成的事。",
+    "The mountain did not care.\n这点反而让我轻松。",
+    "风把脸吹得很钝。\n那天我很难继续把自己想得复杂。",
+    "期待是很实际的重量。\n背在身上，爬坡的时候就知道了。",
+    "I kept counting meters.\n像数钱，也像数剩下的力气。",
+    "到达之后没有掌声。\n这很好，掌声会显得太误会。",
+    "雪在夜里不是白的。\n它更像一个没保存成功的页面。",
+    "High altitude, low temper.\n我变得很容易烦，也很容易原谅。",
   ],
   ch05: [
     "The river keeps its own schedule.\n我只是短暂坐在旁边。",
     "南方的光太直接。\n有些事情因此看不清。",
     "A ferry is a soft delay.\n它允许一天没有结论。",
     "水面很脏，也很亮。\n这两件事不冲突。",
+    "这里的热不是拥抱。\n它只是一直在场，像一条很慢的规定。",
+    "I did not love the river immediately.\n我只是反复经过，最后不好意思说不认识。",
+    "有些下午太空了。\n空到我开始怀疑自己是不是已经把生活暂停。",
+    "The ferry sound is practical.\nIt carries people, not metaphors.",
+    "布里斯班的光很诚实。\n诚实得有点粗鲁。",
+    "I missed shadow there.\n不是黑暗，是可以暂时不被看见的地方。",
+    "河边没有什么大事。\n所以很多小事开始变得清楚。",
+    "Melbourne felt like an extra page.\n夹在后面，不一定要解释。",
+    "南半球的夏天让我迟钝。\n我花了很久才接受自己也在这里生活。",
+    "Some days are only transit.\n但 transit 也会留下水印。",
   ],
   ch06: [
     "After seeing, the eye keeps working.\n残光比结论慢一点。",
     "黑白不是减少。\n只是把噪音放到别处。",
     "There is no last image.\n只有下一次回头时还在的灰。",
     "看完以后，生活继续变小。\n杯子、花、影子，都还够用。",
+    "我开始喜欢不确定的照片。\n它们没有急着证明自己有用。",
+    "The image is tired too.\n所以它只留下边缘，不再解释中心。",
+    "有时候黑色很轻。\n轻到像窗帘后面还没醒的早晨。",
+    "I do not want an ending here.\nEnding makes everything suddenly too obedient.",
+    "看久了以后，灰色会变热。\n不是温度，是眼睛终于放松。",
+    "一朵花放在桌上。\n没有象征，先让它只是花。",
+    "Afterimage is not memory.\nIt is the delay before memory starts working.",
+    "我把声音关小。\n世界没有变安静，只是我不再追着它跑。",
+    "White is difficult.\n它看起来空，其实藏了很多旧光。",
+    "最后我只相信小东西。\n杯沿、纸角、一点影子，够了。",
   ],
 };
 
@@ -1006,6 +1069,7 @@ async function init() {
     if (shouldUseMobileArchiveGate()) showMobileArchiveGate();
     else activateChapter(initialChapterFromLocation() || "ch01");
   }
+  if (!shouldUseMobileArchiveGate()) scheduleArchiveWarmup();
 }
 
 function shouldUseMobileArchiveGate() {
@@ -1137,7 +1201,111 @@ function prepareVideoElement(video) {
   if (!video) return;
   video.setAttribute("playsinline", "");
   video.setAttribute("webkit-playsinline", "");
-  video.preload = "metadata";
+  video.preload = "auto";
+}
+
+function runWhenIdle(callback, timeout = 900) {
+  if (typeof window.requestIdleCallback === "function") {
+    return window.requestIdleCallback(callback, { timeout });
+  }
+  return window.setTimeout(() => callback({ didTimeout: true, timeRemaining: () => 0 }), 80);
+}
+
+function afterNextPaint(callback) {
+  requestAnimationFrame(() => requestAnimationFrame(callback));
+}
+
+function rememberPreloader(node) {
+  mediaPreloadKeepalive.push(node);
+  while (mediaPreloadKeepalive.length > MEDIA_PRELOAD_KEEPALIVE_LIMIT) {
+    const stale = mediaPreloadKeepalive.shift();
+    if (stale?.tagName === "VIDEO") {
+      stale.pause();
+      stale.removeAttribute("src");
+      stale.load();
+    }
+  }
+}
+
+function mediaSourceForItem(item) {
+  if (!item) return "";
+  if (item.type === "photo") return archiveMediaSrc(item.file);
+  const key = item.key || item.file?.replace(/\.[^.]+$/, "");
+  const filename = state.signal[key]?.filename || item.file;
+  return archiveMediaSrc(filename);
+}
+
+function warmMediaSource(src, type = "") {
+  if (!src || mediaPreloadCache.has(src)) return;
+  mediaPreloadCache.add(src);
+  runWhenIdle(() => {
+    if (type === "video" || ARCHIVE_VIDEO_RE.test(src)) {
+      const video = document.createElement("video");
+      prepareVideoElement(video);
+      video.muted = true;
+      video.src = src;
+      video.load();
+      rememberPreloader(video);
+      return;
+    }
+    const image = new Image();
+    image.decoding = "async";
+    image.src = src;
+    rememberPreloader(image);
+  }, 1200);
+}
+
+function warmChapterMedia(chapter, limit = 2) {
+  if (!chapter || !CHAPTERS[chapter]) return;
+  mediaSequenceForChapter(chapter)
+    .slice(0, limit)
+    .forEach((item) => warmMediaSource(mediaSourceForItem(item), item.type));
+}
+
+function warmUpcomingMedia(chapter = state.chapter, index = state.mediaIndex) {
+  const sequence = mediaSequenceForChapter(chapter);
+  sequence
+    .slice(index + 1, index + 3)
+    .forEach((item) => warmMediaSource(mediaSourceForItem(item), item.type));
+
+  const chapterIndex = AUTO_CHAPTER_ORDER.indexOf(chapter);
+  if (chapterIndex >= 0) {
+    warmChapterMedia(AUTO_CHAPTER_ORDER[chapterIndex + 1], 1);
+    warmChapterMedia(AUTO_CHAPTER_ORDER[chapterIndex - 1], 1);
+  }
+}
+
+function scheduleArchiveWarmup() {
+  window.setTimeout(() => {
+    runWhenIdle(() => {
+      AUTO_CHAPTER_ORDER.forEach((chapter) => warmChapterMedia(chapter, 2));
+    }, 2200);
+  }, 1800);
+}
+
+function scheduleChapterPeripheralRefresh(chapter, options = {}) {
+  afterNextPaint(() => {
+    runWhenIdle(() => {
+      if (state.chapter !== chapter) return;
+      updateMapWindow();
+      renderNewsWindow();
+      updateFinderWindow();
+      if (options.archive) renderChapterArchive(chapter);
+      if (options.altitude) renderAltitudeRoute();
+      if (options.p5) maybeStartP5(chapter);
+      if (options.after) renderAfterPage();
+    }, 700);
+  });
+}
+
+function scheduleMediaPeripheralRefresh(expectedClip) {
+  afterNextPaint(() => {
+    runWhenIdle(() => {
+      if (expectedClip && state.currentClip !== expectedClip) return;
+      updateFinderWindow();
+      updateSystemReadout();
+    }, 500);
+  });
 }
 
 function showVideoCompatMessage(video, clipKey) {
@@ -6624,10 +6792,7 @@ function activateChapter(chapter) {
   updateChrome(spec);
   updateNav(chapter);
   updateDesktopObjectVisibility(chapter);
-  updateMapWindow();
   incrementNewsIssue();
-  renderNewsWindow();
-  updateFinderWindow();
   dom.chapter00.classList.toggle("is-active", chapter === "ch00");
   dom.stage.classList.toggle("is-active", chapter !== "ch00");
   dom.stage.dataset.mode = chapter;
@@ -6656,14 +6821,12 @@ function activateChapter(chapter) {
   if (sequence.length) {
     clearNarrativeTimers();
     hideNarrativeText();
+    warmChapterMedia(chapter, 2);
     setMediaItem(sequence[0]);
     startMonologueCycle(chapter);
-    renderChapterArchive(chapter);
-    renderAltitudeRoute();
-    maybeStartP5(chapter);
+    scheduleChapterPeripheralRefresh(chapter, { archive: true, altitude: true, p5: true, after: chapter === "after" });
     maybeStartCh04InterruptTimer(chapter);
     maybeShowOnboardingDialog(chapter);
-    if (chapter === "after") renderAfterPage();
     return;
   }
 
@@ -6677,21 +6840,18 @@ function activateChapter(chapter) {
     hideNarrativeText();
     clearMonologueTimers();
     hideMonologueText();
-    renderChapterArchive(chapter);
     showNextNarrativeText();
     startMonologueCycle(chapter);
     updateVideoControls();
     updateSystemReadout();
-    maybeStartP5(chapter);
+    scheduleChapterPeripheralRefresh(chapter, { archive: true, p5: true, after: chapter === "after" });
     maybeStartCh04InterruptTimer(chapter);
-    if (chapter === "after") renderAfterPage();
     return;
   }
+  warmChapterMedia(chapter, 2);
   setClip(spec.clips[0]);
   startMonologueCycle(chapter);
-  renderChapterArchive(chapter);
-  renderAltitudeRoute();
-  maybeStartP5(chapter);
+  scheduleChapterPeripheralRefresh(chapter, { archive: true, altitude: true, p5: true });
   maybeStartCh04InterruptTimer(chapter);
   maybeShowOnboardingDialog(chapter);
 }
@@ -6954,8 +7114,8 @@ function setPhotoMedia(item) {
     updateRouteCurrent();
     showNextNarrativeText();
     updateVideoControls();
-    updateFinderWindow();
-    updateSystemReadout();
+    scheduleMediaPeripheralRefresh(null);
+    warmUpcomingMedia();
     state.photoTimer = setTimeout(() => advanceClip(), photoDurationForChapter(state.chapter));
   };
   loader.onerror = () => {
@@ -6972,8 +7132,8 @@ function setPhotoMedia(item) {
     updateRouteCurrent();
     showNextNarrativeText();
     updateVideoControls();
-    updateFinderWindow();
-    updateSystemReadout();
+    scheduleMediaPeripheralRefresh(null);
+    warmUpcomingMedia();
     state.photoTimer = setTimeout(() => advanceClip(), photoDurationForChapter(state.chapter));
   };
   loader.src = archiveMediaSrc(item.file);
@@ -7120,8 +7280,17 @@ function setClip(clipKey) {
   dom.video.loop = false;
   dom.video.muted = state.mutedForAutoplay;
   dom.video.volume = state.settings.audio.video;
-  dom.video.src = archiveMediaSrc(clip.filename);
-  dom.video.load();
+  const nextSrc = archiveMediaSrc(clip.filename);
+  if (dom.video.getAttribute("src") !== nextSrc) {
+    dom.video.src = nextSrc;
+    dom.video.load();
+  } else {
+    try {
+      dom.video.currentTime = 0;
+    } catch (err) {
+      console.warn("video seek reset skipped", err);
+    }
+  }
   dom.video.play().catch(() => {});
 
   updateMonitor(clip);
@@ -7131,8 +7300,8 @@ function setClip(clipKey) {
   showNextNarrativeText();
   syncNarrativeToVideoDuration(clipKey);
   updateVideoControls();
-  updateFinderWindow();
-  updateSystemReadout();
+  scheduleMediaPeripheralRefresh(clipKey);
+  warmUpcomingMedia();
 }
 
 function applyVideoLayoutForClip(clipKey) {
