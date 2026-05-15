@@ -1,0 +1,17 @@
+.DS_Store
+**/.DS_Store
+
+# Local source material and private documents
+*.pdf
+*.docx
+*.psd
+*.DNG
+*.HEIC
+
+# Analysis scripts and generated frame caches not used by the public site
+analyze_footage.py
+extract_locations.py
+signal_analysis_pipeline.py
+footage_report/frames/
+signal_data/frame_samples/
+

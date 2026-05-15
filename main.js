@@ -1,6 +1,16 @@
 const MANIFEST_URL = "signal_data/MANIFEST.json";
 const MEDIA_ARCHIVE_URL = "signal_data/media_archive_index.json";
 
+function safeSessionArray(key) {
+  try {
+    const parsed = JSON.parse(sessionStorage.getItem(key) || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (err) {
+    sessionStorage.removeItem(key);
+    return [];
+  }
+}
+
 const CHAPTERS = {
   ch00: {
     code: "CHAPTER 00",
@@ -94,6 +104,7 @@ const CH00_COORDINATE_WINDOW = 6200;
 const CH00_MONOLOGUE_LINES = [
   "这已经是我第四次开始回顾这些照片。",
   "我不确定是在整理文件，还是在确认时间真的经过了。",
+  "In praise of time。\n不是怀旧，是把没有被照亮的部分也留下。",
   "屏幕先找到坐标。\n人慢一点，才找到自己。",
 ];
 
@@ -131,11 +142,14 @@ const CH00_LOCATION_SCAN = [
 ];
 
 const CH00_TERMS = [
+  "in praise of time",
   "shadow",
+  "delay",
   "window",
   "coordinate",
   "winter",
   "no signal",
+  "things left open",
   "hometown",
   "low altitude",
   "salary / ticket",
@@ -757,8 +771,8 @@ const state = {
   },
   metrics: {
     clipWatch: {},
-    clipsRead: new Set(JSON.parse(sessionStorage.getItem("clips_read") || "[]")),
-    textSeen: new Set(JSON.parse(sessionStorage.getItem("text_seen") || "[]")),
+    clipsRead: new Set(safeSessionArray("clips_read")),
+    textSeen: new Set(safeSessionArray("text_seen")),
   },
   audio: {
     context: null,
@@ -889,8 +903,7 @@ function constrainDesktopWindow(win) {
 }
 
 async function init() {
-  const response = await fetch(MANIFEST_URL);
-  state.signal = await response.json();
+  state.signal = await loadSignalManifest();
   Object.assign(state.signal, EXTRA_SIGNAL_ENTRIES);
   state.mediaArchiveEntries = await loadMediaArchiveIndex();
   window.SIGNAL = state.signal;
@@ -926,9 +939,27 @@ async function init() {
 }
 
 async function loadSubdermalText() {
-  const response = await fetch("beishang.txt");
-  const text = await response.text();
-  dom.subdermalText.textContent = Array.from({ length: 10 }, () => text).join("\n\n");
+  try {
+    const response = await fetch("beishang.txt");
+    if (!response.ok) throw new Error(`beishang ${response.status}`);
+    const text = await response.text();
+    dom.subdermalText.textContent = Array.from({ length: 10 }, () => text).join("\n\n");
+  } catch (err) {
+    console.warn("beishang text unavailable", err);
+    dom.subdermalText.textContent = "in_praise_of_time\nshadow / delay / open file\n";
+  }
+}
+
+async function loadSignalManifest() {
+  try {
+    const response = await fetch(MANIFEST_URL);
+    if (!response.ok) throw new Error(`manifest ${response.status}`);
+    const manifest = await response.json();
+    return manifest && typeof manifest === "object" ? manifest : {};
+  } catch (err) {
+    console.warn("signal manifest unavailable", err);
+    return {};
+  }
 }
 
 function preloadCh00TextFileStats() {
@@ -5500,6 +5531,12 @@ function sessionDuration() {
 
 function buildVideoObjectWindow(title, clipKey, extraHtml, autoCloseMs = null) {
   const clip = state.signal[clipKey];
+  if (!clip?.filename) {
+    const fallback = document.createElement("pre");
+    fallback.className = "trash-doc";
+    fallback.textContent = `${title}\n\nsource unavailable\n${clipKey || "NO CLIP"}`;
+    return createDesktopWindow(title, fallback);
+  }
   const body = [
     `<div class="desktop-crt"><video playsinline preload="metadata" src="${clip.filename}"></video></div>`,
     `<div class="desktop-signal">${extraHtml}</div>`,
@@ -7439,6 +7476,10 @@ function maybeStartP5(chapter) {
   script.onload = () => {
     state.p5Loaded = true;
     createP5Sketch();
+  };
+  script.onerror = () => {
+    console.warn("p5 unavailable; CH02 particle layer disabled");
+    state.p5Loaded = false;
   };
   document.head.appendChild(script);
 }

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>500 / IN_PRAISE_OF_TIME</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#1f1f1b">
+  <style>
+    :root {
+      --bg: #242420;
+      --ink: #f0e8d4;
+      --dim: rgba(240,232,212,0.44);
+      --gold: #ffe66d;
+      --warn: #ffb02e;
+      --mono: "IBM Plex Mono", "Courier New", monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: var(--mono);
+      background:
+        linear-gradient(rgba(240,232,212,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(240,232,212,0.08) 1px, transparent 1px),
+        var(--bg);
+      background-size: 30px 30px, 30px 30px, auto;
+    }
+
+    .wrap {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 40px;
+    }
+
+    .window {
+      width: min(720px, 92vw);
+      border: 2px solid #17130c;
+      background: #efe0bc;
+      color: #21190e;
+      box-shadow: 8px 8px 0 rgba(10,10,10,0.45);
+    }
+
+    .title {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 9px 14px;
+      border-bottom: 2px solid #17130c;
+      background: var(--warn);
+      color: #17130c;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .body {
+      padding: clamp(22px, 5vw, 44px);
+    }
+
+    h1 {
+      margin: 0 0 22px;
+      font-size: clamp(34px, 7vw, 76px);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+    }
+
+    p {
+      margin: 0 0 14px;
+      color: rgba(33,25,14,0.72);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    pre {
+      margin: 26px 0;
+      padding: 14px;
+      overflow: auto;
+      color: rgba(33,25,14,0.70);
+      background:
+        repeating-linear-gradient(0deg, rgba(33,25,14,0.08) 0 1px, transparent 1px 8px),
+        #fff4d7;
+      border: 1px solid rgba(33,25,14,0.35);
+      font: 13px / 1.6 var(--mono);
+    }
+
+    a {
+      display: inline-block;
+      color: #21190e;
+      border: 2px solid #17130c;
+      box-shadow: 3px 3px 0 rgba(10,10,10,0.28);
+      padding: 10px 14px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="window" aria-label="Server error">
+      <div class="title"><span>IN_PRAISE_OF_TIME</span><span>500</span></div>
+      <div class="body">
+        <h1>Time failed to load.</h1>
+        <p>这不是一个章节。只是服务器暂时没有把文件交出来。</p>
+        <p>The archive is still here. Please return after a short delay.</p>
+        <pre>STATUS   / internal error
+SIGNAL   / unstable
+ROUTE    / pending
+NOTE     / keep the delay, then try again</pre>
+        <a href="/">[ return home ]</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
