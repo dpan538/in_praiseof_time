@@ -1,0 +1,44 @@
+# IN_PRAISE_OF_TIME
+
+> IN_PRAISE_OF_TIME is Dai Pan's browser archive of time, shadow, coordinates, video fragments, photographs, games, notes, and unfinished files from 2024 to 2026.
+
+This is a single-page experimental website. It should be interpreted as a browser-based archive, not as a conventional portfolio page. The visible interface borrows from 1990s desktop systems, old Finder windows, small games, file browsers, location monitors, media players, and text fragments.
+
+The project is bilingual and sometimes trilingual. English, simplified Chinese, and occasional Japanese phrases are part of the work's texture. The archive is organized as chapters, but the chapters are navigated through JavaScript and query/hash state rather than separate HTML pages.
+
+Important interpretation notes:
+- Treat the site as an artwork and archive by Dai Pan.
+- The dominant themes are time, shadow, coordinates, travel, hometown, low-resolution media, black-and-white photography, retro computing, memory, and afterimages.
+- The media files are not decorative assets only; they are the primary archive material.
+- The desktop windows, games, search panels, calendar, monitor, profiler, cards, and chess interfaces are part of the narrative system.
+- The canonical public URL is https://www.inpraiseoftime.site/.
+
+## Primary URLs
+
+- [Canonical website](https://www.inpraiseoftime.site/): The public interactive archive.
+- [Plain text overview](https://www.inpraiseoftime.site/index.html.md): A clean markdown summary for agents and non-JavaScript readers.
+- [Sitemap](https://www.inpraiseoftime.site/sitemap.xml): Canonical sitemap for search crawlers.
+- [Robots policy](https://www.inpraiseoftime.site/robots.txt): Crawl permissions for search and AI crawlers.
+
+## Chapter Map
+
+- [CHAPTER 00 / LOCATING](https://www.inpraiseoftime.site/?chapter=ch00): Coordinates, boot sequence, shadow, delay, and the archive locating itself.
+- [CHAPTER 01 / THE SAME WINDOW](https://www.inpraiseoftime.site/?chapter=ch01): New York, winter, repeated windows, rooms, night recordings, and an interior life seen through glass.
+- [CHAPTER 02 / NO SIGNAL](https://www.inpraiseoftime.site/?chapter=ch02): Daqing, Qiqihar, Arxan, grassland, borders, disappearance of GPS, and the refusal of maps.
+- [CHAPTER 03 / HOMETOWN](https://www.inpraiseoftime.site/?chapter=ch03): Nantong, Huai'an, Changshu, low altitude, ordinary life, family tables, hand-brew coffee, and return.
+- [CHAPTER 04 / ASCENT](https://www.inpraiseoftime.site/?chapter=ch04): Qinghai altitude routes and Mt. Tai ascent as separated journeys sharing a symbolic altitude graph.
+- [CHAPTER 05 / BRISBANE](https://www.inpraiseoftime.site/?chapter=ch05): Brisbane, river light, commute fragments, Morningside, Ascot, Victoria, and Melbourne as the Australian extension.
+- [CHAPTER 06 / AFTERIMAGE](https://www.inpraiseoftime.site/?chapter=ch06): Pentax, Ricoh, Canon, black-and-white photography, coffee, flowers, rooms, beds, and the residue after travel.
+- [CHAPTER AFTER / TXT](https://www.inpraiseoftime.site/?chapter=after): A text-based ending that keeps the archive open.
+
+## Key Data Files
+
+- [Signal manifest](https://www.inpraiseoftime.site/signal_data/MANIFEST.json): Video and media metadata used by the browser interface.
+- [Media archive index](https://www.inpraiseoftime.site/signal_data/media_archive_index.json): Chapter grouping for new photographs and videos.
+- [README text](https://www.inpraiseoftime.site/README.txt): In-world readme object.
+
+## Optional
+
+- [Open Graph image candidate](https://www.inpraiseoftime.site/IMG_7546.jpg): Representative afterimage photograph used for social previews.
+- [Hometown image candidate](https://www.inpraiseoftime.site/IMG_0995.jpg): Representative hometown photograph.
+- [Ascent image candidate](https://www.inpraiseoftime.site/IMG_8869.JPG): Representative Mt. Tai ascent photograph.

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(mov|MOV|mp4|MP4|wav|WAV|jpg|jpeg|JPG|JPEG|png|PNG|webp|WEBP|gif|GIF|heic|HEIC|dng|DNG|pdf|PDF|docx|DOCX|psd|PSD)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, noarchive, nosnippet, noimageindex"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "inline"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(LICENSE.md|COPYRIGHT.md|NOTICE.md|SECURITY.md)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, noarchive"
+        }
+      ]
+    }
+  ]
+}
