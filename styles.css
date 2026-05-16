@@ -251,6 +251,19 @@ body.show-subdermal-text #subdermal-text { opacity: var(--subdermal-opacity); }
   pointer-events: none;
 }
 
+body.is-preboot .app-shell,
+body.is-booting .app-shell,
+body.is-preboot #dock-bar,
+body.is-booting #dock-bar,
+body.is-preboot #system-chrome,
+body.is-booting #system-chrome,
+body.is-preboot #desktop-object-layer,
+body.is-booting #desktop-object-layer {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .boot-screen.is-active { display: grid; }
 
 .boot-screen pre {
@@ -1884,17 +1897,6 @@ body.has-booted #system-chrome {
   color: var(--text);
 }
 
-.dock-local-icon {
-  display: grid;
-  place-items: center;
-  width: 66px;
-  height: 58px;
-  color: var(--text);
-  font-size: 38px;
-  font-weight: 600;
-  line-height: 1;
-}
-
 .dock-app-icon.is-disabled { opacity: 0.3; }
 
 .dock-label {
@@ -2031,27 +2033,27 @@ body.has-booted #system-chrome {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
-  width: 98px;
+  gap: 4px;
+  width: 92px;
   border: 0;
   background: transparent;
   color: var(--text-inv);
-  padding: 4px 3px;
+  padding: 3px 2px;
   text-align: center;
   font-size: 13px;
-  line-height: 1.3;
+  line-height: 1.18;
   pointer-events: auto;
   font-family: var(--ui-font);
   box-shadow: none;
 }
 
 .desktop-icon-ch01-doc {
-  width: 168px;
+  width: 128px;
 }
 
 .desktop-icon svg {
-  width: 46px;
-  height: 46px;
+  width: 44px;
+  height: 44px;
   display: block;
   filter: drop-shadow(0 1px 3px rgba(0,0,0,0.6));
 }
@@ -2059,25 +2061,30 @@ body.has-booted #system-chrome {
 .desktop-icon svg path { fill: var(--btn-face); stroke: var(--win-border); stroke-width: 1.5; }
 
 .desktop-icon-label {
-  display: block;
-  max-width: 98px;
+  display: -webkit-box;
+  max-width: 92px;
   padding: 1px 3px;
-  overflow-wrap: anywhere;
+  overflow: hidden;
   color: var(--text-inv);
   background: transparent;
   text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7);
   font-size: var(--fs-small);
   font-weight: 600;
   letter-spacing: 0.04em;
+  line-height: 1.12;
+  overflow-wrap: anywhere;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .desktop-icon-ch01-doc .desktop-icon-label {
-  max-width: 168px;
+  max-width: 128px;
   font-size: 12px;
   line-height: 1.12;
   letter-spacing: 0.02em;
   overflow-wrap: anywhere;
-  text-wrap: balance;
+  text-wrap: auto;
 }
 
 .desktop-icon.is-selected .desktop-icon-label {

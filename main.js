@@ -1239,6 +1239,7 @@ const state = {
   photoPositionIndex: 0,
   currentClip: null,
   currentMediaItem: null,
+  mediaRunToken: 0,
   previousClip: null,
   wasInterrupted: false,
   videoHoldTimer: null,
@@ -1398,7 +1399,23 @@ const dom = {
 
 const textureCtx = dom.texture.getContext("2d");
 
-init();
+init().catch(handleInitError);
+
+function handleInitError(error) {
+  console.error("IN_PRAISE_OF_TIME init failed", error);
+  dom.body?.classList.remove("is-preboot", "is-booting");
+  dom.body?.classList.add("has-booted");
+  if (dom.bootScreen && dom.bootLines) {
+    dom.bootScreen.classList.add("is-active");
+    dom.bootScreen.setAttribute("aria-hidden", "false");
+    dom.bootLines.textContent = [
+      "in_praise_of_time",
+      "init failed",
+      "",
+      error?.message || String(error || "unknown error"),
+    ].join("\n");
+  }
+}
 
 function cssPx(name, fallback) {
   const value = parseFloat(getComputedStyle(dom.root).getPropertyValue(name));
@@ -1470,11 +1487,13 @@ async function init() {
   setupAudioUnlock();
   setupDesktopObjects();
   const bootSignature = bootSessionSignature();
-  if (sessionStorage.getItem("booted") !== bootSignature) dom.body.classList.add("is-booting");
+  const hasCurrentBoot = sessionStorage.getItem("booted") === bootSignature;
+  if (!hasCurrentBoot) dom.body.classList.add("is-booting");
   setupOperatingSystem();
   restoreStickyNotes();
   resizeTexture();
-  if (sessionStorage.getItem("booted") === bootSignature) {
+  if (hasCurrentBoot) {
+    dom.body.classList.remove("is-preboot");
     dom.body.classList.add("has-booted");
     const chapter = initialChapterFromLocation() || "ch01";
     if (chapter === "ch01") sessionStorage.setItem("onboarding_ch01", "1");
@@ -2057,6 +2076,7 @@ function hideBootScreen() {
   if (!dom.bootScreen) return;
   dom.bootScreen.classList.remove("is-active");
   dom.bootScreen.setAttribute("aria-hidden", "true");
+  dom.body.classList.remove("is-preboot");
   dom.body.classList.remove("is-booting");
   dom.body.classList.add("has-booted");
 }
@@ -2107,23 +2127,23 @@ function makeDesktopIconDraggable(icon) {
 
 function positionDesktopIcons() {
   const positions = {
-    nye:      { right: 20, top: 48 },
-    nanxiang: { right: 20, top: 142 },
-    brisbane: { right: 20, top: 236 },
-    nogps:    { right: 20, top: 330 },
-    readme:   { right: 20, top: 424 },
-    sabine:   { right: 20, top: 518 },
-    "doc-absurd":      { right: 360, top: 48 },
-    "doc-film-review": { right: 180, top: 48 },
-    "doc-aiweiwei":    { right: 360, top: 190 },
-    "doc-edit":        { right: 180, top: 190 },
-    "doc-pirouette":   { right: 360, top: 350 },
-    "doc-becoming":    { right: 180, top: 350 },
+    nye:      { right: 18, top: 50 },
+    nanxiang: { right: 18, top: 136 },
+    brisbane: { right: 18, top: 222 },
+    nogps:    { right: 18, top: 308 },
+    readme:   { right: 18, top: 394 },
+    sabine:   { right: 18, top: 480 },
+    "doc-absurd":      { right: 156, top: 50 },
+    "doc-film-review": { right: 156, top: 126 },
+    "doc-aiweiwei":    { right: 156, top: 202 },
+    "doc-edit":        { right: 156, top: 278 },
+    "doc-pirouette":   { right: 156, top: 354 },
+    "doc-becoming":    { right: 156, top: 430 },
   };
   dom.desktopIcons.forEach((icon) => {
     if (icon.dataset.dragged === "1") return;
     const pos = positions[icon.dataset.object] || { right: 18, top: 70 };
-    const width = icon.classList.contains("desktop-icon-ch01-doc") ? 166 : 92;
+    const width = icon.classList.contains("desktop-icon-ch01-doc") ? 128 : 92;
     icon.style.left = `${Math.max(8, window.innerWidth - pos.right - width)}px`;
     icon.style.top = Number.isFinite(pos.bottom) ? "" : `${pos.top}px`;
     icon.style.bottom = Number.isFinite(pos.bottom) ? `${pos.bottom}px` : "";
@@ -2454,24 +2474,11 @@ function createDockButton(id, label, svg) {
   button.type = "button";
   button.className = "dock-app-icon";
   button.dataset.dockApp = id;
-  const localIcons = {
-    "ph-folders": "▱",
-    "ph-magnifying-glass": "⌕",
-    "ph-sliders": "≡",
-    "ph-newspaper": "▤",
-    "ph-game-controller": "⌘",
-    "ph-note": "▧",
-    "ph-calendar": "▣",
-    "ph-map-trifold": "◇",
-    "ph-activity": "⌁",
-    "ph-book-open": "□",
-    "ph-trash": "⌫",
-  };
   const icon = svg === "cards-icon"
     ? `<span class="cards-dock-icon" aria-hidden="true"><b>♠</b><b>♥</b></span>`
     : svg === "monitor-icon"
       ? `<span class="monitor-dock-icon" aria-hidden="true"><i></i><i></i><i></i></span>`
-      : `<span class="dock-local-icon" aria-hidden="true">${localIcons[svg] || "□"}</span>`;
+      : `<i class="ph ${svg}" aria-hidden="true"></i>`;
   button.innerHTML = `<span class="dock-svg">${icon}</span><span class="dock-label">${label}</span><span class="dock-dot"></span>`;
   button.addEventListener("click", () => handleDockApp(id));
   return button;
@@ -7254,10 +7261,15 @@ function activateChapter(chapter) {
 
   state.previousChapter = state.chapter;
   state.chapter = chapter;
+  state.mediaRunToken += 1;
   sessionStorage.setItem("last_chapter", chapter);
   state.clipIndex = 0;
   state.mediaIndex = 0;
   state.photoPositionIndex = 0;
+  clearTimeout(state.photoTimer);
+  state.photoTimer = null;
+  clearTimeout(state.ch04DriftTimer);
+  state.ch04DriftTimer = null;
   state.textCycle[chapter] = -1;
   if (Object.prototype.hasOwnProperty.call(state.monologueCycle, chapter)) {
     state.monologueCycle[chapter] = -1;
@@ -7566,6 +7578,8 @@ function setPhotoMedia(item) {
   clearTimeout(state.photoTimer);
   state.photoTimer = null;
   const loadToken = ++state.photoLoadToken;
+  const runToken = state.mediaRunToken;
+  const chapter = state.chapter;
   state.currentMediaItem = item;
   state.currentClip = null;
   dom.video.pause();
@@ -7594,7 +7608,7 @@ function setPhotoMedia(item) {
     updateVideoControls();
     scheduleMediaPeripheralRefresh(null);
     warmUpcomingMedia();
-    state.photoTimer = setTimeout(() => advanceClip(), photoDurationForChapter(state.chapter));
+    schedulePhotoAdvance(chapter, item, runToken);
   };
   loader.onerror = () => {
     if (loadToken !== state.photoLoadToken || state.currentMediaItem !== item) return;
@@ -7612,9 +7626,19 @@ function setPhotoMedia(item) {
     updateVideoControls();
     scheduleMediaPeripheralRefresh(null);
     warmUpcomingMedia();
-    state.photoTimer = setTimeout(() => advanceClip(), photoDurationForChapter(state.chapter));
+    schedulePhotoAdvance(chapter, item, runToken);
   };
   loader.src = archiveMediaSrc(item.file);
+}
+
+function schedulePhotoAdvance(chapter, item, runToken) {
+  clearTimeout(state.photoTimer);
+  state.photoTimer = setTimeout(() => {
+    if (state.chapter !== chapter) return;
+    if (state.mediaRunToken !== runToken) return;
+    if (state.currentMediaItem !== item) return;
+    advanceClip();
+  }, photoDurationForChapter(chapter));
 }
 
 function clearPhotoMedia() {
@@ -7634,23 +7658,27 @@ function applyPhotoLayout(item) {
   const shell = dom.crtShell;
   if (!shell) return;
   const safe = contentSafeRect(14);
-  const longEdge = plannedVideoShortEdgeForChapter(state.chapter, safe);
-  const naturalW = item.naturalWidth || dom.photo.naturalWidth || 4;
-  const naturalH = item.naturalHeight || dom.photo.naturalHeight || 3;
-  const landscape = naturalW >= naturalH;
-  const frameW = landscape ? longEdge : Math.round(longEdge * naturalW / naturalH);
-  const frameH = landscape ? Math.round(longEdge * naturalH / naturalW) : longEdge;
-  const scale = Math.min(
-    1,
-    (safe.right - safe.left) / frameW,
-    (safe.bottom - safe.top - 30) / frameH
-  );
-  const displayW = Math.round(frameW * scale);
-  const displayH = Math.round(frameH * scale);
-  const totalH = displayH + 30;
   const positions = photoPositionsForChapter(state.chapter);
   const posIndex = Number.isFinite(item.positionIndex) ? item.positionIndex : state.mediaIndex;
   const posSpec = positions[posIndex % positions.length] || positions[0];
+  let longEdge = Math.round(plannedVideoShortEdgeForChapter(state.chapter, safe) * (posSpec.scale || 1));
+  const naturalW = item.naturalWidth || dom.photo.naturalWidth || 4;
+  const naturalH = item.naturalHeight || dom.photo.naturalHeight || 3;
+  const landscape = naturalW >= naturalH;
+  const stageW = safe.right - safe.left;
+  const stageH = safe.bottom - safe.top;
+  if (stageW > 1500) {
+    const initial = photoDisplaySize(longEdge, naturalW, naturalH, safe);
+    const areaRatio = (initial.width * initial.height) / Math.max(1, stageW * stageH);
+    if (areaRatio < 0.085) {
+      const boost = Math.min(1.24, Math.sqrt(0.085 / Math.max(0.01, areaRatio)));
+      longEdge = Math.round(longEdge * boost);
+    }
+  }
+  const fitted = photoDisplaySize(longEdge, naturalW, naturalH, safe);
+  const displayW = fitted.width;
+  const displayH = fitted.height;
+  const totalH = displayH + 30;
   const left = safe.left + (safe.right - safe.left - displayW) * posSpec.x;
   const top = safe.top + (safe.bottom - safe.top - totalH) * posSpec.y;
   const pos = clampToRect(left, top, displayW, totalH, safe);
@@ -7663,6 +7691,24 @@ function applyPhotoLayout(item) {
   shell.style.transform = "none";
   dom.crtFrame.style.width = `${displayW}px`;
   dom.crtFrame.style.height = `${displayH}px`;
+}
+
+function photoDisplaySize(longEdge, naturalW, naturalH, safe = contentSafeRect(14)) {
+  const landscape = naturalW >= naturalH;
+  const frameWidth = landscape ? longEdge : Math.round(longEdge * naturalW / naturalH);
+  const frameHeight = landscape ? Math.round(longEdge * naturalH / naturalW) : longEdge;
+  const scale = Math.min(
+    1,
+    (safe.right - safe.left) / frameWidth,
+    (safe.bottom - safe.top - 30) / frameHeight
+  );
+  return {
+    frameWidth,
+    frameHeight,
+    scale,
+    width: Math.round(frameWidth * scale),
+    height: Math.round(frameHeight * scale),
+  };
 }
 
 function mediaShellRect() {
@@ -7709,37 +7755,41 @@ function plannedVideoShortEdgeForChapter(chapter, safe = contentSafeRect(14)) {
 
 function photoPositionsForChapter(chapter) {
   if (chapter === "ch03") return [
-    { x: 0.62, y: 0.10 },
-    { x: 0.42, y: 0.46 },
-    { x: 0.70, y: 0.54 },
-    { x: 0.18, y: 0.44 },
-    { x: 0.50, y: 0.18 },
+    { x: 0.62, y: 0.08, scale: 1.12 },
+    { x: 0.10, y: 0.18, scale: 0.96 },
+    { x: 0.70, y: 0.52, scale: 1.06 },
+    { x: 0.24, y: 0.56, scale: 1.14 },
+    { x: 0.46, y: 0.30, scale: 0.92 },
+    { x: 0.04, y: 0.62, scale: 1.02 },
   ];
   if (chapter === "ch04") return [
-    { x: 0.58, y: 0.08 },
-    { x: 0.44, y: 0.36 },
-    { x: 0.28, y: 0.58 },
-    { x: 0.66, y: 0.48 },
+    { x: 0.58, y: 0.08, scale: 1.04 },
+    { x: 0.42, y: 0.34, scale: 0.92 },
+    { x: 0.24, y: 0.58, scale: 1.08 },
+    { x: 0.68, y: 0.48, scale: 0.98 },
+    { x: 0.50, y: 0.16, scale: 1.12 },
   ];
   if (chapter === "ch05") return [
-    { x: 0.18, y: 0.14 },
-    { x: 0.62, y: 0.10 },
-    { x: 0.50, y: 0.56 },
-    { x: 0.30, y: 0.48 },
-    { x: 0.72, y: 0.34 },
+    { x: 0.14, y: 0.12, scale: 1.06 },
+    { x: 0.62, y: 0.08, scale: 0.94 },
+    { x: 0.48, y: 0.58, scale: 1.10 },
+    { x: 0.24, y: 0.46, scale: 0.92 },
+    { x: 0.72, y: 0.34, scale: 1.04 },
+    { x: 0.40, y: 0.18, scale: 1.14 },
   ];
   if (chapter === "ch06") return [
-    { x: 0.70, y: 0.10 },
-    { x: 0.58, y: 0.36 },
-    { x: 0.70, y: 0.56 },
-    { x: 0.22, y: 0.44 },
-    { x: 0.52, y: 0.16 },
+    { x: 0.68, y: 0.08, scale: 1.18 },
+    { x: 0.52, y: 0.36, scale: 1.04 },
+    { x: 0.70, y: 0.56, scale: 1.12 },
+    { x: 0.14, y: 0.42, scale: 1.06 },
+    { x: 0.48, y: 0.14, scale: 0.96 },
+    { x: 0.26, y: 0.62, scale: 1.16 },
   ];
   return [
-    { x: 0.16, y: 0.12 },
-    { x: 0.56, y: 0.16 },
-    { x: 0.34, y: 0.56 },
-    { x: 0.70, y: 0.46 },
+    { x: 0.12, y: 0.12, scale: 1.04 },
+    { x: 0.56, y: 0.14, scale: 0.94 },
+    { x: 0.30, y: 0.58, scale: 1.10 },
+    { x: 0.70, y: 0.44, scale: 0.98 },
   ];
 }
 
@@ -7801,38 +7851,60 @@ function applyVideoLayoutForClip(clipKey) {
     shell.style.top = `${pos.top}px`;
     shell.style.transform = "none";
   };
+  const setPatternBox = (baseWidth, patterns, index = state.clipIndex, rect = safe) => {
+    const pattern = patterns[index % patterns.length] || patterns[0];
+    const width = Math.round(baseWidth * (pattern.scale || 1));
+    const height = width * 9 / 16 + 24;
+    const left = rect.left + (rect.right - rect.left - width) * pattern.x;
+    const top = rect.top + (rect.bottom - rect.top - height) * pattern.y;
+    setBox(width, left, top);
+  };
   if (state.chapter === "ch01") {
-    const box = placeInSafeArea(620, 372, 0.18, 0.05, safe);
-    setBox(box.width, box.left, box.top);
+    const mediaSafe = { ...safe, right: Math.max(safe.left + 560, safe.right - 330) };
+    setPatternBox(Math.min(680, Math.max(540, (mediaSafe.right - mediaSafe.left) * 0.70)), [
+      { x: 0.12, y: 0.06, scale: 1.00 },
+      { x: 0.48, y: 0.08, scale: 0.92 },
+      { x: 0.22, y: 0.36, scale: 1.10 },
+      { x: 0.56, y: 0.34, scale: 1.02 },
+      { x: 0.18, y: 0.18, scale: 0.86 },
+      { x: 0.40, y: 0.24, scale: 1.14 },
+    ], state.clipIndex, mediaSafe);
     return;
   }
   if (state.chapter === "ch02") {
-    if (state.clipIndex === 0) {
-      const box = placeInSafeArea(720, 440, 0.18, 0.24, safe);
-      setBox(box.width, box.left, box.top);
-    } else {
-      const width = randomInt(620, Math.min(780, safe.right - safe.left - 40));
-      setBox(width, randomBetween(safe.left + 80, safe.right - width - 80), randomBetween(safe.top + 70, safe.bottom - width * 9 / 16 - 90));
-    }
+    setPatternBox(Math.min(780, Math.max(620, (safe.right - safe.left) * 0.46)), [
+      { x: 0.14, y: 0.22, scale: 1.02 },
+      { x: 0.42, y: 0.10, scale: 0.94 },
+      { x: 0.20, y: 0.46, scale: 1.08 },
+      { x: 0.58, y: 0.32, scale: 0.96 },
+      { x: 0.30, y: 0.18, scale: 1.12 },
+    ]);
     return;
   }
   if (state.chapter === "ch04") {
     const chartRight = safe.left + Math.min(520, (safe.right - safe.left) * 0.36);
     const rightLane = Math.max(320, safe.right - chartRight - 24);
-    const width = Math.min(720, Math.max(620, rightLane * 0.62));
-    const left = chartRight + (rightLane - width) / 2;
-    const top = safe.top + Math.max(38, (safe.bottom - safe.top - (width * 9 / 16 + 24)) * 0.20);
+    const patterns = [
+      { x: 0.16, y: 0.14, scale: 1.00 },
+      { x: 0.08, y: 0.40, scale: 0.90 },
+      { x: 0.30, y: 0.08, scale: 1.08 },
+      { x: 0.22, y: 0.34, scale: 0.96 },
+    ];
+    const pattern = patterns[state.clipIndex % patterns.length];
+    const width = Math.round(Math.min(760, Math.max(600, rightLane * 0.66)) * pattern.scale);
+    const left = chartRight + (rightLane - width) * pattern.x;
+    const top = safe.top + Math.max(28, (safe.bottom - safe.top - (width * 9 / 16 + 24)) * pattern.y);
     setBox(width, left, top);
     return;
   }
   if (state.chapter === "ch05") {
-    if (state.clipIndex === 0) {
-      const box = placeInSafeArea(680, 406, 0.20, 0.12, safe);
-      setBox(box.width, box.left, box.top);
-    } else {
-      const width = randomInt(520, Math.min(720, safe.right - safe.left - 40));
-      setBox(width, randomBetween(safe.left + 120, safe.right - width - 60), randomBetween(safe.top + 55, safe.bottom - width * 9 / 16 - 80));
-    }
+    setPatternBox(Math.min(760, Math.max(580, (safe.right - safe.left) * 0.44)), [
+      { x: 0.18, y: 0.10, scale: 1.02 },
+      { x: 0.52, y: 0.14, scale: 0.88 },
+      { x: 0.28, y: 0.42, scale: 1.08 },
+      { x: 0.60, y: 0.38, scale: 0.96 },
+      { x: 0.12, y: 0.32, scale: 0.92 },
+    ]);
     state.ch04DriftTimer = setTimeout(() => driftCh04VideoWindow(), 10000);
     return;
   }
@@ -7930,10 +8002,27 @@ function showNextNarrativeText() {
   const content = texts[next % texts.length];
   const body = target.querySelector("[data-text-body]") || target.querySelector(":scope > div:last-child") || target;
   body.textContent = content;
-  positionNarrativeTarget(target, chapter, next);
+  if (!positionNarrativeTarget(target, chapter, next)) {
+    forceNarrativeFallbackPosition(target, chapter, next);
+  } else {
+    target.dataset.positioned = "1";
+  }
+  if (target.dataset.positioned !== "1") {
+    forceNarrativeFallbackPosition(target, chapter, next);
+  }
+  if (target.dataset.positioned !== "1") {
+    return;
+  }
   target.classList.remove("is-fading");
   target.classList.add("is-visible", "is-entering");
-  requestAnimationFrame(() => target.classList.remove("is-entering"));
+  requestAnimationFrame(() => {
+    target.classList.remove("is-entering");
+    adjustVisibleNarrativePosition(target, chapter);
+    const adjustedRect = target.getBoundingClientRect();
+    if (rectsOverlap(adjustedRect, visibleMonologueRect(), 28)) {
+      hideMonologueText();
+    }
+  });
   state.narrativeCurrent = { target, body, chapter };
   scheduleNarrativeFade(target, body, narrativeDurationForChapter(chapter));
 }
@@ -7967,11 +8056,20 @@ function syncNarrativeToVideoDuration(clipKey = state.currentClip) {
 }
 
 function narrativeTextsForChapter(chapter) {
-  if (chapter === "ch01") return ch01NarrativeTextsForCurrentMedia();
+  const dedicated = dedicatedNarrativeTextsForCurrentMedia(chapter);
+  if (dedicated.length) return dedicated;
   if (chapter === "ch04") {
     return isTaiAscentActive() ? CH04_TAI_TEXTS : CH04_QINGHAI_TEXTS;
   }
   return NARRATIVE_TEXTS[chapter] || [];
+}
+
+function dedicatedNarrativeTextsForCurrentMedia(chapter = state.chapter) {
+  if (chapter === "ch01") return ch01NarrativeTextsForCurrentMedia();
+  if (!["ch02", "ch03", "ch04", "ch05", "ch06"].includes(chapter)) return [];
+  const context = mediaNarrativeContext(chapter);
+  if (!context.key) return [];
+  return generatedNarrativeTextsForContext(chapter, context);
 }
 
 function ch01NarrativeTextsForCurrentMedia() {
@@ -7993,6 +8091,112 @@ function ch01NarrativeTextsForCurrentMedia() {
   if (matched.length >= 5) return matched;
   const generic = NARRATIVE_TEXTS.ch01.filter((text) => !matched.includes(text));
   return [...matched, ...generic.slice(0, Math.max(2, 8 - matched.length))];
+}
+
+function mediaNarrativeContext(chapter = state.chapter) {
+  const key = currentMediaContextKey();
+  const sequenceItem = mediaSequenceForChapter(chapter).find((item) => item.key === key);
+  const archiveItem = (CHAPTER_MEDIA_ARCHIVES[chapter] || []).find((item) => item.key === key);
+  const current = state.currentMediaItem || {};
+  const signal = state.signal?.[key] || {};
+  const label = current.label || sequenceItem?.label || archiveItem?.label || signal.location || key;
+  const meta = current.meta || sequenceItem?.meta || archiveItem?.meta || signal.local_time || "";
+  return {
+    key,
+    type: current.type || sequenceItem?.type || archiveItem?.type || (signal.filename ? "video" : "photo"),
+    label,
+    meta,
+    file: current.file || sequenceItem?.file || archiveItem?.file || signal.filename || "",
+    location: signal.location || label.split("/")[0].trim(),
+    time: signal.local_time || dateFromMeta(meta),
+    altitude: Number.isFinite(Number(signal.altitude_m)) ? Math.round(Number(signal.altitude_m)) : altitudeFromMeta(meta),
+    noGps: /no gps/i.test(meta) || /no-coordinate/i.test(label),
+    timeOfDay: signal.time_of_day || "",
+  };
+}
+
+function generatedNarrativeTextsForContext(chapter, ctx) {
+  const label = ctx.label || ctx.key;
+  const place = readableContextPlace(ctx);
+  const time = ctx.time || ctx.meta || "undated";
+  const altitude = Number.isFinite(ctx.altitude) ? `${ctx.altitude}m` : "low altitude";
+  const key = ctx.key || "file";
+  if (chapter === "ch02") {
+    return [
+      `${key} / ${place}.\nThe map says north, but the body only reads distance.`,
+      `${time} / ${key}.\nA route file, a flat horizon, signal thinning at the edge.`,
+      `${key}: the place name stays on screen as ${place}.\nOutside the window it becomes wind and road dust.`,
+      `No dramatic border in ${key}.\nOnly ${altitude}, long grass, and a phone learning to be quiet.`,
+      `${key} does not explain the north.\nIt leaves a line and lets the line keep moving.`,
+    ];
+  }
+  if (chapter === "ch03") {
+    const gpsLine = ctx.noGps
+      ? `${key}: no GPS, but the room still knows the route.`
+      : `${key} / ${time}. The coordinate behaves like a household object.`;
+    return [
+      `${label}.\nNot an event, just a surface the day leaned on.`,
+      `${gpsLine}\nA low place can be exact without becoming important.`,
+      `${key} keeps small evidence:\nwall, table, water, someone passing through.`,
+      `HOMETOWN is too large a word for ${label}.\nThis image only asks for a smaller voice.`,
+      `${place} / ${key}.\n生活没有标题，只留下可以重新认出的边角。`,
+    ];
+  }
+  if (chapter === "ch04") {
+    const tai = /tai|泰|IMG_88|IMG_89/i.test(`${label} ${key}`);
+    if (tai) {
+      return [
+        `${label} / ${key}.\nTai'an at night, the climb becoming a practical sentence.`,
+        `${time} / ${key} / ${altitude}.\nThe body counts steps before it understands the view.`,
+        `${key}: snow and stone do not perform meaning.\nThey only make breathing more specific.`,
+        `The mountain in ${key} is not a symbol.\nIt is cold, vertical, and very slow.`,
+        `${key} stays close to the ground.\nEven the summit arrives as a small technical fact.`,
+      ];
+    }
+    return [
+      `${label} / ${key}.\nThe road rises before the sentence knows what to do.`,
+      `${time} / ${key} / ${altitude}.\nAltitude turns expectation into weight.`,
+      `${place} / ${key} is not a backdrop.\nIt is pressure, pale sky, and a route that keeps its own grammar.`,
+      `${key} carries thin air.\nNot silence exactly, more like everything speaking farther away.`,
+      `${key} marks one point in the ascent.\nThe next point is already pulling the body forward.`,
+    ];
+  }
+  if (chapter === "ch05") {
+    const southern = /Victoria|Melbourne|Queensland/i.test(label) ? "southern extension" : "river city";
+    return [
+      `${label} / ${key}.\nThe light is too direct to become nostalgic.`,
+      `${time} / ${key}.\nA ${southern} file, warm enough to flatten the afternoon.`,
+      `${key}: water or road, it keeps moving without asking to be understood.`,
+      `${label} / ${key} is not waiting for a story.\nIt is only bright, delayed, and a little hard to look at.`,
+      `${place} / ${key}.\nSouth light makes ordinary things strangely final for a few seconds.`,
+    ];
+  }
+  if (chapter === "ch06") {
+    const gpsLine = ctx.noGps ? `${key}: no GPS. That feels correct.` : `${key} / ${time}. The place remains quieter than the file.`;
+    return [
+      `${label}.\nAfterimage begins where explanation loses interest.`,
+      `${gpsLine}\nThe object keeps its edge without asking for proof.`,
+      `${key}: black, white, grey.\nNot less information, just information with its voice lowered.`,
+      `${label} is not a conclusion.\nIt is a small surface still holding light.`,
+      `${key}.\n看完以后，生活缩小到杯沿、纸边、影子。`,
+    ];
+  }
+  return [];
+}
+
+function readableContextPlace(ctx) {
+  if (ctx.location && ctx.location !== ctx.key) return ctx.location;
+  return (ctx.label || ctx.key || "unknown").split("/")[0].trim();
+}
+
+function dateFromMeta(meta = "") {
+  const match = String(meta).match(/\d{4}-\d{2}-\d{2}(?:\s+\d{2}:\d{2})?/);
+  return match ? match[0] : "";
+}
+
+function altitudeFromMeta(meta = "") {
+  const match = String(meta).match(/(\d+(?:\.\d+)?)m\b/i);
+  return match ? Math.round(Number(match[1])) : NaN;
 }
 
 function currentMediaContextKey() {
@@ -8095,46 +8299,57 @@ function narrativeTargetForText(chapter, index) {
 }
 
 function positionNarrativeTarget(target, chapter, index) {
-  const safe = contentSafeRect(18);
+  const safe = narrativeTextSafeRect(chapter, 18);
+  const text = target.textContent || "";
   if (chapter === "ch01") {
-    const videoRect = dom.crtShell?.getBoundingClientRect();
-    const controlRect = document.getElementById("video-control-bar")?.getBoundingClientRect();
-    const width = Math.min(660, Math.max(420, (safe.right - safe.left) * 0.44));
-    const estimatedHeight = 98;
-    const left = videoRect
-      ? videoRect.left + Math.max(0, (videoRect.width - width) / 2)
-      : safe.left + 44;
-    const top = controlRect ? controlRect.bottom + 18 : safe.top + 58;
-    const pos = clampToRect(left, top, width, estimatedHeight, safe);
-    Object.assign(target.style, { left: `${pos.left}px`, top: `${pos.top}px`, right: "", bottom: "", transform: "", maxWidth: `${width}px` });
-    return;
+    const width = Math.min(460, Math.max(320, (safe.right - safe.left) * 0.28));
+    return positionFloatingTextAwayFromMedia(target, safe, index, {
+      width,
+      height: estimateTextBoxHeight(text, width, 18, 1.45),
+      avoidRects: [...visibleDesktopIconRects(24), ...visibleDesktopClusterRects(38)],
+      candidates: [
+        { x: 0.04, y: 0.08 },
+        { x: 0.36, y: 0.10 },
+        { x: 0.08, y: 0.62 },
+        { x: 0.34, y: 0.62 },
+        { x: 0.20, y: 0.42 },
+      ],
+    });
   }
   if (chapter === "ch02") {
-    const videoRect = dom.crtShell?.getBoundingClientRect();
-    let left = safe.left + 30;
-    let top = safe.top + 30;
-    for (let attempt = 0; attempt < 12; attempt += 1) {
-      left = randomInt(safe.left + 24, Math.max(safe.left + 30, safe.right - 500));
-      top = randomInt(safe.top + 24, Math.max(safe.top + 40, safe.bottom - 190));
-      if (!videoRect || left + 460 < videoRect.left || left > videoRect.right || top + 150 < videoRect.top || top > videoRect.bottom) break;
-    }
-    const pos = clampToRect(left, top, 460, 160, safe);
-    Object.assign(target.style, { left: `${pos.left}px`, top: `${pos.top}px`, right: "", bottom: "", transform: "", maxWidth: "460px" });
-    return;
+    const width = Math.min(500, Math.max(360, (safe.right - safe.left) * 0.32));
+    return positionFloatingTextAwayFromMedia(target, safe, index, {
+      width,
+      height: estimateTextBoxHeight(text, width, 18, 1.65),
+      candidates: [
+        { x: 0.04, y: 0.08 },
+        { x: 0.58, y: 0.12 },
+        { x: 0.10, y: 0.62 },
+        { x: 0.58, y: 0.58 },
+        { x: 0.32, y: 0.32 },
+      ],
+    });
   }
   if (chapter === "ch05") {
-    const videoRect = dom.crtShell?.getBoundingClientRect();
     const width = Math.min(440, Math.max(340, (safe.right - safe.left) * 0.30));
-    const left = videoRect ? videoRect.left + videoRect.width * 0.58 : safe.right - width - 150;
-    const top = videoRect ? videoRect.bottom + 26 : safe.top + 86;
-    const pos = clampToRect(left, top, width, 140, safe);
-    Object.assign(target.style, { left: `${pos.left}px`, right: "", bottom: "", top: `${pos.top}px`, transform: "", maxWidth: `${width}px` });
-    return;
+    const height = estimateTextBoxHeight(text, width, 18, 1.45);
+    return positionFloatingTextAwayFromMedia(target, safe, index, {
+      width,
+      height,
+      candidates: [
+        { x: 0.62, y: 0.08 },
+        { x: 0.08, y: 0.12 },
+        { x: 0.60, y: 0.60 },
+        { x: 0.10, y: 0.62 },
+        { x: 0.38, y: 0.30 },
+      ],
+    });
   }
   if (chapter === "ch03") {
-    positionFloatingTextAwayFromMedia(target, safe, index, {
-      width: Math.min(500, Math.max(340, (safe.right - safe.left) * 0.30)),
-      height: 176,
+    const width = Math.min(500, Math.max(340, (safe.right - safe.left) * 0.30));
+    return positionFloatingTextAwayFromMedia(target, safe, index, {
+      width,
+      height: estimateTextBoxHeight(text, width, 18, 1.65),
       candidates: [
         { x: 0.04, y: 0.08 },
         { x: 0.58, y: 0.10 },
@@ -8143,12 +8358,12 @@ function positionNarrativeTarget(target, chapter, index) {
         { x: 0.32, y: 0.08 },
       ],
     });
-    return;
   }
   if (chapter === "ch06") {
-    positionFloatingTextAwayFromMedia(target, safe, index, {
-      width: Math.min(380, Math.max(300, (safe.right - safe.left) * 0.26)),
-      height: 190,
+    const width = Math.min(380, Math.max(300, (safe.right - safe.left) * 0.26));
+    return positionFloatingTextAwayFromMedia(target, safe, index, {
+      width,
+      height: estimateTextBoxHeight(text, width, 18, 1.45),
       candidates: [
         { x: 0.04, y: 0.10 },
         { x: 0.60, y: 0.10 },
@@ -8156,23 +8371,36 @@ function positionNarrativeTarget(target, chapter, index) {
         { x: 0.54, y: 0.60 },
       ],
     });
-    return;
   }
   if (chapter === "ch04") {
-    const videoRect = dom.crtShell?.getBoundingClientRect();
     const chartRight = safe.left + Math.min(520, (safe.right - safe.left) * 0.36);
-    const x = chartRight + 48;
-    const width = Math.min(540, Math.max(360, safe.right - x - 34));
-    const y = videoRect ? videoRect.bottom + 26 : safe.bottom - 150;
-    const pos = clampToRect(x, y, width, 128, safe);
-    Object.assign(target.style, { left: `${pos.left}px`, top: `${pos.top}px`, right: "", bottom: "", transform: "", maxWidth: `${width}px` });
+    const width = Math.min(540, Math.max(360, safe.right - chartRight - 82));
+    const height = estimateTextBoxHeight(text, width, 18, 1.55);
+    return positionFloatingTextAwayFromMedia(target, safe, index, {
+      width,
+      height,
+      candidates: [
+        { x: 0.54, y: 0.08 },
+        { x: 0.60, y: 0.58 },
+        { x: 0.36, y: 0.12 },
+        { x: 0.38, y: 0.62 },
+        { x: 0.72, y: 0.28 },
+      ],
+    });
   }
+  return false;
 }
 
 function positionFloatingTextAwayFromMedia(target, safe, index, config) {
   const mediaRect = mediaShellRect();
   const width = config.width;
   const height = config.height;
+  const avoidRects = [
+    mediaRect,
+    ...visibleTextRects(target),
+    ...visibleDesktopIconRects(20),
+    ...(config.avoidRects || []),
+  ].filter(Boolean);
   const candidates = config.candidates || [{ x: 0.04, y: 0.10 }];
   const ordered = candidates.map((_, offset) => candidates[(index + offset) % candidates.length]);
   const fallback = ordered[0];
@@ -8182,26 +8410,205 @@ function positionFloatingTextAwayFromMedia(target, safe, index, config) {
     const left = safe.left + (safe.right - safe.left - width) * candidate.x;
     const top = safe.top + (safe.bottom - safe.top - height) * candidate.y;
     const pos = clampToRect(left, top, width, height, safe);
-    if (!rectsOverlap({ left: pos.left, top: pos.top, width, height }, mediaRect, 34)) {
+    const rect = { left: pos.left, top: pos.top, width, height };
+    if (!avoidRects.some((avoid) => rectsOverlap(rect, avoid, 34))) {
       chosen = { left: pos.left, top: pos.top };
       break;
     }
   }
 
   if (!chosen) {
+    chosen = findOpenTextPosition(safe, width, height, avoidRects, 34);
+  }
+
+  if (!chosen) {
+    chosen = findBestTextPosition(safe, width, height, avoidRects, 34);
+  }
+
+  if (!chosen && config.allowFallback !== false) {
     const left = safe.left + (safe.right - safe.left - width) * fallback.x;
     const top = safe.top + (safe.bottom - safe.top - height) * fallback.y;
     chosen = clampToRect(left, top, width, height, safe);
   }
 
+  if (!chosen) return false;
+  setViewportPosition(target, chosen.left, chosen.top, width);
+  return true;
+}
+
+function forceNarrativeFallbackPosition(target, chapter, index) {
+  const safe = narrativeTextSafeRect(chapter, 18);
+  const width = chapter === "ch06"
+    ? Math.min(380, Math.max(300, (safe.right - safe.left) * 0.26))
+    : Math.min(500, Math.max(340, (safe.right - safe.left) * 0.30));
+  const height = estimateTextBoxHeight(target.textContent || "", width, 18, 1.55);
+  const avoidRects = [mediaShellRect(), ...visibleTextRects(target)].filter(Boolean);
+  const pos = findBestTextPosition(safe, width, height, avoidRects, 18)
+    || clampToRect(safe.left + 28, safe.top + 32 + (index % 3) * 84, width, height, safe);
+  setViewportPosition(target, pos.left, pos.top, width);
+  target.dataset.positioned = "1";
+}
+
+function setViewportPosition(target, left, top, width) {
+  const parentRect = target.offsetParent?.getBoundingClientRect();
+  const localLeft = parentRect ? left - parentRect.left : left;
+  const localTop = parentRect ? top - parentRect.top : top;
   Object.assign(target.style, {
-    left: `${chosen.left}px`,
-    top: `${chosen.top}px`,
+    left: `${Math.round(localLeft)}px`,
+    top: `${Math.round(localTop)}px`,
     right: "",
     bottom: "",
     transform: "",
     maxWidth: `${width}px`,
   });
+}
+
+function adjustVisibleNarrativePosition(target, chapter) {
+  const safe = narrativeTextSafeRect(chapter, 18);
+  const rect = target.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+  const avoidRects = [mediaShellRect(), visibleMonologueRect(), ...visibleDesktopIconRects(20)].filter(Boolean);
+  const touchesAvoid = avoidRects.some((avoid) => rectsOverlap(rect, avoid, 40));
+  const outsideBand = rect.left < safe.left
+    || rect.top < safe.top
+    || rect.right > safe.right
+    || rect.bottom > safe.bottom;
+  if (!touchesAvoid && !outsideBand) return;
+  const width = Math.min(rect.width, Math.max(280, safe.right - safe.left));
+  const height = Math.min(rect.height, Math.max(100, safe.bottom - safe.top));
+  const pos = findOpenTextPosition(safe, width, height, avoidRects, 44)
+    || findBestTextPosition(safe, width, height, avoidRects, 30);
+  if (pos) setViewportPosition(target, pos.left, pos.top, width);
+}
+
+function estimateTextBoxHeight(text, width, fontSize = 18, lineHeight = 1.55) {
+  const charsPerLine = Math.max(12, Math.floor(width / (fontSize * 0.62)));
+  const lines = String(text || "")
+    .split("\n")
+    .reduce((total, line) => total + Math.max(1, Math.ceil([...line].length / charsPerLine)), 0);
+  return Math.min(240, Math.max(72, Math.ceil(lines * fontSize * lineHeight)));
+}
+
+function narrativeTextSafeRect(chapter = state.chapter, extra = 18) {
+  const base = contentSafeRect(extra);
+  const stageWidth = base.right - base.left;
+  const stageHeight = base.bottom - base.top;
+  const iconReserve = window.matchMedia("(max-width: 860px)").matches ? 24 : 270;
+  const sideInset = Math.min(120, Math.max(44, stageWidth * 0.045));
+  const topInset = Math.min(84, Math.max(30, stageHeight * 0.05));
+  const bottomInset = Math.min(110, Math.max(58, stageHeight * 0.09));
+  const rect = {
+    left: base.left + sideInset,
+    top: base.top + topInset,
+    right: base.right - iconReserve,
+    bottom: base.bottom - bottomInset,
+  };
+  if (chapter === "ch01") rect.right = Math.min(rect.right, base.right - 340);
+  if (chapter === "ch04") rect.left = Math.max(rect.left, base.left + Math.min(440, stageWidth * 0.24));
+  if (chapter === "ch05") rect.right = Math.min(rect.right, base.right - 330);
+  if (chapter === "ch06") rect.right = Math.min(rect.right, base.right - 300);
+  if (rect.right - rect.left < 360) {
+    rect.left = base.left + 28;
+    rect.right = base.right - Math.min(160, Math.max(36, iconReserve * 0.55));
+  }
+  if (rect.bottom - rect.top < 220) {
+    rect.top = base.top + 24;
+    rect.bottom = base.bottom - 44;
+  }
+  return rect;
+}
+
+function visibleTextRects(exclude = null) {
+  return [...document.querySelectorAll(".text-slot.is-visible, .boxed-text.is-visible, .monologue-text.is-visible")]
+    .filter((node) => node !== exclude)
+    .map((node) => node.getBoundingClientRect())
+    .filter((rect) => rect.width > 0 && rect.height > 0);
+}
+
+function visibleDesktopIconRects(pad = 0) {
+  return [...document.querySelectorAll("#desktop-object-layer .desktop-icon")]
+    .filter((node) => {
+      const style = getComputedStyle(node);
+      return style.display !== "none" && style.visibility !== "hidden" && style.opacity !== "0";
+    })
+    .map((node) => {
+      const rect = node.getBoundingClientRect();
+      return {
+        left: rect.left - pad,
+        top: rect.top - pad,
+        width: rect.width + pad * 2,
+        height: rect.height + pad * 2,
+      };
+    })
+    .filter((rect) => rect.width > pad * 2 && rect.height > pad * 2);
+}
+
+function visibleDesktopClusterRects(pad = 0) {
+  const rects = visibleDesktopIconRects(0);
+  if (!rects.length) return [];
+  const left = Math.min(...rects.map((rect) => rect.left));
+  const top = Math.min(...rects.map((rect) => rect.top));
+  const right = Math.max(...rects.map((rect) => rect.left + rect.width));
+  const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
+  return [{
+    left: left - pad,
+    top: top - pad,
+    width: right - left + pad * 2,
+    height: bottom - top + pad * 2,
+  }];
+}
+
+function visibleMonologueRect() {
+  if (!dom.monologue?.classList.contains("is-visible")) return null;
+  const rect = dom.monologue.getBoundingClientRect();
+  return rect.width > 0 && rect.height > 0 ? rect : null;
+}
+
+function findOpenTextPosition(safe, width, height, avoidRects = [], pad = 30) {
+  const xs = [0.04, 0.16, 0.30, 0.46, 0.62, 0.78, 0.90];
+  const ys = [0.06, 0.18, 0.34, 0.50, 0.66, 0.80];
+  for (const y of ys) {
+    for (const x of xs) {
+      const left = safe.left + (safe.right - safe.left - width) * x;
+      const top = safe.top + (safe.bottom - safe.top - height) * y;
+      const pos = clampToRect(left, top, width, height, safe);
+      const rect = { left: pos.left, top: pos.top, width, height };
+      if (!avoidRects.some((avoid) => rectsOverlap(rect, avoid, pad))) return pos;
+    }
+  }
+  return null;
+}
+
+function findBestTextPosition(safe, width, height, avoidRects = [], pad = 30) {
+  const xs = [0.04, 0.12, 0.22, 0.34, 0.46, 0.58, 0.70, 0.82, 0.90];
+  const ys = [0.06, 0.14, 0.24, 0.36, 0.48, 0.60, 0.72, 0.80];
+  let best = null;
+  let bestScore = Infinity;
+  for (const y of ys) {
+    for (const x of xs) {
+      const left = safe.left + (safe.right - safe.left - width) * x;
+      const top = safe.top + (safe.bottom - safe.top - height) * y;
+      const pos = clampToRect(left, top, width, height, safe);
+      const rect = { left: pos.left, top: pos.top, width, height };
+      const score = avoidRects.reduce((total, avoid) => total + rectOverlapArea(rect, avoid, pad), 0)
+        + Math.abs(x - 0.08) * 120
+        + Math.abs(y - 0.18) * 80;
+      if (score < bestScore) {
+        bestScore = score;
+        best = pos;
+      }
+    }
+  }
+  return best;
+}
+
+function rectOverlapArea(a, b, pad = 0) {
+  if (!a || !b) return 0;
+  const left = Math.max(a.left - pad, b.left);
+  const top = Math.max(a.top - pad, b.top);
+  const right = Math.min(a.left + a.width + pad, b.left + b.width);
+  const bottom = Math.min(a.top + a.height + pad, b.top + b.height);
+  return Math.max(0, right - left) * Math.max(0, bottom - top);
 }
 
 function altitudeToViewportY(altitude) {
@@ -8222,7 +8629,10 @@ function clearNarrativeTimers() {
 
 function hideNarrativeText() {
   document.querySelectorAll(".text-slot, .boxed-text").forEach((node) => {
-    node.classList.remove("is-visible", "is-fading");
+    node.classList.remove("is-visible", "is-entering", "is-fading");
+    delete node.dataset.positioned;
+    const body = node.querySelector("[data-text-body]") || node.querySelector(":scope > div:last-child") || node;
+    body.textContent = "";
   });
 }
 
@@ -8251,7 +8661,16 @@ function showNextMonologueText(chapter = state.chapter) {
   positionMonologueText(dom.monologue, chapter, index);
   dom.monologue.classList.remove("is-fading");
   dom.monologue.classList.add("is-visible", "is-entering");
-  requestAnimationFrame(() => dom.monologue?.classList.remove("is-entering"));
+  requestAnimationFrame(() => {
+    dom.monologue?.classList.remove("is-entering");
+    const rect = dom.monologue?.getBoundingClientRect();
+    const conflict = rectsOverlap(rect, mediaShellRect(), 34)
+      || visibleTextRects(dom.monologue).some((other) => rectsOverlap(rect, other, 28));
+    if (conflict) {
+      dom.monologue?.classList.remove("is-visible", "is-entering", "is-fading");
+      return;
+    }
+  });
   state.monologueFadeTimer = setTimeout(() => {
     if (state.monologueToken !== token || state.chapter !== chapter) return;
     dom.monologue?.classList.add("is-fading");
@@ -8296,11 +8715,15 @@ function monologueIntervalForChapter() {
 }
 
 function positionMonologueText(target, chapter, index) {
-  const safe = contentSafeRect(22);
+  const safe = narrativeTextSafeRect(chapter, 22);
   const width = Math.min(360, Math.max(260, (safe.right - safe.left) * 0.28));
   const height = 120;
   const mediaRect = mediaShellRect();
-  const shortTextRect = document.querySelector(".text-slot.is-visible, .boxed-text.is-visible")?.getBoundingClientRect();
+  const desktopRects = [
+    ...visibleDesktopIconRects(24),
+    ...(chapter === "ch01" ? visibleDesktopClusterRects(38) : []),
+  ];
+  const textRects = [...visibleTextRects(target), ...desktopRects];
   const candidates = monologuePositionsForChapter(chapter);
   const ordered = candidates.map((_, offset) => candidates[(index + offset) % candidates.length]);
   let chosen = null;
@@ -8311,22 +8734,27 @@ function positionMonologueText(target, chapter, index) {
     const pos = clampToRect(left, top, width, height, safe);
     const rect = { left: pos.left, top: pos.top, width, height };
     if (rectsOverlap(rect, mediaRect, 38)) continue;
-    if (rectsOverlap(rect, shortTextRect, 26)) continue;
+    if (textRects.some((textRect) => rectsOverlap(rect, textRect, 26))) continue;
     chosen = pos;
     break;
   }
 
-  const fallback = chosen || clampToRect(
-    safe.left + (safe.right - safe.left - width) * ordered[0].x,
-    safe.top + (safe.bottom - safe.top - height) * ordered[0].y,
-    width,
-    height,
-    safe
-  );
+  const fallback = chosen
+    || findOpenTextPosition(safe, width, height, [mediaRect, ...textRects], 34)
+    || clampToRect(
+      safe.left + (safe.right - safe.left - width) * ordered[0].x,
+      safe.top + (safe.bottom - safe.top - height) * ordered[0].y,
+      width,
+      height,
+      safe
+    );
 
+  const parentRect = target.offsetParent?.getBoundingClientRect();
+  const localLeft = parentRect ? fallback.left - parentRect.left : fallback.left;
+  const localTop = parentRect ? fallback.top - parentRect.top : fallback.top;
   Object.assign(target.style, {
-    left: `${fallback.left}px`,
-    top: `${fallback.top}px`,
+    left: `${Math.round(localLeft)}px`,
+    top: `${Math.round(localTop)}px`,
     right: "",
     bottom: "",
     transform: "",
