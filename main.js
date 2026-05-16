@@ -405,6 +405,429 @@ const MONOLOGUE_TEXTS = {
   ],
 };
 
+const CH01_MEDIA_CONTEXT = {
+  IMG_1401: { tags: ["room", "window", "evening", "first", "lower-east-side", "inside"], mood: ["uneasy", "arrival"] },
+  IMG_1410: { tags: ["room", "window", "dark", "night", "same-window", "inside"], mood: ["quiet", "uncertain"] },
+  IMG_3647: { tags: ["umbrella", "green", "outside", "wet", "found", "street"], mood: ["stray", "curious"] },
+  IMG_2140: { tags: ["window", "night", "room", "low-light", "same-window", "inside"], mood: ["still", "watching"] },
+  IMG_2361: { tags: ["window", "night", "room", "glass", "same-window", "inside"], mood: ["waiting", "thin"] },
+  IMG_4597: { tags: ["paper", "table", "print", "document", "study", "inside"], mood: ["restless", "unfinished"] },
+  IMG_4700: { tags: ["window", "night", "room", "interrupt", "same-window", "inside"], mood: ["nervous", "held"] },
+  IMG_1448: { tags: ["night", "street", "holiday", "late", "outside", "new-york"], mood: ["detached", "awake"] },
+  IMG_1565: { tags: ["night", "street", "late", "outside", "walking", "new-york"], mood: ["drifting", "tired"] },
+  IMG_4245: { tags: ["window", "ice", "cold", "no-gps", "glass", "inside"], mood: ["frozen", "small"] },
+  IMG_1627: { tags: ["night", "street", "last", "outside", "leaving", "new-york"], mood: ["ending", "awake"] },
+};
+
+const CH01_CONTEXT_FRAGMENTS = [
+  {
+    text: "The first window did not introduce itself.\nIt only reflected a room still deciding whether to stay.",
+    tags: ["window", "room", "first", "inside"],
+    mood: ["arrival", "uncertain"],
+  },
+  {
+    text: "September 01 / 20:01.\nThe room was new enough to feel borrowed.",
+    keys: ["IMG_1401"],
+    tags: ["room", "evening", "first"],
+    mood: ["arrival"],
+  },
+  {
+    text: "I thought the window would show the city.\nMostly it showed me standing too close to the glass.",
+    tags: ["window", "glass", "inside", "same-window"],
+    mood: ["watching", "uncertain"],
+  },
+  {
+    text: "The city stayed outside.\nInside, everything waited for a place to be put down.",
+    tags: ["room", "inside", "lower-east-side"],
+    mood: ["arrival", "held"],
+  },
+  {
+    text: "Darkness made the room look official.\nLike a document I had not signed yet.",
+    tags: ["dark", "room", "night", "document"],
+    mood: ["quiet", "nervous"],
+  },
+  {
+    text: "Same window, second night.\nNothing changed except the evidence became easier to believe.",
+    keys: ["IMG_1410"],
+    tags: ["window", "dark", "night", "same-window"],
+    mood: ["quiet"],
+  },
+  {
+    text: "A black umbrella in April.\nNot shelter anymore, just an object trying to stay useful.",
+    keys: ["IMG_3647"],
+    tags: ["umbrella", "outside", "wet", "found"],
+    mood: ["stray"],
+  },
+  {
+    text: "The umbrella looked abandoned without looking tragic.\n这点很好，它没有要求我同情。",
+    keys: ["IMG_3647"],
+    tags: ["umbrella", "green", "street", "found"],
+    mood: ["curious", "stray"],
+  },
+  {
+    text: "Green around black fabric.\nA small accident, already becoming archive.",
+    keys: ["IMG_3647"],
+    tags: ["umbrella", "green", "outside"],
+    mood: ["curious"],
+  },
+  {
+    text: "Someone left it open.\nThe city did not close it for them.",
+    keys: ["IMG_3647"],
+    tags: ["umbrella", "street", "found"],
+    mood: ["stray"],
+  },
+  {
+    text: "Wet leaves, black ribs.\nThe image is almost practical, almost useless.",
+    keys: ["IMG_3647"],
+    tags: ["umbrella", "wet", "green"],
+    mood: ["curious"],
+  },
+  {
+    text: "This is not a symbol yet.\nIt is only a thing lying where weather finished with it.",
+    keys: ["IMG_3647"],
+    tags: ["umbrella", "outside", "found"],
+    mood: ["stray"],
+  },
+  {
+    text: "23:05.\nThe window became less like a view and more like a habit.",
+    keys: ["IMG_2140"],
+    tags: ["window", "night", "same-window"],
+    mood: ["still"],
+  },
+  {
+    text: "Night removed the unnecessary parts.\nA few lights remained, acting confident.",
+    tags: ["night", "window", "low-light"],
+    mood: ["still", "watching"],
+  },
+  {
+    text: "The glass kept both sides.\nCity outside, body inside, no clear agreement.",
+    tags: ["glass", "window", "room", "same-window"],
+    mood: ["thin", "waiting"],
+  },
+  {
+    text: "22:49.\nThe room was not dramatic. That was the problem.",
+    keys: ["IMG_2361"],
+    tags: ["room", "night", "same-window"],
+    mood: ["waiting"],
+  },
+  {
+    text: "There are nights when nothing happens so carefully\nthat it becomes the whole record.",
+    tags: ["night", "room", "window"],
+    mood: ["still", "waiting"],
+  },
+  {
+    text: "Paper on the table.\nThe day pretending it can be sorted into pages.",
+    keys: ["IMG_4597"],
+    tags: ["paper", "table", "print", "document"],
+    mood: ["unfinished"],
+  },
+  {
+    text: "The print table is not quiet.\nIt has deadlines folded into the corners.",
+    keys: ["IMG_4597"],
+    tags: ["paper", "table", "study"],
+    mood: ["restless", "unfinished"],
+  },
+  {
+    text: "A document is another kind of window.\nFlat, bright, difficult to leave.",
+    keys: ["IMG_4597"],
+    tags: ["document", "paper", "inside", "window"],
+    mood: ["restless"],
+  },
+  {
+    text: "November paper.\nThe room learned to hold work before it learned to hold sleep.",
+    keys: ["IMG_4597"],
+    tags: ["paper", "table", "room"],
+    mood: ["unfinished"],
+  },
+  {
+    text: "The table keeps a less beautiful archive:\nprint edge, cup mark, deadline, thumb.",
+    keys: ["IMG_4597"],
+    tags: ["table", "paper", "print"],
+    mood: ["restless"],
+  },
+  {
+    text: "Interruptions are also timestamps.\nThey prove the room was not sealed.",
+    keys: ["IMG_4700"],
+    tags: ["interrupt", "room", "night"],
+    mood: ["nervous"],
+  },
+  {
+    text: "A small night interruption.\nThe window kept playing the same role.",
+    keys: ["IMG_4700"],
+    tags: ["interrupt", "window", "same-window"],
+    mood: ["held"],
+  },
+  {
+    text: "Late New York is never empty.\nIt just becomes selective about who it answers.",
+    tags: ["night", "street", "outside", "new-york"],
+    mood: ["detached", "awake"],
+  },
+  {
+    text: "01:39.\nThe street had no interest in becoming a memory.",
+    keys: ["IMG_1448"],
+    tags: ["night", "street", "late"],
+    mood: ["detached"],
+  },
+  {
+    text: "The holiday lights were still working.\nI was less sure about myself.",
+    keys: ["IMG_1448"],
+    tags: ["night", "holiday", "street"],
+    mood: ["awake"],
+  },
+  {
+    text: "Walking at night makes the city less vertical.\nEverything comes down to doorways and corners.",
+    keys: ["IMG_1565"],
+    tags: ["night", "street", "walking"],
+    mood: ["drifting"],
+  },
+  {
+    text: "May 02 / 00:40.\nA tired street, a tired camera, still no reason to stop.",
+    keys: ["IMG_1565"],
+    tags: ["night", "street", "late", "walking"],
+    mood: ["tired", "drifting"],
+  },
+  {
+    text: "The city at night is mostly maintenance.\nLight, trash, pavement, repeat.",
+    tags: ["night", "street", "outside", "new-york"],
+    mood: ["detached"],
+  },
+  {
+    text: "Outside, New York became a list of small instructions:\ncurb, door, crossing, wait.",
+    tags: ["night", "street", "outside", "new-york", "walking"],
+    mood: ["detached", "drifting"],
+  },
+  {
+    text: "The street was not cinematic.\nThat made it easier to trust.",
+    tags: ["night", "street", "outside", "new-york"],
+    mood: ["awake", "detached"],
+  },
+  {
+    text: "A late block, a lit window, a corner store.\nNo message, just orientation.",
+    tags: ["night", "street", "outside", "new-york"],
+    mood: ["awake"],
+  },
+  {
+    text: "Ice on the window.\nNo GPS, but the cold knew the address.",
+    keys: ["IMG_4245"],
+    tags: ["ice", "window", "cold", "no-gps"],
+    mood: ["frozen"],
+  },
+  {
+    text: "The frozen window made the outside abstract.\nFinally, the city stopped explaining itself.",
+    keys: ["IMG_4245"],
+    tags: ["ice", "window", "glass", "cold"],
+    mood: ["frozen", "small"],
+  },
+  {
+    text: "No coordinate on the file.\nOnly a pane of glass doing weather slowly.",
+    keys: ["IMG_4245"],
+    tags: ["no-gps", "window", "ice"],
+    mood: ["small"],
+  },
+  {
+    text: "Last NYC clip.\nNot a farewell, more like forgetting to turn the light off.",
+    keys: ["IMG_1627"],
+    tags: ["last", "night", "leaving"],
+    mood: ["ending"],
+  },
+  {
+    text: "May 04 / 01:31.\nThe city was still awake, which did not mean it was waiting.",
+    keys: ["IMG_1627"],
+    tags: ["last", "night", "street"],
+    mood: ["awake", "ending"],
+  },
+  {
+    text: "Leaving does not arrive all at once.\nIt appears first as a file you do not replay.",
+    keys: ["IMG_1627"],
+    tags: ["leaving", "last", "new-york"],
+    mood: ["ending"],
+  },
+  {
+    text: "The same window was never the same.\nIt only had a good disguise.",
+    tags: ["same-window", "window", "room"],
+    mood: ["watching"],
+  },
+  {
+    text: "I did not need a story yet.\nI needed the file to stay open.",
+    tags: ["room", "document", "inside"],
+    mood: ["held", "unfinished"],
+  },
+  {
+    text: "IMG_1401.\nThe first evening behaved like a system check.",
+    keys: ["IMG_1401"],
+    tags: ["room", "evening", "first"],
+    mood: ["arrival"],
+  },
+  {
+    text: "The room had not learned my shape yet.\nI moved carefully, like furniture might object.",
+    keys: ["IMG_1401"],
+    tags: ["room", "inside", "first"],
+    mood: ["uneasy", "arrival"],
+  },
+  {
+    text: "Lower East Side, altitude almost nothing.\nStill, the eighteenth floor made the body hesitate.",
+    keys: ["IMG_1401"],
+    tags: ["lower-east-side", "inside", "window"],
+    mood: ["arrival", "uneasy"],
+  },
+  {
+    text: "The first clip is not a beginning.\nIt is the archive clearing its throat.",
+    keys: ["IMG_1401"],
+    tags: ["first", "room", "window"],
+    mood: ["arrival"],
+  },
+  {
+    text: "IMG_1410.\nThe window returned as a darker file.",
+    keys: ["IMG_1410"],
+    tags: ["window", "dark", "night"],
+    mood: ["quiet"],
+  },
+  {
+    text: "The second night had less information.\nThat made it more precise.",
+    keys: ["IMG_1410"],
+    tags: ["night", "dark", "same-window"],
+    mood: ["quiet", "uncertain"],
+  },
+  {
+    text: "Black inside, black outside.\nOnly the glass knew there were two places.",
+    keys: ["IMG_1410"],
+    tags: ["dark", "glass", "inside"],
+    mood: ["quiet"],
+  },
+  {
+    text: "The city did not disappear.\nIt only lowered its brightness until I stopped asking.",
+    keys: ["IMG_1410"],
+    tags: ["night", "window", "same-window"],
+    mood: ["uncertain"],
+  },
+  {
+    text: "IMG_2140.\nA night view held together by very small lights.",
+    keys: ["IMG_2140"],
+    tags: ["window", "night", "low-light"],
+    mood: ["still"],
+  },
+  {
+    text: "The window was performing patience.\nI watched because it seemed better at it than me.",
+    keys: ["IMG_2140"],
+    tags: ["window", "room", "same-window"],
+    mood: ["watching", "still"],
+  },
+  {
+    text: "23:05 again in another form.\nThe room kept its voice low.",
+    keys: ["IMG_2140"],
+    tags: ["night", "room", "low-light"],
+    mood: ["still"],
+  },
+  {
+    text: "This clip is mostly darkness.\nNot absence, just exposure refusing to hurry.",
+    keys: ["IMG_2140"],
+    tags: ["dark", "night", "low-light"],
+    mood: ["watching"],
+  },
+  {
+    text: "IMG_2361.\nThe night looked warmer than it felt.",
+    keys: ["IMG_2361"],
+    tags: ["window", "night", "glass"],
+    mood: ["thin"],
+  },
+  {
+    text: "A room can wait in a very ordinary way.\nNo gesture, no drama, just light on glass.",
+    keys: ["IMG_2361"],
+    tags: ["room", "glass", "same-window"],
+    mood: ["waiting"],
+  },
+  {
+    text: "22:49 was not late enough to be romantic.\nOnly late enough to become evidence.",
+    keys: ["IMG_2361"],
+    tags: ["night", "room"],
+    mood: ["waiting", "thin"],
+  },
+  {
+    text: "The glass kept thinning the city.\nBy the end, it was mostly color and delay.",
+    keys: ["IMG_2361"],
+    tags: ["glass", "window", "night"],
+    mood: ["thin"],
+  },
+  {
+    text: "IMG_4700.\nThe interruption arrived like a small administrative error.",
+    keys: ["IMG_4700"],
+    tags: ["interrupt", "room", "night"],
+    mood: ["nervous"],
+  },
+  {
+    text: "Something briefly broke the room's confidence.\nThen the window continued as if nothing had happened.",
+    keys: ["IMG_4700"],
+    tags: ["interrupt", "window", "same-window"],
+    mood: ["held", "nervous"],
+  },
+  {
+    text: "22:37.\nA file can flinch without becoming important.",
+    keys: ["IMG_4700"],
+    tags: ["interrupt", "night"],
+    mood: ["nervous"],
+  },
+  {
+    text: "IMG_1448.\nThe street was awake in a way that did not include me.",
+    keys: ["IMG_1448"],
+    tags: ["night", "street", "late"],
+    mood: ["detached", "awake"],
+  },
+  {
+    text: "Holiday light after midnight.\nNot celebration, more like electricity doing overtime.",
+    keys: ["IMG_1448"],
+    tags: ["night", "holiday", "street"],
+    mood: ["detached"],
+  },
+  {
+    text: "01:39 made the city flatter.\nSigns, sidewalks, reflections, all on the same plane.",
+    keys: ["IMG_1448"],
+    tags: ["night", "street", "late"],
+    mood: ["awake"],
+  },
+  {
+    text: "IMG_1565.\nWalking became a way to avoid deciding where the room ended.",
+    keys: ["IMG_1565"],
+    tags: ["night", "street", "walking"],
+    mood: ["drifting"],
+  },
+  {
+    text: "The camera stayed tired with me.\nA useful kind of loyalty.",
+    keys: ["IMG_1565"],
+    tags: ["night", "walking", "late"],
+    mood: ["tired"],
+  },
+  {
+    text: "00:40.\nEvery block looked like it had already been used by someone else.",
+    keys: ["IMG_1565"],
+    tags: ["night", "street", "new-york"],
+    mood: ["drifting", "tired"],
+  },
+  {
+    text: "IMG_4245.\nThe window froze without asking for attention.",
+    keys: ["IMG_4245"],
+    tags: ["window", "ice", "cold"],
+    mood: ["frozen"],
+  },
+  {
+    text: "Cold made the glass productive.\nIt finally started drawing on itself.",
+    keys: ["IMG_4245"],
+    tags: ["ice", "glass", "cold"],
+    mood: ["small", "frozen"],
+  },
+  {
+    text: "IMG_1627.\nThe last file did not behave like a goodbye.",
+    keys: ["IMG_1627"],
+    tags: ["last", "leaving", "night"],
+    mood: ["ending"],
+  },
+  {
+    text: "The final New York clip stayed ordinary.\nThat felt accurate, almost merciful.",
+    keys: ["IMG_1627"],
+    tags: ["last", "street", "new-york"],
+    mood: ["ending", "awake"],
+  },
+];
+
 const CHAPTER_MEDIA_ARCHIVES = {
   ch01: [
     mediaEntry("IMG_3647.JPG", "NYC umbrella", "2024-04-13 / 40.7128, -74.0002"),
@@ -1062,12 +1485,16 @@ async function init() {
     }
   } else {
     await playBootSequence();
-    await playBootTitleCard();
     sessionStorage.setItem("booted", bootSignature);
-    hideBootScreen();
     sessionStorage.setItem("onboarding_ch01", "1");
-    if (shouldUseMobileArchiveGate()) showMobileArchiveGate();
-    else activateChapter(initialChapterFromLocation() || "ch01");
+    if (shouldUseMobileArchiveGate()) {
+      hideBootScreen();
+      showMobileArchiveGate();
+    } else {
+      await playBootTitleCard();
+      hideBootScreen();
+      activateChapter(initialChapterFromLocation() || "ch01");
+    }
   }
   if (!shouldUseMobileArchiveGate()) scheduleArchiveWarmup();
 }
@@ -1078,13 +1505,19 @@ function shouldUseMobileArchiveGate() {
 
 function showMobileArchiveGate() {
   dom.body.classList.add("mobile-archive-gate-active");
-  dom.mobileArchiveGate?.setAttribute("aria-hidden", "false");
+  if (dom.mobileArchiveGate) {
+    dom.mobileArchiveGate.setAttribute("aria-hidden", "false");
+    dom.mobileArchiveGate.classList.remove("is-sequencing");
+    void dom.mobileArchiveGate.offsetWidth;
+    dom.mobileArchiveGate.classList.add("is-sequencing");
+  }
   dom.video.pause();
   dom.interruptVideo.pause();
 }
 
 function hideMobileArchiveGate() {
   dom.body.classList.remove("mobile-archive-gate-active");
+  dom.mobileArchiveGate?.classList.remove("is-sequencing");
   dom.mobileArchiveGate?.setAttribute("aria-hidden", "true");
 }
 
@@ -1494,11 +1927,13 @@ function buildBootFileIndex() {
   ].forEach((file) => add(file, "meta"));
 
   [
-    "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono",
-    "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
-    "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
-    "https://unpkg.com/@phosphor-icons/web",
-    "https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js",
+    "vendor/fonts/ibm-plex-mono-300.ttf",
+    "vendor/fonts/ibm-plex-mono-400.ttf",
+    "vendor/fonts/ibm-plex-mono-500.ttf",
+    "vendor/fonts/ibm-plex-mono-600.ttf",
+    "vendor/leaflet/leaflet.css",
+    "vendor/leaflet/leaflet.js",
+    "vendor/p5/p5.min.js",
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   ].forEach((file) => add(file, "external"));
 
@@ -2019,11 +2454,24 @@ function createDockButton(id, label, svg) {
   button.type = "button";
   button.className = "dock-app-icon";
   button.dataset.dockApp = id;
+  const localIcons = {
+    "ph-folders": "▱",
+    "ph-magnifying-glass": "⌕",
+    "ph-sliders": "≡",
+    "ph-newspaper": "▤",
+    "ph-game-controller": "⌘",
+    "ph-note": "▧",
+    "ph-calendar": "▣",
+    "ph-map-trifold": "◇",
+    "ph-activity": "⌁",
+    "ph-book-open": "□",
+    "ph-trash": "⌫",
+  };
   const icon = svg === "cards-icon"
     ? `<span class="cards-dock-icon" aria-hidden="true"><b>♠</b><b>♥</b></span>`
     : svg === "monitor-icon"
       ? `<span class="monitor-dock-icon" aria-hidden="true"><i></i><i></i><i></i></span>`
-    : `<i class="ph ${svg}" aria-hidden="true"></i>`;
+      : `<span class="dock-local-icon" aria-hidden="true">${localIcons[svg] || "□"}</span>`;
   button.innerHTML = `<span class="dock-svg">${icon}</span><span class="dock-label">${label}</span><span class="dock-dot"></span>`;
   button.addEventListener("click", () => handleDockApp(id));
   return button;
@@ -5858,10 +6306,21 @@ function initializeMapWindow(win) {
   };
   const map = L.map(win.mapCanvas, mapOptions).setView([center.lat, center.lon], center.zoom);
   const worldMap = L.map(win.mapWorldCanvas, mapOptions).setView([20, 35], 1);
-  const addTiles = (target) => L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  const addTiles = (target) => {
+    let tileErrors = 0;
+    const layer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution: "&copy; OpenStreetMap",
-  }).addTo(target);
+    });
+    layer.on("tileload", () => clearMapNetworkFallback(win));
+    layer.on("tileerror", () => {
+      tileErrors += 1;
+      if (tileErrors >= 2) {
+        showMapNetworkFallback(win, "map tiles offline / coordinate route remains active");
+      }
+    });
+    return layer.addTo(target);
+  };
   addTiles(map);
   addTiles(worldMap);
   const applyTileFilter = () => {
@@ -5925,6 +6384,25 @@ function initializeMapWindow(win) {
       fitLocalMap(win, currentMapCenter(), false);
       if (pointLatLngs.length) worldMap.fitBounds(pointLatLngs, { padding: [26, 26], maxZoom: 3 });
     }, delay);
+  });
+}
+
+function showMapNetworkFallback(win, message) {
+  [win?.mapCanvas, win?.mapWorldCanvas].forEach((canvas) => {
+    if (!canvas || canvas.querySelector(".map-offline-note")) return;
+    canvas.classList.add("is-tile-offline");
+    const note = document.createElement("div");
+    note.className = "map-offline-note";
+    note.textContent = message;
+    canvas.appendChild(note);
+  });
+}
+
+function clearMapNetworkFallback(win) {
+  [win?.mapCanvas, win?.mapWorldCanvas].forEach((canvas) => {
+    if (!canvas) return;
+    canvas.classList.remove("is-tile-offline");
+    canvas.querySelector(".map-offline-note")?.remove();
   });
 }
 
@@ -7489,10 +7967,72 @@ function syncNarrativeToVideoDuration(clipKey = state.currentClip) {
 }
 
 function narrativeTextsForChapter(chapter) {
+  if (chapter === "ch01") return ch01NarrativeTextsForCurrentMedia();
   if (chapter === "ch04") {
     return isTaiAscentActive() ? CH04_TAI_TEXTS : CH04_QINGHAI_TEXTS;
   }
   return NARRATIVE_TEXTS[chapter] || [];
+}
+
+function ch01NarrativeTextsForCurrentMedia() {
+  const key = currentMediaContextKey();
+  const dedicated = CH01_CONTEXT_FRAGMENTS
+    .filter((fragment) => fragment.keys?.includes(key))
+    .map((fragment) => fragment.text);
+  if (dedicated.length >= 5) return dedicated;
+  const profile = CH01_MEDIA_CONTEXT[key] || inferCh01ContextFromSignal(key);
+  const scored = CH01_CONTEXT_FRAGMENTS
+    .map((fragment, index) => ({
+      index,
+      text: fragment.text,
+      score: scoreContextFragment(fragment, profile, key),
+    }))
+    .filter((item) => item.score > 0.75)
+    .sort((a, b) => b.score - a.score || a.index - b.index);
+  const matched = scored.slice(0, 7).map((item) => item.text);
+  if (matched.length >= 5) return matched;
+  const generic = NARRATIVE_TEXTS.ch01.filter((text) => !matched.includes(text));
+  return [...matched, ...generic.slice(0, Math.max(2, 8 - matched.length))];
+}
+
+function currentMediaContextKey() {
+  if (state.currentMediaItem?.key) return state.currentMediaItem.key;
+  if (state.currentClip) return state.currentClip;
+  return state.currentMediaItem?.file?.replace(/\.[^.]+$/, "") || "";
+}
+
+function inferCh01ContextFromSignal(key) {
+  const clip = state.signal?.[key];
+  if (!clip) return { tags: ["same-window"], mood: ["watching"] };
+  const tags = ["new-york"];
+  const mood = [];
+  if (clip.time_of_day === "night") {
+    tags.push("night");
+    mood.push("awake");
+  } else if (clip.time_of_day === "evening") {
+    tags.push("evening");
+    mood.push("arrival");
+  }
+  if ((clip.rgb?.luminance_mean || 0) < 0.035) tags.push("dark", "low-light");
+  if ((clip.rgb?.motion_score || 0) < 0.01) tags.push("still");
+  if (/New York/i.test(clip.location || "")) tags.push("street");
+  return { tags, mood };
+}
+
+function scoreContextFragment(fragment, profile, key) {
+  if (fragment.keys && !fragment.keys.includes(key)) return 0;
+  const tags = new Set(profile?.tags || []);
+  const moods = new Set(profile?.mood || []);
+  let score = 0;
+  if (fragment.keys?.includes(key)) score += 9;
+  (fragment.tags || []).forEach((tag) => {
+    if (tags.has(tag)) score += 2;
+  });
+  (fragment.mood || []).forEach((mood) => {
+    if (moods.has(mood)) score += 1.25;
+  });
+  if (!fragment.keys && (fragment.tags || []).includes("same-window") && tags.has("same-window")) score += 1;
+  return score;
 }
 
 function isTaiAscentActive() {
@@ -8164,7 +8704,7 @@ function maybeStartP5(chapter) {
     return;
   }
   const script = document.createElement("script");
-  script.src = "https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js";
+  script.src = "vendor/p5/p5.min.js";
   script.onload = () => {
     state.p5Loaded = true;
     createP5Sketch();

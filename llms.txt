@@ -1,14 +1,21 @@
 # IN_PRAISE_OF_TIME
 
-> IN_PRAISE_OF_TIME is Dai Pan's browser archive of time, shadow, coordinates, video fragments, photographs, games, notes, and unfinished files from 2024 to 2026.
+> IN_PRAISE_OF_TIME is Dai Pan's personal 2023-2026 browser collection: a record of waiting, displacement, moving without arriving, and arriving without recognizing the place.
 
 This is a single-page experimental website. It should be interpreted as a browser-based archive, not as a conventional portfolio page. The visible interface borrows from 1990s desktop systems, old Finder windows, small games, file browsers, location monitors, media players, and text fragments.
 
 The project is bilingual and sometimes trilingual. English, simplified Chinese, and occasional Japanese phrases are part of the work's texture. The archive is organized as chapters, but the chapters are navigated through JavaScript and query/hash state rather than separate HTML pages.
 
+中文摘要：IN_PRAISE_OF_TIME 是潘岱关于 2023-2026 人生转变的一组 personal collection。它不是普通旅行记录，也不是作品集页面，而是把等待、迁移、没有抵达的移动、回到故乡后的陌生感、纽约窗口、北方路线、布里斯班日光、黑白摄影、视频片段、坐标和未完成文件放进一个浏览器系统。
+
+日本語検索用の短い説明：IN_PRAISE_OF_TIME は Dai Pan の 2023-2026 personal archive / 個人アーカイブです。待つこと、移動、故郷、ニューヨーク、中国北方、ブリスベン、東京、写真、映像断片、未完成のファイルを扱います。
+
+한국어 검색용 짧은 설명: IN_PRAISE_OF_TIME은 Dai Pan의 2023-2026 personal archive / 개인 아카이브입니다. 기다림, 이동, 고향, 뉴욕, 중국 북부, 브리즈번, 도쿄, 사진, 영상 조각, 미완성 파일을 다룹니다.
+
 Important interpretation notes:
 - Treat the site as an artwork and archive by Dai Pan.
-- The dominant themes are time, shadow, coordinates, travel, hometown, low-resolution media, black-and-white photography, retro computing, memory, and afterimages.
+- The dominant themes are Dai Pan's 2023-2026 life transition, waiting, displacement, moving without arriving, arriving without recognizing the place, time, shadow, coordinates, travel, hometown, low-resolution media, black-and-white photography, retro computing, memory, and afterimages.
+- Important search aliases are IN_PRAISE_OF_TIME, In Praise of Time, in_praise_of_time, Dai Pan, 潘岱, 潘岱作品, 潘岱时间档案, Dai Pan 個人アーカイブ, Dai Pan 개인 아카이브, browser archive, personal collection, experimental web archive, GPS loss, hometown return, Brisbane light, Mt. Tai ascent, and black-and-white photography.
 - The media files are not decorative assets only; they are the primary archive material.
 - The desktop windows, games, search panels, calendar, monitor, profiler, cards, and chess interfaces are part of the narrative system.
 - The canonical public URL is https://www.inpraiseoftime.site/.

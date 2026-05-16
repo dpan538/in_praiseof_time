@@ -1,5 +1,56 @@
 User-agent: *
 Allow: /
+Allow: /1dx-42.JPG
+Allow: /index.html.md
+Allow: /llms.txt
+Allow: /signal_data/MANIFEST.json
+Allow: /signal_data/media_archive_index.json
+Disallow: /*.mov$
+Disallow: /*.MOV$
+Disallow: /*.mp4$
+Disallow: /*.MP4$
+Disallow: /*.wav$
+Disallow: /*.WAV$
+Disallow: /*.jpg$
+Disallow: /*.jpeg$
+Disallow: /*.JPG$
+Disallow: /*.JPEG$
+Disallow: /*.png$
+Disallow: /*.PNG$
+Disallow: /*.webp$
+Disallow: /*.WEBP$
+Disallow: /*.gif$
+Disallow: /*.GIF$
+Disallow: /*.heic$
+Disallow: /*.HEIC$
+Disallow: /*.dng$
+Disallow: /*.DNG$
+Disallow: /*.pdf$
+Disallow: /*.PDF$
+Disallow: /*.docx$
+Disallow: /*.DOCX$
+Disallow: /*.psd$
+Disallow: /*.PSD$
+Disallow: /footage_report/frames/
+Disallow: /signal_data/frame_samples/
+
+# Regional search crawlers may read the public page and text maps.
+# Raw media remains excluded from standalone image/video indexing.
+User-agent: Applebot
+User-agent: Slurp
+User-agent: Baiduspider
+User-agent: Sogou web spider
+User-agent: Sogou inst spider
+User-agent: 360Spider
+User-agent: YisouSpider
+User-agent: Yeti
+User-agent: Daumoa
+Allow: /
+Allow: /1dx-42.JPG
+Allow: /index.html.md
+Allow: /llms.txt
+Allow: /signal_data/MANIFEST.json
+Allow: /signal_data/media_archive_index.json
 Disallow: /*.mov$
 Disallow: /*.MOV$
 Disallow: /*.mp4$
@@ -34,6 +85,10 @@ Disallow: /signal_data/frame_samples/
 # model training, or standalone indexing.
 User-agent: GPTBot
 Allow: /
+Allow: /index.html.md
+Allow: /llms.txt
+Allow: /signal_data/MANIFEST.json
+Allow: /signal_data/media_archive_index.json
 Disallow: /*.mov$
 Disallow: /*.MOV$
 Disallow: /*.mp4$
@@ -65,6 +120,10 @@ Disallow: /signal_data/frame_samples/
 
 User-agent: ChatGPT-User
 Allow: /
+Allow: /index.html.md
+Allow: /llms.txt
+Allow: /signal_data/MANIFEST.json
+Allow: /signal_data/media_archive_index.json
 Disallow: /*.mov$
 Disallow: /*.MOV$
 Disallow: /*.mp4$
@@ -96,6 +155,10 @@ Disallow: /signal_data/frame_samples/
 
 User-agent: OAI-SearchBot
 Allow: /
+Allow: /index.html.md
+Allow: /llms.txt
+Allow: /signal_data/MANIFEST.json
+Allow: /signal_data/media_archive_index.json
 Disallow: /*.mov$
 Disallow: /*.MOV$
 Disallow: /*.mp4$
@@ -127,6 +190,10 @@ Disallow: /signal_data/frame_samples/
 
 User-agent: ClaudeBot
 Allow: /
+Allow: /index.html.md
+Allow: /llms.txt
+Allow: /signal_data/MANIFEST.json
+Allow: /signal_data/media_archive_index.json
 Disallow: /*.mov$
 Disallow: /*.MOV$
 Disallow: /*.mp4$
@@ -158,6 +225,10 @@ Disallow: /signal_data/frame_samples/
 
 User-agent: PerplexityBot
 Allow: /
+Allow: /index.html.md
+Allow: /llms.txt
+Allow: /signal_data/MANIFEST.json
+Allow: /signal_data/media_archive_index.json
 Disallow: /*.mov$
 Disallow: /*.MOV$
 Disallow: /*.mp4$
@@ -189,6 +260,10 @@ Disallow: /signal_data/frame_samples/
 
 User-agent: Google-Extended
 Allow: /
+Allow: /index.html.md
+Allow: /llms.txt
+Allow: /signal_data/MANIFEST.json
+Allow: /signal_data/media_archive_index.json
 Disallow: /*.mov$
 Disallow: /*.MOV$
 Disallow: /*.mp4$
