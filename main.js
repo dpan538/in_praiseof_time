@@ -1,20 +1,32 @@
 const MANIFEST_URL = "signal_data/MANIFEST.json";
 const MEDIA_ARCHIVE_URL = "signal_data/media_archive_index.json";
+const MEDIA_PRELOAD_SIZES_URL = "signal_data/media_preload_sizes.json";
 const ARCHIVE_VIDEO_RE = /\.(mov|mp4|m4v|webm)$/i;
-const MEDIA_PRELOAD_KEEPALIVE_LIMIT = 24;
+const ARCHIVE_IMAGE_RE = /\.(jpe?g|png|gif|webp|heic|dng)$/i;
+const MEDIA_PRELOAD_KEEPALIVE_LIMIT = 4;
 const mediaPreloadCache = new Set();
 const mediaPreloadKeepalive = [];
+let mediaPreloadSizes = {};
+let mediaPreloadSizesPromise = null;
+let mediaPreloadQueueTimer = null;
+let mediaPreloadQueue = [];
 
 function archiveMediaSrc(file) {
   if (!file || typeof file !== "string") return file;
   if (/^(https?:|data:|blob:)/i.test(file)) return file;
   if (!file.includes("/") && ARCHIVE_VIDEO_RE.test(file)) return webMediaProxySrc(file);
+  if (!file.includes("/") && ARCHIVE_IMAGE_RE.test(file)) return webImageProxySrc(file);
   return file;
 }
 
 function webMediaProxySrc(file) {
   const basename = String(file).split("/").pop() || file;
   return `web-media/${basename.replace(/\.[^.]+$/, ".mp4")}`;
+}
+
+function webImageProxySrc(file) {
+  const basename = String(file).split("/").pop() || file;
+  return `web-media/${basename.replace(/\.[^.]+$/, ".jpg")}`;
 }
 
 function safeSessionArray(key) {
@@ -1653,7 +1665,7 @@ function prepareVideoElement(video) {
   if (!video) return;
   video.setAttribute("playsinline", "");
   video.setAttribute("webkit-playsinline", "");
-  video.preload = "auto";
+  video.preload = "metadata";
 }
 
 function runWhenIdle(callback, timeout = 900) {
@@ -1679,6 +1691,21 @@ function rememberPreloader(node) {
   }
 }
 
+function loadMediaPreloadSizes() {
+  if (mediaPreloadSizesPromise) return mediaPreloadSizesPromise;
+  mediaPreloadSizesPromise = fetch(MEDIA_PRELOAD_SIZES_URL, { cache: "force-cache" })
+    .then((response) => response.ok ? response.json() : {})
+    .then((sizes) => {
+      mediaPreloadSizes = sizes && typeof sizes === "object" ? sizes : {};
+      return mediaPreloadSizes;
+    })
+    .catch(() => {
+      mediaPreloadSizes = {};
+      return mediaPreloadSizes;
+    });
+  return mediaPreloadSizesPromise;
+}
+
 function mediaSourceForItem(item) {
   if (!item) return "";
   if (item.type === "photo") return archiveMediaSrc(item.file);
@@ -1696,7 +1723,6 @@ function warmMediaSource(src, type = "") {
       prepareVideoElement(video);
       video.muted = true;
       video.src = src;
-      video.load();
       rememberPreloader(video);
       return;
     }
@@ -1707,30 +1733,67 @@ function warmMediaSource(src, type = "") {
   }, 1200);
 }
 
+function mediaPreloadSize(src, type = "") {
+  if (mediaPreloadSizes[src]) return mediaPreloadSizes[src];
+  if (type === "video" || ARCHIVE_VIDEO_RE.test(src)) return 4_000_000;
+  return 600_000;
+}
+
+function warmMediaItemsBySize(items = [], delay = 420) {
+  const plan = items
+    .map((item) => ({ item, src: mediaSourceForItem(item) }))
+    .filter((entry) => entry.src && !mediaPreloadCache.has(entry.src))
+    .sort((a, b) => mediaPreloadSize(a.src, a.item.type) - mediaPreloadSize(b.src, b.item.type));
+  if (!plan.length) return;
+  const queued = new Set(mediaPreloadQueue.map((entry) => entry.src));
+  plan.forEach((entry) => {
+    if (!queued.has(entry.src)) {
+      mediaPreloadQueue.push(entry);
+      queued.add(entry.src);
+    }
+  });
+  mediaPreloadQueue.sort((a, b) => mediaPreloadSize(a.src, a.item.type) - mediaPreloadSize(b.src, b.item.type));
+  if (mediaPreloadQueueTimer) return;
+  const step = () => {
+    const next = mediaPreloadQueue.shift();
+    if (!next) {
+      mediaPreloadQueueTimer = null;
+      return;
+    }
+    warmMediaSource(next.src, next.item.type);
+    mediaPreloadQueueTimer = window.setTimeout(step, delay);
+  };
+  step();
+}
+
+function chapterWarmupItems(chapter, limit = 1) {
+  if (!chapter || !CHAPTERS[chapter]) return [];
+  return mediaSequenceForChapter(chapter).slice(0, limit);
+}
+
 function warmChapterMedia(chapter, limit = 2) {
   if (!chapter || !CHAPTERS[chapter]) return;
-  mediaSequenceForChapter(chapter)
-    .slice(0, limit)
-    .forEach((item) => warmMediaSource(mediaSourceForItem(item), item.type));
+  warmMediaItemsBySize(chapterWarmupItems(chapter, limit));
 }
 
 function warmUpcomingMedia(chapter = state.chapter, index = state.mediaIndex) {
   const sequence = mediaSequenceForChapter(chapter);
-  sequence
-    .slice(index + 1, index + 3)
-    .forEach((item) => warmMediaSource(mediaSourceForItem(item), item.type));
+  warmMediaItemsBySize(sequence.slice(index + 1, index + 3), 520);
+}
 
-  const chapterIndex = AUTO_CHAPTER_ORDER.indexOf(chapter);
-  if (chapterIndex >= 0) {
-    warmChapterMedia(AUTO_CHAPTER_ORDER[chapterIndex + 1], 1);
-    warmChapterMedia(AUTO_CHAPTER_ORDER[chapterIndex - 1], 1);
-  }
+async function warmInitialChapterMedia() {
+  await loadMediaPreloadSizes();
+  const items = AUTO_CHAPTER_ORDER.flatMap((chapter) => {
+    if (chapter === "ch00" || chapter === "after") return [];
+    return chapterWarmupItems(chapter, chapter === "ch06" ? 3 : 1);
+  });
+  warmMediaItemsBySize(items, 520);
 }
 
 function scheduleArchiveWarmup() {
   window.setTimeout(() => {
     runWhenIdle(() => {
-      AUTO_CHAPTER_ORDER.forEach((chapter) => warmChapterMedia(chapter, 2));
+      warmInitialChapterMedia();
     }, 2200);
   }, 1800);
 }
@@ -1876,6 +1939,7 @@ function buildBootFileIndex() {
   const addMedia = (file, detail = "") => {
     add(file, "media", detail);
     if (file && ARCHIVE_VIDEO_RE.test(file)) add(webMediaProxySrc(file), "media", `${detail || "video"} / web proxy`);
+    if (file && ARCHIVE_IMAGE_RE.test(file)) add(webImageProxySrc(file), "media", `${detail || "image"} / web proxy`);
   };
 
   [
@@ -1892,6 +1956,7 @@ function buildBootFileIndex() {
     MANIFEST_URL,
     MEDIA_ARCHIVE_URL,
     "signal_data/environment.json",
+    MEDIA_PRELOAD_SIZES_URL,
     "beishang.txt",
     "README.txt",
     "一切都会好起来的.txt",
@@ -7554,7 +7619,7 @@ function mediaSequenceForChapter(chapter = state.chapter) {
   return (CHAPTER_MEDIA_SEQUENCES[chapter] || []).filter((item) => {
     if (!item) return false;
     if (item.type !== "photo") return true;
-    return /\.(jpe?g|png|gif|webp)$/i.test(item.file || "");
+    return ARCHIVE_IMAGE_RE.test(item.file || "");
   });
 }
 
