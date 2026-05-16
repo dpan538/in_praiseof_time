@@ -1,6 +1,7 @@
 const MANIFEST_URL = "signal_data/MANIFEST.json";
 const MEDIA_ARCHIVE_URL = "signal_data/media_archive_index.json";
 const MEDIA_PRELOAD_SIZES_URL = "signal_data/media_preload_sizes.json";
+const IMAGE_PROXY_VERSION = "20260516c";
 const ARCHIVE_VIDEO_RE = /\.(mov|mp4|m4v|webm)$/i;
 const ARCHIVE_IMAGE_RE = /\.(jpe?g|png|gif|webp|heic|dng)$/i;
 const MEDIA_PRELOAD_KEEPALIVE_LIMIT = 4;
@@ -26,7 +27,11 @@ function webMediaProxySrc(file) {
 
 function webImageProxySrc(file) {
   const basename = String(file).split("/").pop() || file;
-  return `web-media/${basename.replace(/\.[^.]+$/, ".jpg")}`;
+  return `web-media/${basename.replace(/\.[^.]+$/, ".jpg")}?v=${IMAGE_PROXY_VERSION}`;
+}
+
+function stripAssetQuery(src) {
+  return String(src || "").split("?")[0];
 }
 
 function safeSessionArray(key) {
@@ -1734,8 +1739,9 @@ function warmMediaSource(src, type = "") {
 }
 
 function mediaPreloadSize(src, type = "") {
-  if (mediaPreloadSizes[src]) return mediaPreloadSizes[src];
-  if (type === "video" || ARCHIVE_VIDEO_RE.test(src)) return 4_000_000;
+  const normalizedSrc = stripAssetQuery(src);
+  if (mediaPreloadSizes[normalizedSrc]) return mediaPreloadSizes[normalizedSrc];
+  if (type === "video" || ARCHIVE_VIDEO_RE.test(normalizedSrc)) return 4_000_000;
   return 600_000;
 }
 
